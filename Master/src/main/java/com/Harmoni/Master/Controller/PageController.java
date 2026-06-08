@@ -13,22 +13,9 @@ public class PageController {
     }
 
     @GetMapping("/home")
-    public String loadPage() {
+    public String loadPage(Model model) {
+        model.addAttribute("viewName", "index");
         return "index";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage(Model model) {
-        // We tell base.jsp to include 'login.jsp' in the middle
-        model.addAttribute("viewName", "login/login");
-        return "base/base";
-    }
-
-    @GetMapping("/register")
-    public String showRegisterPage(Model model) {
-        // We tell base.jsp to include 'register.jsp' in the middle
-        model.addAttribute("viewName", "login/registration");
-        return "base/base";
     }
 
     @GetMapping("/about")

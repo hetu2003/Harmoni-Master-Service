@@ -35,21 +35,15 @@
             <h2 class="big-title">Login To Our Website, </h2>
         </div>
         <div class="contact-form form-wrapper text-center">
-            <%-- Message handling for errors --%>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger">${error}</div>
-            </c:if>
 
-            <form action="<c:url value='/login' />" method="post">
-                <%-- Spring Security CSRF --%>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div id="message" style="display: none;"></div>
 
+            <form id="loginForm" action="<c:url value='/login' />" method="post">
                 <div class="row justify-content-center">
-                    <%-- Changed from col-lg-6 to col-lg-12 to make it full width --%>
                     <div class="col-lg-12 col-md-12 col-sm-12">
 
                         <div class="form-item">
-                            <input type="text" name="username" placeholder="Username" required style="width: 100%;">
+                            <input type="text" name="username" placeholder="Username or Email" required style="width: 100%;">
                         </div>
 
                         <div class="form-item">
@@ -67,6 +61,32 @@
                         <div class="mt-3 text-center">
                             <p>New user? <a href="<c:url value='/register' />" style="color: #ff8a00;">Register here</a></p>
                         </div>
+
+                        <div class="my-4">
+                            <span style="color: #999; font-weight: bold;">OR</span>
+                        </div>
+
+                        <!-- Google Sign-In Button (Restyled) -->
+                        <div id="g_id_onload"
+                             data-client_id="190662284666-8jsc7a0ag2kakd389ni97gahv6lcovmq.apps.googleusercontent.com"
+                             data-context="signin"
+                             data-ux_mode="popup"
+                             data-callback="handleGoogleSignIn"
+                             data-auto_prompt="false">
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <div class="g_id_signin"
+                                 data-type="standard"
+                                 data-shape="pill"
+                                 data-theme="filled_blue"
+                                 data-text="continue_with"
+                                 data-size="large"
+                                 data-width="280"
+                                 data-logo_alignment="left">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </form>
@@ -74,3 +94,40 @@
 
     </div>
 </section>
+
+<!-- Google Platform Library -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- Your custom auth.js -->
+<script src="<c:url value='/assets/custom/login/auth.js' />"></script>
+
+<script>
+// This function will be called by the Google library after a successful sign-in
+function handleGoogleSignIn(response) {
+    const idToken = response.credential;
+    const messageDiv = document.getElementById("message");
+
+    messageDiv.innerHTML = '<div class="alert alert-info">Verifying Google Sign-In...</div>';
+    messageDiv.style.display = 'block';
+
+    fetch('<c:url value="/login/google" />', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken: idToken })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            window.location.href = result.redirectUrl;
+        } else {
+            messageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        messageDiv.innerHTML = '<div class="alert alert-danger">An unexpected error occurred during Google Sign-In.</div>';
+    });
+}
+</script>

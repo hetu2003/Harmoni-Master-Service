@@ -49,7 +49,6 @@
                         <div class="basic-contact">
                             <ul>
                                 <c:choose>
-                                    <%-- If user is logged in, use their email --%>
                                     <c:when test="${not empty user}">
                                         <li>
                                             <a href="mailto:${user.email}">
@@ -57,7 +56,6 @@
                                             </a>
                                         </li>
                                     </c:when>
-                                    <%-- Otherwise use the company email --%>
                                     <c:otherwise>
                                         <li>
                                             <a href="mailto:info@harmoni.com">
@@ -88,7 +86,7 @@
                                 <li>
                                     <c:choose>
                                         <c:when test="${not empty user}">
-                                            <a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                            <a href="<c:url value='/logout' />"><i class="fas fa-sign-out-alt"></i> Logout</a>
                                         </c:when>
                                         <c:otherwise>
                                             <a href="<c:url value='/login' />"><i class="fas fa-lock"></i> Login</a>
@@ -203,7 +201,7 @@
 									<li> <a href="#!"><i class="fab fa-twitter"></i></a> </li>
 									<li> <a href="#!"><i class="fab fa-twitch"></i></a> </li>
 									<li> <a href=""><i class="fab fa-google-plus-g"></i></a> </li>
-									<li> <a href=""""><i class="fab fa-instagram"></i></a> </li>
+									<li> <a href=""><i class="fab fa-instagram"></i></a> </li>
 								</ul>
                         	</div>
                         </div>
@@ -220,10 +218,8 @@
                                 <li><a href="<c:url value='/closed-event' />">Recently Closed Event</a></li>
 
                                 <c:choose>
-                                    <%-- JSTL equivalent of {% if user.is_authenticated %} --%>
                                     <c:when test="${not empty user}">
                                         <c:choose>
-                                            <%-- JSTL equivalent of {% if request.user.is_staff %} --%>
                                             <c:when test="${user.isStaff}">
                                                 <li><a href="<c:url value='/myevent' />">My Events</a></li>
                                             </c:when>
@@ -232,7 +228,6 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </c:when>
-                                    <%-- JSTL equivalent of {% else %} for authentication --%>
                                     <c:otherwise>
                                         <li><a href="<c:url value='/register' />">Register</a></li>
                                         <li><a href="<c:url value='/login' />">Login</a></li>
@@ -242,49 +237,47 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                           							<div class="instagram-wrapper ul-li">
-                           								<h3 class="footer-item-title">
-                           									harmoni <strong>instagram</strong>
-                           								</h3>
-                           								<ul>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img1.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img2.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img3.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img4.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img5.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           									<li class="image-wrapper">
-                           										<img src="{% static 'assets/images/footer/instagram/img6.png' %}" alt="Image_not_found">
-                           										<a href=""""><i class="fab fa-instagram"></i></a>
-                           									</li>
-                           								</ul>
-                           								<h4 class="followus-link">
-                           									Follow Our Instagram <a href="#!">#Harmoni</a>
-                           								</h4>
-                           							</div>
-                           						</div>
+                        <div class="instagram-wrapper ul-li">
+                            <h3 class="footer-item-title">
+                                harmoni <strong>instagram</strong>
+                            </h3>
+                            <ul>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img1.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img2.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img3.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img4.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img5.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                                <li class="image-wrapper">
+                                    <img src="<c:url value='/assets/images/footer/instagram/img6.png' />" alt="Image_not_found">
+                                    <a href=""><i class="fab fa-instagram"></i></a>
+                                </li>
+                            </ul>
+                            <h4 class="followus-link">
+                                Follow Our Instagram <a href="#!">#Harmoni</a>
+                            </h4>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <div class="container">
-                <%-- Added d-flex and justify-content-between to force one line --%>
                 <div class="row align-items-center d-flex justify-content-between">
-
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="copyright-text">
                             <p class="m-0">©2018 <a href="#!" class="site-link">Harmoni.com</a></p>
@@ -328,16 +321,13 @@
 
     <script src="<c:url value='/assets/js/custom.js' />"></script>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+    <!-- Restored the original paths for the login-specific scripts -->
     <script src="<c:url value='/login/js/vendor.min.js' />"></script>
     <script src="<c:url value='/login/js/plugins.min.js' />"></script>
     <script src="<c:url value='/login/js/main.min.js' />"></script>
+    <!-- Note: main.js and addEvent.js were not found in the directory structure, you may need to verify their locations -->
+    <!-- <script src="<c:url value='/login/js/main.js' />"></script> -->
+    <!-- <script src="<c:url value='/login/js/addEvent.js' />"></script> -->
 
-    <script src="<c:url value='/login/js/main.js' />"></script>
-    <script src="<c:url value='/assets/js/addEvent.js' />"></script>
 </body>
 </html>
