@@ -65,6 +65,20 @@ public class Users {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
+    /* ── Read-only JPA navigation for city / state / role (used by JSP EL) ── */
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
+    private City city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id", insertable = false, updatable = false)
+    private State state;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    private Role role;
+
     public Users() {
     }
 
@@ -219,4 +233,13 @@ public class Users {
     public void setResetPasswordToken(String resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
     }
+
+    public City getCity() { return city; }
+    public void setCity(City city) { this.city = city; }
+
+    public State getState() { return state; }
+    public void setState(State state) { this.state = state; }
+
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 }

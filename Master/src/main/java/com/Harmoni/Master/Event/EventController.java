@@ -6,11 +6,13 @@ import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
@@ -18,21 +20,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * Full CRUD for Events — vendor side.
- *
- * Routes:
- *   GET  /vendor/event/add              → show add form
- *   POST /vendor/event/add              → create event + workhand slots
- *   GET  /vendor/event/{id}/edit        → show edit form (pre-populated)
- *   POST /vendor/event/{id}/edit        → update event + replace workhand slots
- *   POST /vendor/event/{id}/delete      → soft-delete event
- *
- * Mirrors Django's add_event() in company/views.py plus adds Update & Delete.
- */
 @Controller
 @RequestMapping("/vendor/event")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
 public class EventController {
 
     private final EventService eventService;
@@ -48,18 +39,14 @@ public class EventController {
     // CREATE
     // ─────────────────────────────────────────────────────────────
 
-    /** GET /vendor/event/add */
     @GetMapping("/add")
     public String showAddForm(@AuthenticationPrincipal UserDetails principal, Model model) {
         model.addAttribute("eventCategories", eventCategoryRepo.findAll());
         model.addAttribute("states", stateRepo.findAllByOrderByStateNameDesc());
         model.addAttribute("active", "myevent");
-        model.addAttribute("formAction", "/vendor/event/add");
-        model.addAttribute("pageTitle", "Add New Event");
-        return "vendor/add-event";
+        return "Event/add-event";
     }
 
-    /** POST /vendor/event/add */
     @PostMapping("/add")
     public String createEvent(
             @RequestParam("cat_id")                                   Long categoryId,
@@ -76,37 +63,30 @@ public class EventController {
             @RequestParam("workhand_category_ids")                    List<Integer> workhandCategoryIds,
             @RequestParam("workhand_numbers")                         List<Integer> workhandNumbers,
             @RequestParam("prices")                                   List<BigDecimal> prices,
+            @RequestParam(value = "imageFile", required = false)      MultipartFile imageFile,
             @AuthenticationPrincipal UserDetails principal,
             RedirectAttributes redirectAttrs) {
 
         try {
-            // Validate dates
             if (!startDatetime.isAfter(LocalDateTime.now())) {
-                redirectAttrs.addFlashAttribute("errorMessage",
-                        "Start date must be in the future.");
+                redirectAttrs.addFlashAttribute("errorMessage", "Start date must be in the future.");
                 return "redirect:/vendor/event/add";
             }
             if (!endDatetime.isAfter(startDatetime)) {
-                redirectAttrs.addFlashAttribute("errorMessage",
-                        "End datetime must be after start datetime.");
+                redirectAttrs.addFlashAttribute("errorMessage", "End datetime must be after start datetime.");
                 return "redirect:/vendor/event/add";
             }
-            if (workhandCategoryIds.size() != workhandNumbers.size()
-                    || workhandCategoryIds.size() != prices.size()) {
-                redirectAttrs.addFlashAttribute("errorMessage",
-                        "Workhand slot data is inconsistent. Please re-enter.");
+            if (workhandCategoryIds.size() != workhandNumbers.size() || workhandCategoryIds.size() != prices.size()) {
+                redirectAttrs.addFlashAttribute("errorMessage", "Workhand slot data is inconsistent.");
                 return "redirect:/vendor/event/add";
             }
-
             Users company = getCompany(principal);
             eventService.createEvent(categoryId, subcategoryId, eventName,
                     startDatetime, endDatetime, streetAddress, stateId, cityId,
-                    description, workhandCategoryIds, workhandNumbers, prices, company);
-
+                    description, workhandCategoryIds, workhandNumbers, prices, company, imageFile);
             redirectAttrs.addFlashAttribute("successMessage", "Event created successfully!");
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("errorMessage",
-                    "Something went wrong: " + e.getMessage());
+            redirectAttrs.addFlashAttribute("errorMessage", "Something went wrong: " + e.getMessage());
         }
         return "redirect:/vendor/event/add";
     }
@@ -115,14 +95,13 @@ public class EventController {
     // UPDATE
     // ─────────────────────────────────────────────────────────────
 
-    /** GET /vendor/event/{eventId}/edit */
     @GetMapping("/{eventId}/edit")
     public String showEditForm(@PathVariable Long eventId,
                                @AuthenticationPrincipal UserDetails principal,
                                Model model) {
 
         Events event = findEvent(eventId);
-        List<EventWorkhand> slots = eventWorkhnadRepo.findByEvent(event);
+        List<EventWorkhand> slots = eventWorkhnadRepo.findByEvent(event.getId().intValue());
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         model.addAttribute("event", event);
@@ -131,14 +110,19 @@ public class EventController {
         model.addAttribute("endDatetimeStr",   event.getEndDatetime().format(dtf));
         model.addAttribute("eventCategories", eventCategoryRepo.findAll());
         model.addAttribute("eventSubcategories",
-                eventSubcategoryRepo.findByEventCategory(event.getEventCategory()));
+                eventSubcategoryRepo.findByEventCategoryEventCategoryId(
+                        event.getEventCategory() != null
+                                ? event.getEventCategory().getEventCategoryId()
+                                : null));
         model.addAttribute("states", stateRepo.findAllByOrderByStateNameDesc());
-        model.addAttribute("cities", cityRepo.findByState(event.getState()));
+        model.addAttribute("cities",
+                event.getState() != null
+                        ? cityRepo.findByState(event.getState())
+                        : List.of());
         model.addAttribute("active", "myevent");
-        return "vendor/edit-event";
+        return "Event/edit-event";
     }
 
-    /** POST /vendor/event/{eventId}/edit */
     @PostMapping("/{eventId}/edit")
     public String updateEvent(
             @PathVariable Long eventId,
@@ -156,25 +140,22 @@ public class EventController {
             @RequestParam("workhand_category_ids")                    List<Integer> workhandCategoryIds,
             @RequestParam("workhand_numbers")                         List<Integer> workhandNumbers,
             @RequestParam("prices")                                   List<BigDecimal> prices,
+            @RequestParam(value = "imageFile", required = false)      MultipartFile imageFile,
             @AuthenticationPrincipal UserDetails principal,
             RedirectAttributes redirectAttrs) {
 
         try {
             if (!endDatetime.isAfter(startDatetime)) {
-                redirectAttrs.addFlashAttribute("errorMessage",
-                        "End datetime must be after start datetime.");
+                redirectAttrs.addFlashAttribute("errorMessage", "End datetime must be after start datetime.");
                 return "redirect:/vendor/event/" + eventId + "/edit";
             }
-
             Users company = getCompany(principal);
             eventService.updateEvent(eventId, categoryId, subcategoryId, eventName,
                     startDatetime, endDatetime, streetAddress, stateId, cityId,
-                    description, workhandCategoryIds, workhandNumbers, prices, company);
-
+                    description, workhandCategoryIds, workhandNumbers, prices, company, imageFile);
             redirectAttrs.addFlashAttribute("successMessage", "Event updated successfully!");
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("errorMessage",
-                    "Update failed: " + e.getMessage());
+            redirectAttrs.addFlashAttribute("errorMessage", "Update failed: " + e.getMessage());
         }
         return "redirect:/vendor/event/" + eventId + "/edit";
     }
@@ -183,7 +164,6 @@ public class EventController {
     // DELETE (soft)
     // ─────────────────────────────────────────────────────────────
 
-    /** POST /vendor/event/{eventId}/delete */
     @PostMapping("/{eventId}/delete")
     public String deleteEvent(@PathVariable Long eventId,
                               @AuthenticationPrincipal UserDetails principal,
@@ -193,15 +173,10 @@ public class EventController {
             eventService.softDeleteEvent(eventId, company);
             redirectAttrs.addFlashAttribute("successMessage", "Event deleted successfully.");
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("errorMessage",
-                    "Delete failed: " + e.getMessage());
+            redirectAttrs.addFlashAttribute("errorMessage", "Delete failed: " + e.getMessage());
         }
         return "redirect:/vendor/my-events";
     }
-
-    // ─────────────────────────────────────────────────────────────
-    // Helpers
-    // ─────────────────────────────────────────────────────────────
 
     private Users getCompany(UserDetails principal) {
         return userRepo.findByUsername(principal.getUsername())

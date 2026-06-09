@@ -107,6 +107,32 @@ public class AuthController {
         return "redirect:/";
     }
 
+    // --- Change Password ---
+
+    @GetMapping("/change-password")
+    public String showChangePasswordPage(HttpSession session, Model model) {
+        if (session.getAttribute("userToken") == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("viewName", "login/change-password");
+        return "base/base";
+    }
+
+    @PostMapping(value = "/change-password", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<AjaxResponse> processChangePassword(@RequestBody ChangePasswordRequest request,
+                                                               HttpSession session) {
+        if (session.getAttribute("userToken") == null) {
+            return ResponseEntity.ok(new AjaxResponse(false, "Session expired. Please log in again.", null));
+        }
+        String result = authService.changePassword(request);
+        if (result != null && result.contains("successfully")) {
+            session.invalidate();
+            return ResponseEntity.ok(new AjaxResponse(true, result, "/login"));
+        }
+        return ResponseEntity.ok(new AjaxResponse(false, result, null));
+    }
+
     // --- Email OTP Login Endpoints ---
 
     @PostMapping(value = "/login/email/send-otp", consumes = "application/json", produces = "application/json")

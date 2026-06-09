@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +25,11 @@ public class EventListServiceImpl implements EventListService {
     public Page<Events> getUpcomingEvents(int page, int pageSize, Long catId) {
         LocalDateTime now = LocalDateTime.now();
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("startDatetime").ascending());
-
         if (catId != null) {
-            // The repository method expects an Integer, not an EventCategory object
-            return eventRepo.findByStartDatetimeAfterAndEventCategoryOrderByStartDatetime(now, catId.intValue(), pageable);
+            EventCategory cat = eventCategoryRepo.findById(catId).orElse(null);
+            if (cat != null) {
+                return eventRepo.findByStartDatetimeAfterAndEventCategoryOrderByStartDatetime(now, cat, pageable);
+            }
         }
         return eventRepo.findByStartDatetimeAfterOrderByStartDatetime(now, pageable);
     }
@@ -40,18 +40,15 @@ public class EventListServiceImpl implements EventListService {
     }
 
     @Override
-    public List<Events> searchUpcomingEvents(String keyword, Long catId) {
+    public Page<Events> searchUpcomingEvents(String keyword, Long catId, int page, int pageSize) {
         LocalDateTime now = LocalDateTime.now();
-        List<Events> results = eventRepo.searchByKeyword(keyword.trim())
-                .stream()
-                .filter(e -> e.getStartDatetime().isAfter(now))
-                .collect(Collectors.toList());
-
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("startDatetime").ascending());
         if (catId != null) {
-            results = results.stream()
-                    .filter(e -> e.getEventCategory().equals(catId.intValue()))
-                    .collect(Collectors.toList());
+            EventCategory cat = eventCategoryRepo.findById(catId).orElse(null);
+            if (cat != null) {
+                return eventRepo.searchUpcomingByCategory(keyword.trim(), now, cat, pageable);
+            }
         }
-        return results;
+        return eventRepo.searchUpcoming(keyword.trim(), now, pageable);
     }
 }

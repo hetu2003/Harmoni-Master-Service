@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
             if (authResponse != null && authResponse.getToken() != null) {
                 session.setAttribute("userToken", authResponse.getToken());
                 session.setAttribute("userEmail", authResponse.getEmail());
-                session.setAttribute("userId", authResponse.getUserId());
+                session.setAttribute("userId", Long.parseLong(authResponse.getUserId()));
                 return authResponse;
             }
         } catch (FeignException e) {
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
             if (authResponse != null && authResponse.getToken() != null) {
                 session.setAttribute("userToken", authResponse.getToken());
                 session.setAttribute("userEmail", authResponse.getEmail());
-                session.setAttribute("userId", authResponse.getUserId());
+                session.setAttribute("userId", Long.parseLong(authResponse.getUserId()));
                 return authResponse;
             }
         } catch (FeignException e) {
@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
             if (authResponse != null && authResponse.getToken() != null) {
                 session.setAttribute("userToken", authResponse.getToken());
                 session.setAttribute("userEmail", authResponse.getEmail());
-                session.setAttribute("userId", authResponse.getUserId());
+                session.setAttribute("userId", Long.parseLong(authResponse.getUserId()));
                 return authResponse;
             }
         } catch (FeignException e) {

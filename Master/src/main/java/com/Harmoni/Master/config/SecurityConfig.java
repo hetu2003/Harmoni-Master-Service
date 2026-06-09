@@ -4,6 +4,7 @@ import com.Harmoni.Master.Auth.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -23,16 +25,16 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
-                // Allow access to static resources
-                .requestMatchers("/assets/**", "/login/**").permitAll()
-                // Allow authentication endpoints
-                .requestMatchers("/harmoni/login", "/harmoni/register", "/harmoni/forgot-password", "/harmoni/reset-password", "/harmoni/login/google").permitAll()
-                // All other requests require authentication
+                .requestMatchers("/assets/**", "/login/**", "/register", "/forgot-password",
+                        "/reset-password", "/login/google", "/login/email/**").permitAll()
+                .requestMatchers("/harmoni/login", "/harmoni/register", "/harmoni/forgot-password",
+                        "/harmoni/reset-password", "/harmoni/login/google",
+                        "/harmoni/login/email/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 }

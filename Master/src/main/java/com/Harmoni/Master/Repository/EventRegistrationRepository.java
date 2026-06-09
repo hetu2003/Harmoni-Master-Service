@@ -1,7 +1,8 @@
 package com.Harmoni.Master.Repository;
 
 import com.Harmoni.Master.Entity.EventRegistration;
-import com.Harmoni.Master.Entity.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,9 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
 
     List<EventRegistration> findByWorkhandAndRegistrationStatusTrue(Integer workhandId);
 
+    /** Paginated history for a workhand's own profile page */
+    Page<EventRegistration> findByWorkhand(Integer workhandId, Pageable pageable);
+
     long countByEvent(Integer eventId);
 
     long countByEventAndRegistrationStatusTrue(Integer eventId);
@@ -30,16 +34,15 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
 
     @Query("SELECT AVG(er.rating) FROM EventRegistration er WHERE er.workhand = :workhandId AND er.rating IS NOT NULL")
     Double findAverageRatingByWorkhand(@Param("workhandId") Integer workhandId);
-    
-    // Add these methods that were missing but used in the original code
-    List<EventRegistration> findByEventOrderByEventWorkhandDesc(Integer eventId);
-    
-    // Aliases to match VendorServiceImpl exactly
-    default List<EventRegistration> findByEventOrderByEventWorkhnadIdDesc(Integer eventId) {
-        return findByEventOrderByEventWorkhandDesc(eventId);
-    }
-    
-    default List<EventRegistration> findByEventAndRegistrationStatusTrueOrderByEventWorkhandEventWorkhnadIdAsc(Integer eventId) {
-        return findByEventAndRegistrationStatusTrueOrderByEventWorkhandAsc(eventId);
-    }
+
+    List<EventRegistration> findByEventOrderByRegistrationDateDesc(Integer eventId);
+
+    @Query("SELECT er FROM EventRegistration er WHERE er.workhand = :workhandId AND er.event = :eventId AND er.registrationStatus = true")
+    List<EventRegistration> findApprovedByWorkhandAndEvent(
+            @Param("workhandId") Integer workhandId,
+            @Param("eventId") Integer eventId);
+
+    /** Count all registrations for admin stats */
+    long countByRegistrationStatusTrue();
+    long countByPaymentStatusTrue();
 }

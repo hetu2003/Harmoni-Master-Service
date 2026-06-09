@@ -38,11 +38,11 @@ public class CompanyController {
     public String companyProfile(@PathVariable Long userId, Model model) {
 
         Users company = companyService.getCompanyById(userId);
-        List<Events> upcomingEvents = companyService.getUpcomingEventsForCompany(company);
+//        List<Events> upcomingEvents = companyService.getUpcomingEventsForCompany(company);
         List<Events> allEvents = companyService.getAllEventsForCompany(company);
 
         model.addAttribute("company",       company);
-        model.addAttribute("upcomingEvents", upcomingEvents);
+//        model.addAttribute("upcomingEvents", upcomingEvents);
         model.addAttribute("totalEvents",   allEvents.size());
         model.addAttribute("active", "company");
         return "user/company-profile"; // Update path if you move JSPs

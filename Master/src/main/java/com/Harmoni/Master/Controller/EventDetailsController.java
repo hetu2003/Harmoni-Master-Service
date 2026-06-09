@@ -1,6 +1,5 @@
 package com.Harmoni.Master.Controller;
 
-import com.Harmoni.Master.Entity.EventRegistration;
 import com.Harmoni.Master.Entity.Events;
 import com.Harmoni.Master.Entity.Feedback;
 import com.Harmoni.Master.Entity.Users;
@@ -19,11 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Event details page + feedback submission.
- * Routes use event_id (no slug column in schema).
- * Mirrors Django's event_details() and feedback() views.
- */
 @Controller
 @RequiredArgsConstructor
 public class EventDetailsController {
@@ -42,27 +36,24 @@ public class EventDetailsController {
         Events event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
 
-        List<Feedback> feedbacks = feedbackRepo.findByEvent(event);
-        List<EventRegistration> registrationInfo = registrationRepo.findByEvent(event);
+        List<Feedback> feedbacks = feedbackRepo.findByEvent(event.getId().intValue());
 
         model.addAttribute("event", event);
         model.addAttribute("workhnadFeedbacks", feedbacks);
-        model.addAttribute("registrationInfo", registrationInfo);
 
         if (principal != null) {
             Users currentUser = userRepo.findByUsername(principal.getUsername()).orElse(null);
             if (currentUser != null) {
-                boolean isCompany = currentUser.getRoleId().equals(2);
+                boolean isCompany = currentUser.getRoleId() != null && currentUser.getRoleId() == 2;
                 model.addAttribute("isCompany", isCompany);
 
                 if (!isCompany) {
-                    // Workhand-specific model attributes
-                    List<EventRegistration> alreadyRegistered =
-                            registrationRepo.findByWorkhandAndEvent(currentUser, event);
-                    List<Feedback> alreadyFeedback =
-                            feedbackRepo.findByEventAndWorkhand(event, currentUser);
-                    List<EventRegistration> approvedForFeedback =
-                            registrationRepo.findByWorkhandAndRegistrationStatusTrueAndEvent(currentUser, event);
+                    List<?> alreadyRegistered = registrationRepo.findByWorkhandAndEvent(
+                            currentUser.getUserId().intValue(), event.getId().intValue());
+                    List<Feedback> alreadyFeedback = feedbackRepo.findByEventAndWorkhnadId(
+                            event.getId().intValue(), currentUser.getUserId().intValue());
+                    List<?> approvedForFeedback = registrationRepo.findApprovedByWorkhandAndEvent(
+                            currentUser.getUserId().intValue(), event.getId().intValue());
 
                     model.addAttribute("currentUser", currentUser);
                     model.addAttribute("alreadyRegistered", alreadyRegistered);
@@ -72,7 +63,7 @@ public class EventDetailsController {
             }
         }
 
-        return "user/event-details";
+        return "Event/eventdetails";
     }
 
     /** POST /feedback */
@@ -82,18 +73,14 @@ public class EventDetailsController {
                                  @RequestParam("feedback") String feedbackText,
                                  RedirectAttributes redirectAttrs) {
 
-        Integer event = eventRepo.findById(eventId);
-        Users workhand = userRepo.findById(workhnadId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + workhnadId));
-
         Feedback feedback = Feedback.builder()
                 .feedback(feedbackText)
                 .feedbackDate(LocalDate.now())
-                .event(event)
-                .workhand(workhand)
+                .event(eventId.intValue())
+                .workhnadId(workhnadId.intValue())
                 .build();
-        feedback.setCreatedBy(workhand.getUserId().intValue());
-        feedback.setModifiedBy(workhand.getUserId().intValue());
+        feedback.setCreatedBy(workhnadId.intValue());
+        feedback.setModifiedBy(workhnadId.intValue());
         feedback.setIsActive(1);
         feedbackRepo.save(feedback);
 

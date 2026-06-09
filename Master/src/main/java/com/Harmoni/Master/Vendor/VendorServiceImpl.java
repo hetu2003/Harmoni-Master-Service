@@ -1,10 +1,7 @@
 package com.Harmoni.Master.Vendor;
 
-import com.Harmoni.Master.Entity.Events;
-import com.Harmoni.Master.Entity.EventRegistration;
-import com.Harmoni.Master.Entity.EventSubcategory;
-import com.Harmoni.Master.Entity.EventWorkhand;
-import com.Harmoni.Master.Entity.Users;
+import com.Harmoni.Master.Dto.WorkhnadRegistrationDto;
+import com.Harmoni.Master.Entity.*;
 import com.Harmoni.Master.EventRegistration.EventRegistrationService;
 import com.Harmoni.Master.Repository.*;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,20 +30,14 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public Users getCompanyFromPrincipal(UserDetails principal) {
-        Users user = userRepo.findByUsername(principal.getUsername());
-        if (user == null) {
-            throw new IllegalStateException("Company user not found");
-        }
-        return user;
+        return userRepo.findByUsername(principal.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Company user not found"));
     }
 
     @Override
     public Events findEventById(Long eventId) {
-        Events event = eventRepo.findById(eventId).orElse(null);
-        if (event == null) {
-            throw new IllegalArgumentException("Event not found: " + eventId);
-        }
-        return event;
+        return eventRepo.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
     }
 
     @Override
@@ -57,7 +49,6 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public List<Events> searchMyEvents(Users company, String search) {
         if ("all".equals(search)) return List.of();
-
         EventSubcategory sub = eventSubcategoryRepo.findById(Long.parseLong(search)).orElse(null);
         return (sub != null)
                 ? eventRepo.findByCompanyAndEventSubcategoryOrderByStartDatetime(company, sub)
@@ -65,25 +56,25 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public List<EventRegistration> getWorkhandRequestsForEvent(Events event) {
-        return registrationRepo.findByEventOrderByEventWorkhnadIdDesc(event.getEventId());
+    public List<WorkhnadRegistrationDto> getWorkhandRequestsForEvent(Events event) {
+        return toDto(registrationRepo.findByEventOrderByRegistrationDateDesc(event.getId().intValue()));
     }
 
     @Override
-    public List<EventRegistration> getApprovedRequestsForEvent(Events event) {
-        return registrationRepo.findByEventAndRegistrationStatusTrueOrderByEventWorkhandEventWorkhnadIdAsc(event.getEventId());
+    public List<WorkhnadRegistrationDto> getApprovedRequestsForEvent(Events event) {
+        return toDto(registrationRepo.findByEventAndRegistrationStatusTrueOrderByEventWorkhandAsc(event.getId().intValue()));
     }
 
     @Override
-    public List<EventRegistration> getWorkhandsForPayment(Events event) {
-        return registrationRepo.findByEventAndRegistrationStatusTrue(event.getEventId());
+    public List<WorkhnadRegistrationDto> getWorkhandsForPayment(Events event) {
+        return toDto(registrationRepo.findByEventAndRegistrationStatusTrue(event.getId().intValue()));
     }
 
     @Override
-    public int calculateTotalPrice(List<EventRegistration> approvedWorkhands) {
+    public int calculateTotalPrice(List<WorkhnadRegistrationDto> approvedWorkhands) {
         return approvedWorkhands.stream()
-                .mapToInt(r -> {
-                    EventWorkhand ew = eventWorkhandRepo.findById(r.getEventWorkhand().longValue()).orElse(null);
+                .mapToInt(dto -> {
+                    EventWorkhand ew = dto.getEventWorkhand();
                     return (ew != null && ew.getPrice() != null) ? ew.getPrice().intValue() : 0;
                 })
                 .sum();
@@ -92,39 +83,31 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public void processWorkhandPayment(Long registrationId, int rating) {
         registrationService.processPayment(registrationId, rating);
-        EventRegistration reg = registrationRepo.findById(registrationId).orElse(null);
-        if (reg == null) {
-            throw new IllegalArgumentException("Registration not found");
-        }
-        Users workhand = userRepo.findById(reg.getWorkhand().longValue()).orElse(null);
-        if (workhand != null) {
-            registrationService.sendPaymentEmail(workhand.getEmail());
-        }
+        registrationRepo.findById(registrationId).ifPresent(reg -> {
+            userRepo.findById(reg.getWorkhand().longValue())
+                    .ifPresent(wh -> registrationService.sendPaymentEmail(wh.getEmail()));
+        });
     }
 
     @Override
     public Users getWorkhandProfile(Long userId) {
-        Users user = userRepo.findById(userId).orElse(null);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found: " + userId);
-        }
-        return user;
+        return userRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
     }
 
     @Override
-    public List<EventRegistration> getWorkhandHistory(Users workhand) {
-        return registrationRepo.findByWorkhandAndRegistrationStatusTrue(workhand.getUserId().intValue());
+    public List<WorkhnadRegistrationDto> getWorkhandHistory(Users workhand) {
+        return toDto(registrationRepo.findByWorkhandAndRegistrationStatusTrue(workhand.getUserId().intValue()));
     }
 
     @Override
     public List<Map<String, Object>> getEventHistoryWithStats(Users company) {
         List<Events> allEvents = eventRepo.findByCompanyOrderByStartDatetimeDesc(company);
         List<Map<String, Object>> rows = new ArrayList<>();
-        
         for (Events ev : allEvents) {
-            long total    = registrationRepo.countByEvent(ev.getEventId());
-            long approved = registrationRepo.countByEventAndRegistrationStatusTrue(ev.getEventId());
-            long paid     = registrationRepo.countByEventAndPaymentStatusTrue(ev.getEventId());
+            long total    = registrationRepo.countByEvent(ev.getId().intValue());
+            long approved = registrationRepo.countByEventAndRegistrationStatusTrue(ev.getId().intValue());
+            long paid     = registrationRepo.countByEventAndPaymentStatusTrue(ev.getId().intValue());
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("event",    ev);
             row.put("total",    total);
@@ -133,5 +116,27 @@ public class VendorServiceImpl implements VendorService {
             rows.add(row);
         }
         return rows;
+    }
+
+    // ─── Helper ──────────────────────────────────────────────────────────────
+
+    private List<WorkhnadRegistrationDto> toDto(List<EventRegistration> regs) {
+        return regs.stream().map(reg -> {
+            Users wh = reg.getWorkhand() != null
+                    ? userRepo.findById(reg.getWorkhand().longValue()).orElse(null)
+                    : null;
+            EventWorkhand ew = reg.getEventWorkhand() != null
+                    ? eventWorkhandRepo.findById(reg.getEventWorkhand().longValue()).orElse(null)
+                    : null;
+            Events ev = reg.getEvent() != null
+                    ? eventRepo.findById(reg.getEvent().longValue()).orElse(null)
+                    : null;
+            return new WorkhnadRegistrationDto(
+                    reg.getRegistrationId(), wh, ew, ev,
+                    reg.getRegistrationDate(),
+                    reg.isRegistrationStatus(),
+                    reg.isPaymentStatus(),
+                    reg.getRating());
+        }).collect(Collectors.toList());
     }
 }

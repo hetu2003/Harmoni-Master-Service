@@ -37,10 +37,10 @@ public class CompanyServiceImpl implements CompanyService {
                 .orElseThrow(() -> new IllegalArgumentException("Company not found: " + userId));
     }
 
-    @Override
-    public List<Events> getUpcomingEventsForCompany(Users company) {
-        return eventRepo.findByCompanyAndStartDatetimeAfterOrderByStartDatetime(company, LocalDateTime.now());
-    }
+//    @Override
+//    public List<Events> getUpcomingEventsForCompany(Users company) {
+//        return eventRepo.findByCompanyAndStartDatetimeAfterOrderByStartDatetime(company, LocalDateTime.now());
+//    }
 
     @Override
     public List<Events> getAllEventsForCompany(Users company) {

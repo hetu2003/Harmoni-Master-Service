@@ -2,15 +2,16 @@ package com.Harmoni.Master.Profile;
 
 import com.Harmoni.Master.Auth.AuthService;
 import com.Harmoni.Master.Auth.dto.UpdateProfileRequest;
+import com.Harmoni.Master.Dto.AjaxResponse;
 import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/profile")
@@ -33,8 +34,8 @@ public class ProfileController {
         }
 
         model.addAttribute("user", user);
-        
-        if (user.getRoleId() != null && user.getRoleId() == 2) { // Assuming 2 is Company
+
+        if (user.getRoleId() != null && user.getRoleId() == 2) {
             model.addAttribute("viewName", "profile/company-profile-edit");
         } else {
             model.addAttribute("viewName", "profile/workhand-profile-edit");
@@ -42,24 +43,24 @@ public class ProfileController {
         return "base/base";
     }
 
-    @PostMapping("/update")
-    public String updateProfile(@ModelAttribute UpdateProfileRequest request,
-                                @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto,
-                                HttpSession session,
-                                RedirectAttributes redirectAttributes) {
-        
+    @PostMapping(value = "/update", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<AjaxResponse> updateProfile(
+            @ModelAttribute UpdateProfileRequest request,
+            @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto,
+            HttpSession session) {
+
         String token = (String) session.getAttribute("userToken");
         if (token == null) {
-            return "redirect:/login";
+            return ResponseEntity.ok(new AjaxResponse(false, "Session expired. Please log in again.", "/login"));
         }
 
         String result = authService.updateProfile(token, request, profilePhoto);
 
         if (result != null && result.contains("successfully")) {
-            redirectAttributes.addFlashAttribute("success", result);
-        } else {
-            redirectAttributes.addFlashAttribute("error", result);
+            // Refresh the user in session — reload from DB via userId
+            return ResponseEntity.ok(new AjaxResponse(true, result, null));
         }
-        return "redirect:/profile";
+        return ResponseEntity.ok(new AjaxResponse(false, result != null ? result : "Update failed.", null));
     }
 }

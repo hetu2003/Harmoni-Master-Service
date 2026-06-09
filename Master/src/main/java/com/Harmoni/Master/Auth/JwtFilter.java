@@ -1,5 +1,7 @@
 package com.Harmoni.Master.Auth;
 
+import com.Harmoni.Master.Entity.Users;
+import com.Harmoni.Master.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -8,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,11 +25,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Component
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    // You need to add this property to your Master's application.properties
     @Value("${jwt.secret}")
     private String secretKey;
+
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -49,20 +54,27 @@ public class JwtFilter extends OncePerRequestFilter {
                         .getPayload();
                 username = claims.getSubject();
             } catch (Exception e) {
-                // Invalid token, clear session
-                session.invalidate();
+                if (session != null) session.invalidate();
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // We don't need to check the database again. The JWT is our source of truth.
-            // We create a simple UserDetails object from the token's claims.
-            UserDetails userDetails = new User(username, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-            
-            UsernamePasswordAuthenticationToken authenticationToken =
+            // Load user from DB to get real role
+            String grantedRole = "ROLE_WORKHAND"; // default
+            try {
+                Users user = userRepository.findByUsername(username).orElse(null);
+                if (user != null && user.getRole() != null) {
+                    String roleName = user.getRole().getRoleName().toUpperCase();
+                    grantedRole = "ROLE_" + roleName;
+                }
+            } catch (Exception ignored) {}
+
+            UserDetails userDetails = new User(username, "",
+                    Collections.singletonList(new SimpleGrantedAuthority(grantedRole)));
+
+            UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);

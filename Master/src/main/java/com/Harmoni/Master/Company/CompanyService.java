@@ -8,6 +8,6 @@ public interface CompanyService {
     List<Users> searchCompanies(String search);
     List<Users> getAllCompanies();
     Users getCompanyById(Long userId);
-    List<Events> getUpcomingEventsForCompany(Users company);
+//    List<Events> getUpcomingEventsForCompany(Users company);
     List<Events> getAllEventsForCompany(Users company);
 }

@@ -40,21 +40,51 @@ public class Events {
     @Column(name = "street_address", length = 250)
     private String streetAddress;
 
-    @Column(name = "city_id")
-    private Integer city;
+    /* ── Raw FK columns (used for inserts / updates) ── */
 
+    @Column(name = "city_id")
+    private Integer cityId;
 
     @Column(name = "state_id")
-    private Integer state;
+    private Integer stateId;
 
     @Column(name = "event_category_id")
-    private Integer eventCategory;
+    private Integer eventCategoryId;
 
     @Column(name = "event_subcategory_id")
-    private Integer eventSubcategory;
+    private Integer eventSubcategoryId;
 
     @Column(name = "company_id")
-    private Integer company;
+    private Integer companyId;
+
+    /* ── Read-only JPA associations for JSP / EL navigation ── */
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
+    private City city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id", insertable = false, updatable = false)
+    private State state;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_category_id", insertable = false, updatable = false)
+    private EventCategory eventCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_subcategory_id", insertable = false, updatable = false)
+    private EventSubcategory eventSubcategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", insertable = false, updatable = false)
+    private Users company;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @Builder.Default
+    @Column(name = "is_featured")
+    private Boolean featured = false;
 
     @Column(name = "is_active")
     Integer isActive;
@@ -70,4 +100,9 @@ public class Events {
 
     @Column(name = "modifiedon")
     Timestamp modifiedOn;
+
+    /** Alias so JSPs can reference ${ev.eventId} */
+    public Long getEventId() {
+        return this.id;
+    }
 }

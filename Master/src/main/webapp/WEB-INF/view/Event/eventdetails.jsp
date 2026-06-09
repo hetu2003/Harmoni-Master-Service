@@ -33,13 +33,36 @@
         </div>
     </section>
 
+    <%-- Event banner --%>
+    <c:choose>
+        <c:when test="${not empty event.imagePath}">
+            <img src="${pageContext.request.contextPath}/${event.imagePath}"
+                 class="w-100" style="height:280px; object-fit:cover;" alt="${event.eventName}">
+        </c:when>
+        <c:otherwise>
+            <div style="height:200px; background:linear-gradient(135deg,#0d6efd,#6610f2);
+                        display:flex; align-items:center; justify-content:center;">
+                <span class="text-white display-6 opacity-75">
+                    <i class="fas fa-calendar-alt me-2"></i>${event.eventName}
+                </span>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
     <div class="container my-5">
         <div class="row g-4">
 
             <%-- ── Left: Event details ── --%>
             <div class="col-lg-8">
 
-                <h2 class="fw-bold">${event.eventName}</h2>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h2 class="fw-bold mb-0">${event.eventName}</h2>
+                    <c:if test="${event.featured}">
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-star me-1"></i>Featured
+                        </span>
+                    </c:if>
+                </div>
 
                 <p class="text-muted mb-1">
                     <i class="fas fa-calendar me-1 text-primary"></i>
@@ -169,6 +192,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/static/js/eventDetails.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/custom/Event/eventDetails.js"></script>
 </body>
 </html>

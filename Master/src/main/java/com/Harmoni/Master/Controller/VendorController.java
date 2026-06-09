@@ -1,12 +1,13 @@
 package com.Harmoni.Master.Controller;
 
+import com.Harmoni.Master.Dto.WorkhnadRegistrationDto;
 import com.Harmoni.Master.Entity.Events;
-import com.Harmoni.Master.Entity.EventRegistration;
 import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.EventRegistration.EventRegistrationService;
 import com.Harmoni.Master.Vendor.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/vendor")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -35,14 +36,15 @@ public class VendorController {
                            Model model) {
         Users company = vendorService.getCompanyFromPrincipal(principal);
         Page<Events> eventPage = vendorService.getMyEvents(company, page, PAGE_SIZE);
-        List<Integer> pageNumbers = IntStream.rangeClosed(1, eventPage.getTotalPages()).boxed().collect(Collectors.toList());
+        List<Integer> pageNumbers = IntStream.rangeClosed(1, eventPage.getTotalPages())
+                .boxed().collect(Collectors.toList());
 
         model.addAttribute("active", "myevent");
         model.addAttribute("events", eventPage);
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", eventPage.getNumber() + 1);
-        model.addAttribute("eventCount", eventPage.getTotalElements());
-        return "vendor/company-events";
+        model.addAttribute("totalEvent", eventPage.getTotalElements());
+        return "User/company-events";
     }
 
     @PostMapping("/my-events/search")
@@ -50,14 +52,12 @@ public class VendorController {
                                  @AuthenticationPrincipal UserDetails principal,
                                  Model model) {
         if ("all".equals(search)) return "redirect:/vendor/my-events";
-        
         Users company = vendorService.getCompanyFromPrincipal(principal);
         List<Events> events = vendorService.searchMyEvents(company, search);
-
         model.addAttribute("active", "myevent");
         model.addAttribute("events", events);
-        model.addAttribute("eventCount", events.size());
-        return "vendor/company-events";
+        model.addAttribute("totalEvent", events.size());
+        return "User/company-events";
     }
 
     @GetMapping("/workhand-requests/{eventId}")
@@ -65,8 +65,8 @@ public class VendorController {
         Events event = vendorService.findEventById(eventId);
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
-        model.addAttribute("workhandRequests", vendorService.getWorkhandRequestsForEvent(event));
-        return "vendor/request-approve";
+        model.addAttribute("workhnadRequests", vendorService.getWorkhandRequestsForEvent(event));
+        return "Event/request-approve";
     }
 
     @GetMapping("/request-approve")
@@ -74,10 +74,8 @@ public class VendorController {
                                  RedirectAttributes redirectAttrs) {
         String error = registrationService.approveRegistration(registrationId);
         if (error != null) redirectAttrs.addFlashAttribute("errorMessage", error);
-        
-        EventRegistration reg = registrationService.getRegistrationById(registrationId);
-        // reg.getEvent() now returns an Integer ID
-        return "redirect:/vendor/workhand-requests/" + reg.getEvent();
+        Long eventId = registrationService.getRegistrationById(registrationId).getEvent().longValue();
+        return "redirect:/vendor/workhand-requests/" + eventId;
     }
 
     @GetMapping("/approved-requests/{eventId}")
@@ -86,7 +84,7 @@ public class VendorController {
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
         model.addAttribute("approvedRequests", vendorService.getApprovedRequestsForEvent(event));
-        return "vendor/approved-requests";
+        return "Event/approved-requests";
     }
 
     @PostMapping("/approved-requests/{eventId}/revoke")
@@ -99,23 +97,21 @@ public class VendorController {
     @GetMapping("/payment/{eventId}")
     public String payment(@PathVariable Long eventId, Model model) {
         Events event = vendorService.findEventById(eventId);
-        List<EventRegistration> approved = vendorService.getWorkhandsForPayment(event);
+        List<WorkhnadRegistrationDto> approved = vendorService.getWorkhandsForPayment(event);
         int totalPrice = vendorService.calculateTotalPrice(approved);
 
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
         model.addAttribute("workhands", approved);
         model.addAttribute("totalPrice", totalPrice);
-        return "vendor/payment";
+        return "Payment/payment";
     }
 
     @GetMapping("/payment/success")
     public String paymentSuccess(@RequestParam("registration_id") Long registrationId,
                                  @RequestParam("rating") int rating,
                                  RedirectAttributes redirectAttrs) {
-        EventRegistration reg = registrationService.getRegistrationById(registrationId);
-        Integer eventId = reg.getEvent();
-
+        Long eventId = registrationService.getRegistrationById(registrationId).getEvent().longValue();
         try {
             vendorService.processWorkhandPayment(registrationId, rating);
         } catch (Exception e) {
@@ -129,8 +125,8 @@ public class VendorController {
         Users workhand = vendorService.getWorkhandProfile(userId);
         model.addAttribute("active", "myevent");
         model.addAttribute("workhand", workhand);
-        model.addAttribute("workhandEvents", vendorService.getWorkhandHistory(workhand));
-        return "vendor/workhand-profile";
+        model.addAttribute("workhnadEvents", vendorService.getWorkhandHistory(workhand));
+        return "User/workhand-profile";
     }
 
     @GetMapping("/event-history")
@@ -138,6 +134,6 @@ public class VendorController {
         Users company = vendorService.getCompanyFromPrincipal(principal);
         model.addAttribute("active", "myevent");
         model.addAttribute("rows", vendorService.getEventHistoryWithStats(company));
-        return "vendor/event-history";
+        return "Event/event-history";
     }
 }

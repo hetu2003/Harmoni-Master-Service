@@ -20,7 +20,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<Map<String, Object>> getCitiesByStateId(Long stateId) {
-        List<City> cities = cityRepo.findByStateStateId(stateId);
+        List<City> cities = cityRepo.findByStateId(stateId);
         return cities.stream()
                 .map(c -> Map.<String, Object>of("id", c.getId(), "name", c.getCityName()))
                 .collect(Collectors.toList());

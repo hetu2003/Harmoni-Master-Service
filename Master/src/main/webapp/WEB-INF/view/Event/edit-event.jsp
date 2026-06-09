@@ -45,7 +45,8 @@
 
                         <form id="editEventForm"
                               action="${pageContext.request.contextPath}/vendor/event/${event.eventId}/edit"
-                              method="POST">
+                              method="POST"
+                              enctype="multipart/form-data">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
                             <!-- ── Category & Subcategory ── -->
@@ -209,6 +210,21 @@
                                           required>${event.description}</textarea>
                             </div>
 
+                            <!-- ── Event Banner Image ── -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Event Banner Image</label>
+                                <c:if test="${not empty event.imagePath}">
+                                    <div class="mb-2">
+                                        <img src="${pageContext.request.contextPath}/${event.imagePath}"
+                                             class="img-fluid rounded" style="max-height:160px; object-fit:cover;"
+                                             alt="Current banner">
+                                        <small class="d-block text-muted mt-1">Current image — upload a new one to replace it.</small>
+                                    </div>
+                                </c:if>
+                                <input type="file" class="form-control" name="imageFile"
+                                       accept="image/jpeg,image/png,image/webp">
+                            </div>
+
                             <!-- ── Submit ── -->
                             <div class="d-flex gap-3">
                                 <button type="submit" class="btn btn-warning px-5" id="submitBtn">
@@ -234,7 +250,7 @@
         /* Selected city ID so AJAX city-load can re-select it after state change */
         var SELECTED_CITY_ID = ${event.city.cityId};
     </script>
-    <script src="${pageContext.request.contextPath}/static/js/addEvent.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>
     <script>
         /* Pre-fill existing workhand slot rows from embedded JSON */
         (function () {

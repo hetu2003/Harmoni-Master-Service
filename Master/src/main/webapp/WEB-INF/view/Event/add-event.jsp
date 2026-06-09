@@ -41,7 +41,8 @@
 
                         <form id="addEventForm"
                               action="${pageContext.request.contextPath}/vendor/event/add"
-                              method="POST">
+                              method="POST"
+                              enctype="multipart/form-data">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
                             <!-- ── Category & Subcategory ── -->
@@ -157,6 +158,18 @@
                                           placeholder="Describe the event..." required></textarea>
                             </div>
 
+                            <!-- ── Event Banner Image ── -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Event Banner Image <span class="text-muted small">(optional, JPG/PNG)</span>
+                                </label>
+                                <input type="file" class="form-control" name="imageFile"
+                                       accept="image/jpeg,image/png,image/webp">
+                                <div class="form-text text-muted">
+                                    Recommended: 1200×400 px, max 5 MB.
+                                </div>
+                            </div>
+
                             <!-- ── Submit ── -->
                             <div class="d-flex gap-3">
                                 <button type="submit" class="btn btn-primary px-5" id="submitBtn">
@@ -181,6 +194,6 @@
         /* Context path for AJAX calls */
         var CTX = '${pageContext.request.contextPath}';
     </script>
-    <script src="${pageContext.request.contextPath}/static/js/addEvent.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.Harmoni.Master.EventRegistration;
 
-
 import com.Harmoni.Master.Entity.EventWorkhand;
 import com.Harmoni.Master.Entity.Events;
 import com.Harmoni.Master.Entity.Users;
@@ -10,24 +9,20 @@ import com.Harmoni.Master.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-@RestController
+
+@Controller
 public class EventRegistrationController {
 
-    @Autowired
-    private EventRepository eventRepo;
-
-    @Autowired
-    private EventWorkhnadRepository eventWorkhnadRepo;
-
-    @Autowired
-    private  UserRepository userRepo;
-    @Autowired
-    private  EventRegistrationService registrationService;
+    @Autowired private EventRepository eventRepo;
+    @Autowired private EventWorkhnadRepository eventWorkhnadRepo;
+    @Autowired private UserRepository userRepo;
+    @Autowired private EventRegistrationService registrationService;
 
     /** GET /event-register/{eventId} */
     @GetMapping("/event-register/{eventId}")
@@ -37,13 +32,12 @@ public class EventRegistrationController {
 
         Events event = findEvent(eventId);
         Users currentUser = findUser(principal);
-
-        List<EventWorkhand> eventWorkhands = eventWorkhnadRepo.findByEvent(event);
+        List<EventWorkhand> eventWorkhands = eventWorkhnadRepo.findByEvent(event.getId().intValue());
 
         model.addAttribute("event", event);
         model.addAttribute("eventWorkhands", eventWorkhands);
         model.addAttribute("workhand", currentUser);
-        return "user/event-register";
+        return "Event/event-register";
     }
 
     /** POST /event-register/{eventId} */
@@ -62,8 +56,7 @@ public class EventRegistrationController {
         boolean registered = registrationService.registerWorkhand(event, workhand, eventWorkhand);
 
         if (!registered) {
-            redirectAttrs.addFlashAttribute("errorMessage",
-                    "You are already registered for this event!");
+            redirectAttrs.addFlashAttribute("errorMessage", "You are already registered for this event!");
             return "redirect:/event";
         }
 
@@ -74,10 +67,8 @@ public class EventRegistrationController {
     /** GET /register-success */
     @GetMapping("/register-success")
     public String registerSuccess() {
-        return "user/register-success";
+        return "Event/register-success";
     }
-
-    // ─── Helpers ──────────────────────────────────────────────────────────────
 
     private Events findEvent(Long eventId) {
         return eventRepo.findById(eventId)
@@ -88,5 +79,4 @@ public class EventRegistrationController {
         return userRepo.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new IllegalStateException("User not found: " + principal.getUsername()));
     }
-
 }

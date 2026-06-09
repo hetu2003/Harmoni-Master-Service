@@ -16,6 +16,7 @@ public class EventSubcategory {
     @Column(name = "event_subcategory_name", nullable = false, length = 255)
     private String eventSubcategoryName;
 
-    @Column(name = "event_category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_category_id")
     private EventCategory eventCategory;
 }

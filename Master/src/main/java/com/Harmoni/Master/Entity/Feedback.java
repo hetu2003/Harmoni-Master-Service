@@ -26,14 +26,20 @@ public class Feedback {
     @Column(name = "feedback_date", nullable = false)
     private LocalDate feedbackDate;
 
+    /* Raw FK for writes */
     @Column(name = "event_id")
     private Integer event;
 
     @Column(name = "workhand_id")
-    private Integer workhand;
+    private Integer workhnadId;
 
     @Column(name = "company_id")
     private Integer company;
+
+    /* Read-only navigation for JSP: ${fb.workhand.name} */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workhand_id", insertable = false, updatable = false)
+    private Users workhand;
 
     @Column(name = "is_active")
     Integer isActive;

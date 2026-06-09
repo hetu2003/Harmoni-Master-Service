@@ -144,13 +144,35 @@
                 <c:forEach var="ev" items="${events}">
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 event-card border-0 shadow-sm">
+
+                            <%-- Banner image --%>
+                            <c:choose>
+                                <c:when test="${not empty ev.imagePath}">
+                                    <img src="${pageContext.request.contextPath}/${ev.imagePath}"
+                                         class="card-img-top"
+                                         style="height:160px; object-fit:cover;"
+                                         alt="${ev.eventName}">
+                                </c:when>
+                                <c:otherwise>
+                                    <div style="height:160px; background:linear-gradient(135deg,#0d6efd,#6610f2);
+                                                display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas fa-calendar-alt fa-3x text-white opacity-50"></i>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+
                             <div class="card-body d-flex flex-column p-4">
 
-                                <div class="mb-2">
+                                <div class="mb-2 d-flex flex-wrap gap-1">
                                     <span class="badge bg-primary">${ev.eventCategory.eventCategoryName}</span>
-                                    <span class="badge bg-light text-dark border ms-1">
+                                    <span class="badge bg-light text-dark border">
                                         ${ev.eventSubcategory.eventSubcategoryName}
                                     </span>
+                                    <c:if test="${ev.featured}">
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fas fa-star me-1"></i>Featured
+                                        </span>
+                                    </c:if>
                                 </div>
 
                                 <h5 class="fw-bold mb-1">${ev.eventName}</h5>

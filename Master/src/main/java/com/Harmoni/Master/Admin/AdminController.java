@@ -8,6 +8,7 @@ import com.Harmoni.Master.Repository.EventRepository;
 import com.Harmoni.Master.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final UserRepository userRepo;
@@ -126,6 +128,34 @@ public class AdminController {
         redirectAttrs.addFlashAttribute("successMessage",
                 "User '" + user.getName() + "' has been " + action + ".");
         return "redirect:/admin/users";
+    }
+
+    // ── Events list ───────────────────────────────────────────────────────────
+
+    @GetMapping("/events")
+    public String eventList(@RequestParam(defaultValue = "0") int page, Model model) {
+        Page<Events> events = eventRepo.findAll(PageRequest.of(page, 15, Sort.by("createdAt").descending()));
+        List<Integer> pageNumbers = IntStream.rangeClosed(1, events.getTotalPages())
+                .boxed().collect(Collectors.toList());
+        model.addAttribute("events", events);
+        model.addAttribute("totalPageList", pageNumbers);
+        model.addAttribute("currentPage", events.getNumber() + 1);
+        model.addAttribute("active", "events");
+        return "admin/events";
+    }
+
+    // ── Toggle event featured ─────────────────────────────────────────────────
+
+    @PostMapping("/events/{eventId}/toggle-featured")
+    public String toggleFeatured(@PathVariable Long eventId,
+                                 @RequestParam(value = "from", defaultValue = "dashboard") String from,
+                                 RedirectAttributes ra) {
+        eventRepo.findById(eventId).ifPresent(e -> {
+            e.setFeatured(e.getFeatured() == null || !e.getFeatured());
+            eventRepo.save(e);
+        });
+        ra.addFlashAttribute("successMessage", "Featured status updated.");
+        return "events".equals(from) ? "redirect:/admin/events" : "redirect:/admin/dashboard";
     }
 
     // ── Force-delete an event (admin override) ────────────────────────────────
