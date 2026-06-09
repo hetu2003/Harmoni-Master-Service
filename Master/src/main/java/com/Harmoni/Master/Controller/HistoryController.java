@@ -1,5 +1,11 @@
 package com.Harmoni.Master.Controller;
 
+import com.Harmoni.Master.Entity.EventRegistration;
+import com.Harmoni.Master.Entity.Feedback;
+import com.Harmoni.Master.Entity.Users;
+import com.Harmoni.Master.Repository.EventRegistrationRepository;
+import com.Harmoni.Master.Repository.FeedbackRepository;
+import com.Harmoni.Master.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +34,7 @@ public class HistoryController {
                           @AuthenticationPrincipal UserDetails principal,
                           Model model) {
 
-        User currentUser = userRepo.findByUsername(principal.getUsername())
+        Users currentUser = userRepo.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
 
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);

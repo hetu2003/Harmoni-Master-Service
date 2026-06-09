@@ -47,17 +47,17 @@ public class EventRegistration {
     private Integer rating;
 
     @Column(name = "is_active")
-    Integer isActive;
+    private Integer isActive;
 
     @Column(name = "createdat")
-    Timestamp createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "createdby")
-    Integer createdBy;
+    private Integer createdBy;
 
     @Column(name = "modifiedby")
-    Integer modifiedBy;
+    private Integer modifiedBy;
 
     @Column(name = "modifiedon")
-    Timestamp modifiedOn;
+    private Timestamp modifiedOn;
 }

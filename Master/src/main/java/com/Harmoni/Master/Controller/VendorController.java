@@ -1,7 +1,12 @@
 package com.Harmoni.Master.Controller;
 
+import com.Harmoni.Master.Entity.Events;
+import com.Harmoni.Master.Entity.EventRegistration;
+import com.Harmoni.Master.Entity.Users;
+import com.Harmoni.Master.EventRegistration.EventRegistrationService;
+import com.Harmoni.Master.Vendor.VendorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,48 +15,33 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Company/Vendor dashboard.
- * Routes use event_id and user_id (no slug column in schema).
- * Mirrors Django's company/views.py.
- */
 @Controller
 @RequestMapping("/vendor")
 @RequiredArgsConstructor
 public class VendorController {
 
-    private final EventRepository eventRepo;
-    private final EventWorkhnadRepository eventWorkhnadRepo;
-    private final EventRegistrationRepository registrationRepo;
-    private final EventSubcategoryRepository eventSubcategoryRepo;
-    private final UserRepository userRepo;
+    private final VendorService vendorService;
     private final EventRegistrationService registrationService;
 
-    // ─────────────────────────────────────────────
-    // My Events list
-    // ─────────────────────────────────────────────
+    private static final int PAGE_SIZE = 2;
 
     @GetMapping("/my-events")
     public String myEvents(@RequestParam(value = "page", defaultValue = "0") int page,
                            @AuthenticationPrincipal UserDetails principal,
                            Model model) {
-
-        User company = getCompany(principal);
-        Pageable pageable = PageRequest.of(page, 2);
-        Page<Event> eventPage = eventRepo.findByCompanyOrderByStartDatetimeDesc(company, pageable);
-
-        List<Integer> pageNumbers = IntStream.rangeClosed(1, eventPage.getTotalPages())
-                .boxed().collect(Collectors.toList());
+        Users company = vendorService.getCompanyFromPrincipal(principal);
+        Page<Events> eventPage = vendorService.getMyEvents(company, page, PAGE_SIZE);
+        List<Integer> pageNumbers = IntStream.rangeClosed(1, eventPage.getTotalPages()).boxed().collect(Collectors.toList());
 
         model.addAttribute("active", "myevent");
         model.addAttribute("events", eventPage);
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", eventPage.getNumber() + 1);
         model.addAttribute("eventCount", eventPage.getTotalElements());
-        model.addAttribute("totalEvent", eventRepo.findByCompanyOrderByStartDatetimeDesc(company).size());
         return "vendor/company-events";
     }
 
@@ -59,64 +49,43 @@ public class VendorController {
     public String searchMyEvents(@RequestParam("search") String search,
                                  @AuthenticationPrincipal UserDetails principal,
                                  Model model) {
-        User company = getCompany(principal);
         if ("all".equals(search)) return "redirect:/vendor/my-events";
-
-        EventSubcategory sub = eventSubcategoryRepo.findById(Long.parseLong(search)).orElse(null);
-        List<Event> events = (sub != null)
-                ? eventRepo.findByCompanyAndEventSubcategoryOrderByStartDatetime(company, sub)
-                : List.of();
+        
+        Users company = vendorService.getCompanyFromPrincipal(principal);
+        List<Events> events = vendorService.searchMyEvents(company, search);
 
         model.addAttribute("active", "myevent");
         model.addAttribute("events", events);
         model.addAttribute("eventCount", events.size());
-        model.addAttribute("totalEvent", eventRepo.findByCompanyOrderByStartDatetimeDesc(company).size());
         return "vendor/company-events";
     }
 
-    // ─────────────────────────────────────────────
-    // Workhand Requests (pending)
-    // ─────────────────────────────────────────────
-
     @GetMapping("/workhand-requests/{eventId}")
-    public String workhnadRequests(@PathVariable Long eventId, Model model) {
-        Event event = findEvent(eventId);
-        List<EventRegistration> requests = registrationRepo.findByEventOrderByEventWorkhnadIdDesc(event);
-
+    public String workhandRequests(@PathVariable Long eventId, Model model) {
+        Events event = vendorService.findEventById(eventId);
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
-        model.addAttribute("workhnadRequests", requests);
-        model.addAttribute("eventWorkhands", eventWorkhnadRepo.findByEvent(event));
+        model.addAttribute("workhandRequests", vendorService.getWorkhandRequestsForEvent(event));
         return "vendor/request-approve";
     }
 
     @GetMapping("/request-approve")
     public String approveRequest(@RequestParam("registrationId") Long registrationId,
                                  RedirectAttributes redirectAttrs) {
-
-        EventRegistration reg = registrationRepo.findById(registrationId)
-                .orElseThrow(() -> new IllegalArgumentException("Registration not found"));
-        Long eventId = reg.getEvent().getEventId();
-
         String error = registrationService.approveRegistration(registrationId);
         if (error != null) redirectAttrs.addFlashAttribute("errorMessage", error);
-
-        return "redirect:/vendor/workhand-requests/" + eventId;
+        
+        EventRegistration reg = registrationService.getRegistrationById(registrationId);
+        // reg.getEvent() now returns an Integer ID
+        return "redirect:/vendor/workhand-requests/" + reg.getEvent();
     }
-
-    // ─────────────────────────────────────────────
-    // Approved Requests
-    // ─────────────────────────────────────────────
 
     @GetMapping("/approved-requests/{eventId}")
     public String approvedRequests(@PathVariable Long eventId, Model model) {
-        Event event = findEvent(eventId);
-        List<EventRegistration> approved =
-                registrationRepo.findByEventAndRegistrationStatusTrueOrderByEventWorkhandEventWorkhnadIdAsc(event);
-
+        Events event = vendorService.findEventById(eventId);
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
-        model.addAttribute("approvedRequests", approved);
+        model.addAttribute("approvedRequests", vendorService.getApprovedRequestsForEvent(event));
         return "vendor/approved-requests";
     }
 
@@ -127,18 +96,11 @@ public class VendorController {
         return "redirect:/vendor/approved-requests/" + eventId;
     }
 
-    // ─────────────────────────────────────────────
-    // Payment
-    // ─────────────────────────────────────────────
-
     @GetMapping("/payment/{eventId}")
     public String payment(@PathVariable Long eventId, Model model) {
-        Event event = findEvent(eventId);
-        List<EventRegistration> approved = registrationRepo.findByEventAndRegistrationStatusTrue(event);
-
-        int totalPrice = approved.stream()
-                .mapToInt(r -> r.getEventWorkhand().getPrice().intValue())
-                .sum();
+        Events event = vendorService.findEventById(eventId);
+        List<EventRegistration> approved = vendorService.getWorkhandsForPayment(event);
+        int totalPrice = vendorService.calculateTotalPrice(approved);
 
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
@@ -151,49 +113,31 @@ public class VendorController {
     public String paymentSuccess(@RequestParam("registration_id") Long registrationId,
                                  @RequestParam("rating") int rating,
                                  RedirectAttributes redirectAttrs) {
-
-        EventRegistration reg = registrationRepo.findById(registrationId)
-                .orElseThrow(() -> new IllegalArgumentException("Registration not found"));
-        Long eventId = reg.getEvent().getEventId();
+        EventRegistration reg = registrationService.getRegistrationById(registrationId);
+        Integer eventId = reg.getEvent();
 
         try {
-            registrationService.processPayment(registrationId, rating);
-            registrationService.sendPaymentEmail(reg.getWorkhand().getEmail());
+            vendorService.processWorkhandPayment(registrationId, rating);
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", "Payment processing failed.");
         }
         return "redirect:/vendor/payment/" + eventId;
     }
 
-    // ─────────────────────────────────────────────
-    // Workhand profile (vendor view)
-    // ─────────────────────────────────────────────
-
     @GetMapping("/workhand-profile/{userId}")
-    public String workhnadProfile(@PathVariable Long userId, Model model) {
-        User workhand = userRepo.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
-
-        List<EventRegistration> workhnadEvents =
-                registrationRepo.findByWorkhandAndRegistrationStatusTrueAndEvent(workhand, null);
-
+    public String workhandProfile(@PathVariable Long userId, Model model) {
+        Users workhand = vendorService.getWorkhandProfile(userId);
         model.addAttribute("active", "myevent");
         model.addAttribute("workhand", workhand);
-        model.addAttribute("workhnadEvents", workhnadEvents);
+        model.addAttribute("workhandEvents", vendorService.getWorkhandHistory(workhand));
         return "vendor/workhand-profile";
     }
 
-    // ─────────────────────────────────────────────
-    // Utility
-    // ─────────────────────────────────────────────
-
-    private User getCompany(UserDetails principal) {
-        return userRepo.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Company user not found"));
-    }
-
-    private Event findEvent(Long eventId) {
-        return eventRepo.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
+    @GetMapping("/event-history")
+    public String eventHistory(@AuthenticationPrincipal UserDetails principal, Model model) {
+        Users company = vendorService.getCompanyFromPrincipal(principal);
+        model.addAttribute("active", "myevent");
+        model.addAttribute("rows", vendorService.getEventHistoryWithStats(company));
+        return "vendor/event-history";
     }
 }

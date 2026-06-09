@@ -11,4 +11,9 @@ public interface AuthService {
     String processForgotPassword(ForgotPasswordRequest request);
     String processResetPassword(ResetPasswordRequest request);
     String changePassword(ChangePasswordRequest request);
+    String updateProfile(String token, UpdateProfileRequest request, MultipartFile profilePhoto);
+
+    String sendEmailOtp(EmailOtpSendRequest request);
+
+    AuthResponse verifyEmailOtp(EmailOtpVerifyRequest request, HttpSession session);
 }

@@ -32,7 +32,6 @@
 
         <div class="contact-form form-wrapper text-center">
 
-            <%-- Div to hold AJAX response messages --%>
             <div id="message" style="display: none;"></div>
 
             <form id="registerForm" action="<c:url value='/register' />" method="post" enctype="multipart/form-data">
@@ -91,14 +90,12 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <!-- Temporary placeholder for testing. You will need to populate this via AJAX or model attributes in the GET method -->
                             <input type="number" name="stateId" placeholder="State ID (e.g., 1)" required>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <!-- Temporary placeholder for testing. You will need to populate this via AJAX or model attributes in the GET method -->
                             <input type="number" name="cityId" placeholder="City ID (e.g., 1)" required>
                         </div>
                     </div>
@@ -119,5 +116,9 @@
     </div>
 </section>
 
-<!-- Path updated to match auth.js location convention -->
 <script src="<c:url value='/assets/custom/login/register.js' />"></script>
+<script>
+    function toggleAdditionalImagesField() {
+        // Your logic here
+    }
+</script>

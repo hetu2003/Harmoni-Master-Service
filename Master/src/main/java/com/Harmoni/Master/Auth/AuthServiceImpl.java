@@ -51,21 +51,15 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse loginWithGoogle(String idToken, HttpSession session) {
         GoogleLoginRequest googleLoginRequest = new GoogleLoginRequest(idToken);
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<GoogleLoginRequest> requestEntity = new HttpEntity<>(googleLoginRequest, headers);
-
-            ResponseEntity<AuthResponse> response = restTemplate.postForEntity("http://localhost:8081/auth/login/google", requestEntity, AuthResponse.class);
-            AuthResponse authResponse = response.getBody();
-
+            AuthResponse authResponse = authClient.loginGoogle(googleLoginRequest);
             if (authResponse != null && authResponse.getToken() != null) {
                 session.setAttribute("userToken", authResponse.getToken());
                 session.setAttribute("userEmail", authResponse.getEmail());
                 session.setAttribute("userId", authResponse.getUserId());
                 return authResponse;
             }
-        } catch (HttpClientErrorException e) {
-            System.err.println("Google login failed: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+        } catch (FeignException e) {
+            System.err.println("Google login failed: " + e.status() + " " + e.getMessage());
             return null;
         }
         return null;
@@ -141,6 +135,73 @@ public class AuthServiceImpl implements AuthService {
         } catch (FeignException e) {
             System.err.println("Change password failed: " + e.status() + " " + e.getMessage());
             return "Failed to change password.";
+        }
+    }
+
+    @Override
+    public String sendEmailOtp(EmailOtpSendRequest request) {
+        try {
+            return authClient.sendEmailOtp(request);
+        } catch (FeignException e) {
+            System.err.println("Send email OTP failed: " + e.status() + " " + e.getMessage());
+            return "Failed to send OTP. Please try again.";
+        }
+    }
+
+    @Override
+    public AuthResponse verifyEmailOtp(EmailOtpVerifyRequest request, HttpSession session) {
+        try {
+            AuthResponse authResponse = authClient.verifyEmailOtp(request);
+            if (authResponse != null && authResponse.getToken() != null) {
+                session.setAttribute("userToken", authResponse.getToken());
+                session.setAttribute("userEmail", authResponse.getEmail());
+                session.setAttribute("userId", authResponse.getUserId());
+                return authResponse;
+            }
+        } catch (FeignException e) {
+            System.err.println("Verify email OTP failed: " + e.status() + " " + e.getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public String updateProfile(String token, UpdateProfileRequest request, MultipartFile profilePhoto) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            headers.setBearerAuth(token); // Pass the JWT token for authentication
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("name", request.getName());
+            body.add("contactNumber", request.getContactNumber());
+            body.add("streetAddress", request.getStreetAddress());
+            body.add("stateId", request.getStateId());
+            body.add("cityId", request.getCityId());
+            if (request.getCompanyDescription() != null) {
+                body.add("companyDescription", request.getCompanyDescription());
+            }
+
+            if (profilePhoto != null && !profilePhoto.isEmpty()) {
+                ByteArrayResource fileAsResource = new ByteArrayResource(profilePhoto.getBytes()) {
+                    @Override
+                    public String getFilename() {
+                        return profilePhoto.getOriginalFilename();
+                    }
+                };
+                body.add("profilePhoto", fileAsResource);
+            }
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            
+            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8081/auth/update-profile", requestEntity, String.class);
+            return response.getBody();
+            
+        } catch (HttpClientErrorException e) {
+            System.err.println("Update profile failed: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+            return "Failed to update profile: " + e.getResponseBodyAsString();
+        } catch (IOException e) {
+            return "Failed to process profile photo.";
         }
     }
 }

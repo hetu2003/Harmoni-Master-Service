@@ -107,6 +107,27 @@ public class AuthController {
         return "redirect:/";
     }
 
+    // --- Email OTP Login Endpoints ---
+
+    @PostMapping(value = "/login/email/send-otp", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<AjaxResponse> sendEmailOtp(@RequestBody EmailOtpSendRequest otpRequest) {
+        String result = authService.sendEmailOtp(otpRequest);
+        return ResponseEntity.ok(new AjaxResponse(true, result, null));
+    }
+
+    @PostMapping(value = "/login/email/verify-otp", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<AjaxResponse> verifyEmailOtp(@RequestBody EmailOtpVerifyRequest otpRequest,
+                                                        HttpServletRequest request, HttpSession session) {
+        AuthResponse response = authService.verifyEmailOtp(otpRequest, session);
+        if (response != null) {
+            return ResponseEntity.ok(new AjaxResponse(true, "Login successful", request.getContextPath() + "/dashboard"));
+        } else {
+            return ResponseEntity.ok(new AjaxResponse(false, "Invalid or expired OTP. Please try again.", null));
+        }
+    }
+
     // --- Forgot / Reset Password Endpoints ---
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage(Model model) {

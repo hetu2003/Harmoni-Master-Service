@@ -1,14 +1,15 @@
 package com.Harmoni.Master.EventRegistration;
 
+
+import com.Harmoni.Master.Entity.EventWorkhand;
 import com.Harmoni.Master.Entity.Events;
+import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.EventRepository;
-import com.harmoni.entity.*;
-import com.harmoni.repository.*;
-import com.harmoni.service.EventRegistrationService;
-import lombok.RequiredArgsConstructor;
+import com.Harmoni.Master.Repository.EventWorkhnadRepository;
+import com.Harmoni.Master.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,10 +18,16 @@ import java.util.List;
 @RestController
 public class EventRegistrationController {
 
-    private final EventRepository eventRepo;
-    private final EventWorkhnadRepository eventWorkhnadRepo;
-    private final UserRepository userRepo;
-    private final EventRegistrationService registrationService;
+    @Autowired
+    private EventRepository eventRepo;
+
+    @Autowired
+    private EventWorkhnadRepository eventWorkhnadRepo;
+
+    @Autowired
+    private  UserRepository userRepo;
+    @Autowired
+    private  EventRegistrationService registrationService;
 
     /** GET /event-register/{eventId} */
     @GetMapping("/event-register/{eventId}")
@@ -28,8 +35,8 @@ public class EventRegistrationController {
                                    @AuthenticationPrincipal UserDetails principal,
                                    Model model) {
 
-        Event event = findEvent(eventId);
-        User currentUser = findUser(principal);
+        Events event = findEvent(eventId);
+        Users currentUser = findUser(principal);
 
         List<EventWorkhand> eventWorkhands = eventWorkhnadRepo.findByEvent(event);
 
@@ -46,8 +53,8 @@ public class EventRegistrationController {
                                      @AuthenticationPrincipal UserDetails principal,
                                      RedirectAttributes redirectAttrs) {
 
-        Event event = findEvent(eventId);
-        User workhand = findUser(principal);
+        Events event = findEvent(eventId);
+        Users workhand = findUser(principal);
 
         EventWorkhand eventWorkhand = eventWorkhnadRepo.findById(selectedCategoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category slot not found: " + selectedCategoryId));
@@ -72,12 +79,12 @@ public class EventRegistrationController {
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
-    private Event findEvent(Long eventId) {
+    private Events findEvent(Long eventId) {
         return eventRepo.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
     }
 
-    private User findUser(UserDetails principal) {
+    private Users findUser(UserDetails principal) {
         return userRepo.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new IllegalStateException("User not found: " + principal.getUsername()));
     }

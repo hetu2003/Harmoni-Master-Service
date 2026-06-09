@@ -3,9 +3,11 @@ package com.Harmoni.Master.Controller;
 import com.Harmoni.Master.Entity.EventRegistration;
 import com.Harmoni.Master.Entity.Events;
 import com.Harmoni.Master.Entity.Feedback;
+import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.EventRegistrationRepository;
 import com.Harmoni.Master.Repository.EventRepository;
 import com.Harmoni.Master.Repository.FeedbackRepository;
+import com.Harmoni.Master.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,9 +50,9 @@ public class EventDetailsController {
         model.addAttribute("registrationInfo", registrationInfo);
 
         if (principal != null) {
-            User currentUser = userRepo.findByUsername(principal.getUsername()).orElse(null);
+            Users currentUser = userRepo.findByUsername(principal.getUsername()).orElse(null);
             if (currentUser != null) {
-                boolean isCompany = currentUser.isCompany();
+                boolean isCompany = currentUser.getRoleId().equals(2);
                 model.addAttribute("isCompany", isCompany);
 
                 if (!isCompany) {
@@ -80,9 +82,8 @@ public class EventDetailsController {
                                  @RequestParam("feedback") String feedbackText,
                                  RedirectAttributes redirectAttrs) {
 
-        Event event = eventRepo.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
-        User workhand = userRepo.findById(workhnadId)
+        Integer event = eventRepo.findById(eventId);
+        Users workhand = userRepo.findById(workhnadId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + workhnadId));
 
         Feedback feedback = Feedback.builder()
