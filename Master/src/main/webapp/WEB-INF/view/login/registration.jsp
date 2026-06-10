@@ -77,66 +77,65 @@
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Username <span style="color:red">*</span></label>
-                                <input type="text" name="username" placeholder="Choose a username" required>
+                                <input type="text" name="username" placeholder="Username *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Email Address <span style="color:red">*</span></label>
-                                <input type="email" name="email" placeholder="your@email.com" required>
+                                <input type="email" name="email" placeholder="Email Address *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>First Name <span style="color:red">*</span></label>
-                                <input type="text" name="firstName" placeholder="First name" required>
+                                <input type="text" name="firstName" placeholder="First Name *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Last Name <span style="color:red">*</span></label>
-                                <input type="text" name="lastName" placeholder="Last name" required>
+                                <input type="text" name="lastName" placeholder="Last Name * hidden" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Contact Number <span style="color:red">*</span></label>
-                                <input type="tel" name="contactNumber" placeholder="10-digit phone"
+                                <input type="tel" name="contactNumber" placeholder="Contact Number (10-digit phone) *"
                                        pattern="[0-9]{10}" title="Enter a 10-digit phone number" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Street Address <span style="color:red">*</span></label>
-                                <input type="text" name="streetAddress" placeholder="Street address" required>
+                                <input type="text" name="streetAddress" placeholder="Street Address *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>State ID <span style="color:red">*</span></label>
-                                <input type="number" name="stateId" placeholder="e.g. 1" min="1" required>
+                                <select name="stateId" id="stateId-wh" required onchange="loadCities(this,'cityId-wh')"
+                                        style="width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:4px;font-size:14px;color:#555;">
+                                    <option value="">Select State *</option>
+                                    <c:forEach var="st" items="${states}">
+                                        <option value="${st.id}">${st.stateName}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>City ID <span style="color:red">*</span></label>
-                                <input type="number" name="cityId" placeholder="e.g. 1" min="1" required>
+                                <select name="cityId" id="cityId-wh" required
+                                        style="width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:4px;font-size:14px;color:#555;">
+                                    <option value="">Select City *</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-item">
-                                <label>Profile Picture <span style="color:red">*</span>
-                                    <small style="color:#888;font-weight:normal;">(PNG or JPG)</small>
-                                </label>
+                                <label style="display:block;text-align:center;margin-bottom:10px;">Profile Picture <span style="color:red">*</span> <small style="color:#888;font-weight:normal;">(PNG or JPG)</small></label>
                                 <!-- Preview box -->
                                 <div id="preview-workhand"
                                      style="width:110px;height:110px;border-radius:50%;border:2px dashed #ccc;
@@ -174,59 +173,60 @@
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Username <span style="color:red">*</span></label>
-                                <input type="text" name="username" placeholder="Choose a username" required>
+                                <input type="text" name="username" placeholder="Username *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Email Address <span style="color:red">*</span></label>
-                                <input type="email" name="email" placeholder="company@email.com" required>
+                                <input type="email" name="email" placeholder="Email Address *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-item">
-                                <label>Company Name <span style="color:red">*</span></label>
-                                <input type="text" name="firstName" placeholder="Full legal company name" required>
+                                <input type="text" name="firstName" placeholder="Company Name (Full legal company name) *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Contact Number <span style="color:red">*</span></label>
-                                <input type="tel" name="contactNumber" placeholder="10-digit phone"
+                                <input type="tel" name="contactNumber" placeholder="Contact Number (10-digit phone) *"
                                        pattern="[0-9]{10}" title="Enter a 10-digit phone number" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>Street Address <span style="color:red">*</span></label>
-                                <input type="text" name="streetAddress" placeholder="Street address" required>
+                                <input type="text" name="streetAddress" placeholder="Street Address *" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>State ID <span style="color:red">*</span></label>
-                                <input type="number" name="stateId" placeholder="e.g. 1" min="1" required>
+                                <select name="stateId" id="stateId-co" required onchange="loadCities(this,'cityId-co')"
+                                        style="width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:4px;font-size:14px;color:#555;">
+                                    <option value="">Select State *</option>
+                                    <c:forEach var="st" items="${states}">
+                                        <option value="${st.id}">${st.stateName}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <label>City ID <span style="color:red">*</span></label>
-                                <input type="number" name="cityId" placeholder="e.g. 1" min="1" required>
+                                <select name="cityId" id="cityId-co" required
+                                        style="width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:4px;font-size:14px;color:#555;">
+                                    <option value="">Select City *</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-item">
-                                <label>Company Description</label>
                                 <textarea name="specialCategory" rows="4"
-                                          placeholder="Brief description of your company, services, specialties…"
+                                          placeholder="Company Description (Brief description of your company, services, specialties…)"
                                           style="width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:6px;
                                                  resize:vertical;font-family:inherit;font-size:14px;"></textarea>
                             </div>
@@ -234,9 +234,7 @@
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="form-item">
-                                <label>Company Logo <span style="color:red">*</span>
-                                    <small style="color:#888;font-weight:normal;">(PNG or JPG)</small>
-                                </label>
+                                <label style="display:block;text-align:center;margin-bottom:10px;">Company Logo <span style="color:red">*</span> <small style="color:#888;font-weight:normal;">(PNG or JPG)</small></label>
                                 <!-- Preview box -->
                                 <div id="preview-company"
                                      style="width:140px;height:140px;border-radius:8px;border:2px dashed #ccc;
@@ -272,4 +270,38 @@
 .mb-30 { margin-bottom: 30px; }
 </style>
 
+<script>
+var _ctxPath = '${pageContext.request.contextPath}';
+function loadCities(stateSelect, citySelectId) {
+    var stateId = stateSelect.value;
+    var citySelect = document.getElementById(citySelectId);
+    citySelect.innerHTML = '<option value="">Loading cities…</option>';
+    if (!stateId) {
+        citySelect.innerHTML = '<option value="">Select City *</option>';
+        return;
+    }
+    fetch(_ctxPath + '/location/cities/' + stateId)
+        .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        })
+        .then(function(cities) {
+            citySelect.innerHTML = '<option value="">Select City *</option>';
+            if (cities.length === 0) {
+                citySelect.innerHTML = '<option value="">No cities found</option>';
+                return;
+            }
+            cities.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = c.name;
+                citySelect.appendChild(opt);
+            });
+        })
+        .catch(function(err) {
+            citySelect.innerHTML = '<option value="">Error loading cities</option>';
+            console.error('City load failed:', err);
+        });
+}
+</script>
 <script src="<c:url value='/assets/custom/login/register.js' />"></script>

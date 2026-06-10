@@ -1,12 +1,12 @@
 package com.Harmoni.Master.Common;
 
-import com.Harmoni.Master.Entity.City;
 import com.Harmoni.Master.Entity.EventSubcategory;
 import com.Harmoni.Master.Repository.CityRepository;
 import com.Harmoni.Master.Repository.EventSubcategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,9 +20,8 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<Map<String, Object>> getCitiesByStateId(Long stateId) {
-        List<City> cities = cityRepo.findByStateId(stateId);
-        return cities.stream()
-                .map(c -> Map.<String, Object>of("id", c.getId(), "name", c.getCityName()))
+        return cityRepo.findCitiesByStateId(Math.toIntExact(stateId)).stream()
+                .map(row -> { Map<String, Object> m = new LinkedHashMap<>(); m.put("id", row[0]); m.put("name", row[1]); return m; })
                 .collect(Collectors.toList());
     }
 

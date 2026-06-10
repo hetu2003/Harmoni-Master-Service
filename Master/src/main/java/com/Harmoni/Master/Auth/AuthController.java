@@ -3,7 +3,10 @@ package com.Harmoni.Master.Auth;
 
 import com.Harmoni.Master.Auth.dto.*;
 import com.Harmoni.Master.Dto.AjaxResponse;
+import com.Harmoni.Master.Repository.StateRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private StateRepository stateRepository;
+
     // Show the login page
     @GetMapping("/login")
     public String showLoginPage(Model model) {
@@ -29,6 +35,7 @@ public class AuthController {
     // Show the registration page
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
+        model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
         model.addAttribute("viewName", "login/registration");
         return "base/base";
     }
@@ -54,10 +61,14 @@ public class AuthController {
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<AjaxResponse> processAjaxLogin(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<AjaxResponse> processAjaxLogin(@RequestBody LoginRequest loginRequest,
+                                                          HttpServletRequest request,
+                                                          HttpServletResponse httpResponse,
+                                                          HttpSession session) {
         AuthResponse response = authService.login(loginRequest.getUsername(), loginRequest.getPassword(), session);
 
         if (response != null) {
+            setJwtCookie(httpResponse, response.getToken());
             String contextPath = request.getContextPath();
             return ResponseEntity.ok(new AjaxResponse(true, "Login successful", contextPath + "/dashboard"));
         } else {
@@ -66,10 +77,13 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
-    public String processFormLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session, Model model) {
+    public String processFormLogin(@RequestParam("username") String username,
+                                   @RequestParam("password") String password,
+                                   HttpSession session, HttpServletResponse httpResponse, Model model) {
         AuthResponse response = authService.login(username, password, session);
 
         if (response != null) {
+            setJwtCookie(httpResponse, response.getToken());
             return "redirect:/dashboard";
         } else {
             model.addAttribute("error", "Invalid username or password");
@@ -80,10 +94,14 @@ public class AuthController {
 
     @PostMapping(value = "/login/google", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<AjaxResponse> processGoogleLogin(@RequestBody GoogleLoginRequest googleLoginRequest, HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<AjaxResponse> processGoogleLogin(@RequestBody GoogleLoginRequest googleLoginRequest,
+                                                             HttpServletRequest request,
+                                                             HttpServletResponse httpResponse,
+                                                             HttpSession session) {
         AuthResponse response = authService.loginWithGoogle(googleLoginRequest.getIdToken(), session);
 
         if (response != null) {
+            setJwtCookie(httpResponse, response.getToken());
             String contextPath = request.getContextPath();
             return ResponseEntity.ok(new AjaxResponse(true, "Google Sign-In successful", contextPath + "/dashboard"));
         } else {
@@ -102,8 +120,9 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, HttpServletResponse httpResponse) {
         session.invalidate();
+        clearJwtCookie(httpResponse);
         return "redirect:/";
     }
 
@@ -145,9 +164,12 @@ public class AuthController {
     @PostMapping(value = "/login/email/verify-otp", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<AjaxResponse> verifyEmailOtp(@RequestBody EmailOtpVerifyRequest otpRequest,
-                                                        HttpServletRequest request, HttpSession session) {
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse httpResponse,
+                                                        HttpSession session) {
         AuthResponse response = authService.verifyEmailOtp(otpRequest, session);
         if (response != null) {
+            setJwtCookie(httpResponse, response.getToken());
             return ResponseEntity.ok(new AjaxResponse(true, "Login successful", request.getContextPath() + "/dashboard"));
         } else {
             return ResponseEntity.ok(new AjaxResponse(false, "Invalid or expired OTP. Please try again.", null));
@@ -185,5 +207,20 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("error", result);
             return "redirect:/reset-password?token=" + request.getToken();
         }
+    }
+
+    private void setJwtCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("jwt_token", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60); // 24 hours — matches JWT validity
+        response.addCookie(cookie);
+    }
+
+    private void clearJwtCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("jwt_token", "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }
