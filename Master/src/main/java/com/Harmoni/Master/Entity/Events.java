@@ -105,4 +105,29 @@ public class Events {
     public Long getEventId() {
         return this.id;
     }
+
+    public String getStartDay() {
+        return startDatetime != null ? String.format("%02d", startDatetime.getDayOfMonth()) : "00";
+    }
+
+    public String getStartMonth() {
+        if (startDatetime == null) return "---";
+        String[] months = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+        return months[startDatetime.getMonthValue() - 1];
+    }
+
+    public String getStartDateForCountdown() {
+        if (startDatetime == null) return "";
+        return startDatetime.getYear() + "/"
+             + String.format("%02d", startDatetime.getMonthValue()) + "/"
+             + String.format("%02d", startDatetime.getDayOfMonth());
+    }
+
+    public String getFormattedDatetime() {
+        if (startDatetime == null) return "";
+        return startDatetime.getYear() + "-"
+             + String.format("%02d", startDatetime.getMonthValue()) + "-"
+             + String.format("%02d", startDatetime.getDayOfMonth()) + "  "
+             + String.format("%02d:%02d", startDatetime.getHour(), startDatetime.getMinute());
+    }
 }

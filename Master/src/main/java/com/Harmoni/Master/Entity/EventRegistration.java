@@ -46,6 +46,10 @@ public class EventRegistration {
     @Column(name = "rating")
     private Integer rating;
 
+    @Column(name = "application_status", length = 20)
+    @Builder.Default
+    private String applicationStatus = "PENDING";
+
     @Column(name = "is_active")
     private Integer isActive;
 
@@ -60,4 +64,16 @@ public class EventRegistration {
 
     @Column(name = "modifiedon")
     private Timestamp modifiedOn;
+
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (createdAt == null) createdAt = now;
+        if (modifiedOn == null) modifiedOn = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedOn = new Timestamp(System.currentTimeMillis());
+    }
 }

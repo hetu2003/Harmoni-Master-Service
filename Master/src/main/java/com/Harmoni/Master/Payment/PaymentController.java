@@ -41,6 +41,13 @@ public class PaymentController {
         Users workhand = userRepo.findById(reg.getWorkhand().longValue()).orElse(null);
         EventWorkhand eventWorkhand = eventWorkhandRepo.findById(reg.getEventWorkhand().longValue()).orElse(null);
 
+        if (reg.isPaymentStatus()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("error", "Payment has already been made for this workhand.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
         if (workhand == null || eventWorkhand == null) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);

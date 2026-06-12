@@ -7,6 +7,7 @@ import com.Harmoni.Master.Repository.EventRegistrationRepository;
 import com.Harmoni.Master.Repository.EventRepository;
 import com.Harmoni.Master.Repository.FeedbackRepository;
 import com.Harmoni.Master.Repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +32,7 @@ public class EventDetailsController {
     @GetMapping("/event-details/{eventId}")
     public String showEventDetails(@PathVariable Long eventId,
                                    @AuthenticationPrincipal UserDetails principal,
+                                   HttpSession session,
                                    Model model) {
 
         Events event = eventRepo.findById(eventId)
@@ -41,29 +43,42 @@ public class EventDetailsController {
         model.addAttribute("event", event);
         model.addAttribute("workhnadFeedbacks", feedbacks);
 
+        // Resolve current user: prefer Spring Security principal, fall back to session
+        Users currentUser = null;
         if (principal != null) {
-            Users currentUser = userRepo.findByUsername(principal.getUsername()).orElse(null);
-            if (currentUser != null) {
-                boolean isCompany = currentUser.getRoleId() != null && currentUser.getRoleId() == 2;
-                model.addAttribute("isCompany", isCompany);
-
-                if (!isCompany) {
-                    List<?> alreadyRegistered = registrationRepo.findByWorkhandAndEvent(
-                            currentUser.getUserId().intValue(), event.getId().intValue());
-                    List<Feedback> alreadyFeedback = feedbackRepo.findByEventAndWorkhnadId(
-                            event.getId().intValue(), currentUser.getUserId().intValue());
-                    List<?> approvedForFeedback = registrationRepo.findApprovedByWorkhandAndEvent(
-                            currentUser.getUserId().intValue(), event.getId().intValue());
-
-                    model.addAttribute("currentUser", currentUser);
-                    model.addAttribute("alreadyRegistered", alreadyRegistered);
-                    model.addAttribute("alreadyFeedback", alreadyFeedback);
-                    model.addAttribute("approvedForFeedback", approvedForFeedback);
-                }
+            currentUser = userRepo.findByUsername(principal.getUsername()).orElse(null);
+        }
+        if (currentUser == null) {
+            Long sessionUserId = (Long) session.getAttribute("userId");
+            if (sessionUserId != null) {
+                currentUser = userRepo.findById(sessionUserId).orElse(null);
             }
         }
 
-        return "Event/eventdetails";
+        if (currentUser != null) {
+            boolean isCompany = currentUser.getRoleId() != null && currentUser.getRoleId() == 2;
+            boolean isAdmin   = currentUser.getRoleId() != null && currentUser.getRoleId() == 3;
+            model.addAttribute("isCompany", isCompany || isAdmin);
+
+            if (!isCompany && !isAdmin) {
+                var existing = registrationRepo.findByWorkhandAndEvent(
+                        currentUser.getUserId().intValue(), event.getId().intValue());
+                List<Feedback> alreadyFeedback = feedbackRepo.findByEventAndWorkhnadId(
+                        event.getId().intValue(), currentUser.getUserId().intValue());
+                var approvedForFeedback = registrationRepo.findApprovedByWorkhandAndEvent(
+                        currentUser.getUserId().intValue(), event.getId().intValue());
+
+                model.addAttribute("currentUser", currentUser);
+                model.addAttribute("alreadyRegistered", !existing.isEmpty());
+                model.addAttribute("myApplicationStatus",
+                        existing.isEmpty() ? null : existing.get(0).getApplicationStatus());
+                model.addAttribute("alreadyFeedback", alreadyFeedback);
+                model.addAttribute("approvedForFeedback", approvedForFeedback);
+            }
+        }
+
+        model.addAttribute("viewName", "Event/eventdetails");
+        return "base/base";
     }
 
     /** POST /feedback */

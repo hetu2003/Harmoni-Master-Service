@@ -55,4 +55,16 @@ public class Feedback {
 
     @Column(name = "modifiedon")
     Timestamp modifiedOn;
+
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (createdAt == null) createdAt = now;
+        if (modifiedOn == null) modifiedOn = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedOn = new Timestamp(System.currentTimeMillis());
+    }
 }

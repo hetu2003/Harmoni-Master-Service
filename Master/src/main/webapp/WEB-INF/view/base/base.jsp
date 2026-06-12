@@ -33,6 +33,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+
+    <%-- Context path for JS files that construct asset URLs --%>
+    <script>var CTX_PATH = '${pageContext.request.contextPath}';</script>
 </head>
 
 <body class="default-header-p" id="body">
@@ -120,12 +123,12 @@
                                 <li><a href="<c:url value='/company' />">Company</a></li>
                                 <li><a href="<c:url value='/contact' />">Contact</a></li>
                                 <c:choose>
-                                    <c:when test="${user.isStaff}">
-                                        <li><a href="<c:url value='/myevent' />">My Events</a></li>
-                                    </c:when>
-                                    <c:otherwise>
+                                    <c:when test="${user.roleId == 1}">
                                         <li><a href="<c:url value='/history' />">History</a></li>
-                                    </c:otherwise>
+                                    </c:when>
+                                    <c:when test="${user.roleId == 2 or user.roleId == 3}">
+                                        <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+                                    </c:when>
                                 </c:choose>
                             </ul>
                         </div>
@@ -137,9 +140,9 @@
                         <ul>
                             <li>
                                 <c:choose>
-                                    <c:when test="${not empty user.profile_pics}">
+                                    <c:when test="${not empty user.profilePath}">
                                         <a href="#">
-                                            <img src="<c:url value='${user.profile_pics}' />"
+                                            <img src="${pageContext.request.contextPath}${user.profilePath}"
                                                  class="rounded-circle"
                                                  style="height: 43px; width: 43px; object-fit: cover;"> </a>
                                     </c:when>
@@ -220,12 +223,12 @@
                                 <c:choose>
                                     <c:when test="${not empty user}">
                                         <c:choose>
-                                            <c:when test="${user.isStaff}">
-                                                <li><a href="<c:url value='/myevent' />">My Events</a></li>
+                                            <c:when test="${user.roleId == 1}">
+                                                <li><a href="<c:url value='/history' />">My History</a></li>
                                             </c:when>
-                                            <c:otherwise>
-                                                <li><a href="<c:url value='/history' />">History</a></li>
-                                            </c:otherwise>
+                                            <c:when test="${user.roleId == 2 or user.roleId == 3}">
+                                                <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+                                            </c:when>
                                         </c:choose>
                                     </c:when>
                                     <c:otherwise>

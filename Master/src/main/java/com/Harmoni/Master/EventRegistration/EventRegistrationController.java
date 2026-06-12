@@ -6,6 +6,7 @@ import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.EventRepository;
 import com.Harmoni.Master.Repository.EventWorkhnadRepository;
 import com.Harmoni.Master.Repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,16 +29,20 @@ public class EventRegistrationController {
     @GetMapping("/event-register/{eventId}")
     public String showRegisterForm(@PathVariable Long eventId,
                                    @AuthenticationPrincipal UserDetails principal,
+                                   HttpSession session,
                                    Model model) {
 
         Events event = findEvent(eventId);
-        Users currentUser = findUser(principal);
+        Users currentUser = resolveUser(principal, session);
+        if (currentUser == null) return "redirect:/login";
+
         List<EventWorkhand> eventWorkhands = eventWorkhnadRepo.findByEvent(event.getId().intValue());
 
         model.addAttribute("event", event);
         model.addAttribute("eventWorkhands", eventWorkhands);
         model.addAttribute("workhand", currentUser);
-        return "Event/event-register";
+        model.addAttribute("viewName", "Event/event-register");
+        return "base/base";
     }
 
     /** POST /event-register/{eventId} */
@@ -45,10 +50,12 @@ public class EventRegistrationController {
     public String submitRegistration(@PathVariable Long eventId,
                                      @RequestParam("selected_category") Long selectedCategoryId,
                                      @AuthenticationPrincipal UserDetails principal,
+                                     HttpSession session,
                                      RedirectAttributes redirectAttrs) {
 
         Events event = findEvent(eventId);
-        Users workhand = findUser(principal);
+        Users workhand = resolveUser(principal, session);
+        if (workhand == null) return "redirect:/login";
 
         EventWorkhand eventWorkhand = eventWorkhnadRepo.findById(selectedCategoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category slot not found: " + selectedCategoryId));
@@ -56,12 +63,14 @@ public class EventRegistrationController {
         boolean registered = registrationService.registerWorkhand(event, workhand, eventWorkhand);
 
         if (!registered) {
-            redirectAttrs.addFlashAttribute("errorMessage", "You are already registered for this event!");
-            return "redirect:/event";
+            redirectAttrs.addFlashAttribute("errorMessage", "You have already applied for this event!");
+            return "redirect:/event-details/" + eventId;
         }
 
         registrationService.sendRegistrationEmail(workhand.getEmail(), workhand.getName());
-        return "redirect:/register-success";
+        redirectAttrs.addFlashAttribute("successMessage",
+                "Application submitted! The company will review and get back to you.");
+        return "redirect:/event-details/" + eventId;
     }
 
     /** GET /register-success */
@@ -75,8 +84,14 @@ public class EventRegistrationController {
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + eventId));
     }
 
-    private Users findUser(UserDetails principal) {
-        return userRepo.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new IllegalStateException("User not found: " + principal.getUsername()));
+    private Users resolveUser(UserDetails principal, HttpSession session) {
+        if (principal != null) {
+            return userRepo.findByUsername(principal.getUsername()).orElse(null);
+        }
+        Long sessionUserId = (Long) session.getAttribute("userId");
+        if (sessionUserId != null) {
+            return userRepo.findById(sessionUserId).orElse(null);
+        }
+        return null;
     }
 }

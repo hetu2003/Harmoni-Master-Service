@@ -1,5 +1,6 @@
 package com.Harmoni.Master.Entity;
 
+import com.Harmoni.Master.Entity.WorkhandCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,5 +44,8 @@ public class EventWorkhand {
     @Column(name = "modifiedon")
     Timestamp modifiedOn;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workhand_category_id", insertable = false, updatable = false)
+    private WorkhandCategory workhnadCategory;
 }
 

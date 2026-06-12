@@ -42,6 +42,12 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
             @Param("workhandId") Integer workhandId,
             @Param("eventId") Integer eventId);
 
+    List<EventRegistration> findByEventAndApplicationStatus(Integer eventId, String applicationStatus);
+
+    long countByEventAndApplicationStatus(Integer eventId, String applicationStatus);
+
+    long countByEventWorkhandAndApplicationStatus(Integer eventWorkhandId, String applicationStatus);
+
     /** Count all registrations for admin stats */
     long countByRegistrationStatusTrue();
     long countByPaymentStatusTrue();

@@ -20,12 +20,12 @@ public class City {
     private String cityName;
 
     /* Raw FK — keep for inserts */
-    @Column(name = "state")
+    @Column(name = "state_id")
     private Integer stateRawId;
 
     /* Read-only JPA association */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "state", insertable = false, updatable = false)
+    @JoinColumn(name = "state_id", insertable = false, updatable = false)
     private State state;
 
     /** Alias so JSPs / repositories can reference cityId */

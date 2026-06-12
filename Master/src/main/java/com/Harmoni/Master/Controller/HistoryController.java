@@ -57,7 +57,8 @@ public class HistoryController {
                     reg.getRegistrationDate(),
                     reg.isRegistrationStatus(),
                     reg.isPaymentStatus(),
-                    reg.getRating());
+                    reg.getRating(),
+                    reg.getApplicationStatus());
         }).collect(Collectors.toList());
 
         Page<WorkhnadRegistrationDto> dtoPage =
@@ -70,7 +71,7 @@ public class HistoryController {
         model.addAttribute("registrations", dtoPage);
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", dtoPage.getNumber() + 1);
-
-        return "history";
+        model.addAttribute("viewName", "history");
+        return "base/base";
     }
 }

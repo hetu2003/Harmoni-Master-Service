@@ -19,4 +19,5 @@ public class WorkhnadRegistrationDto {
     private boolean registrationStatus;
     private boolean paymentStatus;
     private Integer rating;
+    private String applicationStatus;
 }

@@ -31,20 +31,21 @@ public class CompanyController {
         model.addAttribute("companies",  companies);
         model.addAttribute("totalCount", companies.size());
         model.addAttribute("active", "company");
-        return "user/company-list"; // Update path if you move JSPs
+        model.addAttribute("viewName", "User/company-list");
+        return "base/base";
     }
 
     @GetMapping("/company/{userId}")
     public String companyProfile(@PathVariable Long userId, Model model) {
 
         Users company = companyService.getCompanyById(userId);
-//        List<Events> upcomingEvents = companyService.getUpcomingEventsForCompany(company);
         List<Events> allEvents = companyService.getAllEventsForCompany(company);
 
-        model.addAttribute("company",       company);
-//        model.addAttribute("upcomingEvents", upcomingEvents);
-        model.addAttribute("totalEvents",   allEvents.size());
+        model.addAttribute("company",         company);
+        model.addAttribute("upcomingEvents", allEvents);
+        model.addAttribute("totalEvents",    allEvents.size());
         model.addAttribute("active", "company");
-        return "user/company-profile"; // Update path if you move JSPs
+        model.addAttribute("viewName", "User/company-profile");
+        return "base/base";
     }
 }

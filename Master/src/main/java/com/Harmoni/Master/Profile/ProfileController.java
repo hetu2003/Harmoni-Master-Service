@@ -4,6 +4,8 @@ import com.Harmoni.Master.Auth.AuthService;
 import com.Harmoni.Master.Auth.dto.UpdateProfileRequest;
 import com.Harmoni.Master.Dto.AjaxResponse;
 import com.Harmoni.Master.Entity.Users;
+import com.Harmoni.Master.Repository.CityRepository;
+import com.Harmoni.Master.Repository.StateRepository;
 import com.Harmoni.Master.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ public class ProfileController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final StateRepository stateRepository;
+    private final CityRepository cityRepository;
 
     @GetMapping
     public String showProfile(HttpSession session, Model model) {
@@ -34,6 +38,10 @@ public class ProfileController {
         }
 
         model.addAttribute("user", user);
+        model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
+        if (user.getStateId() != null) {
+            model.addAttribute("cities", cityRepository.findByStateRawIdOrderByCityNameAsc(user.getStateId()));
+        }
 
         if (user.getRoleId() != null && user.getRoleId() == 2) {
             model.addAttribute("viewName", "profile/company-profile-edit");

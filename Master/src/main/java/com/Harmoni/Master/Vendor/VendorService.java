@@ -16,6 +16,7 @@ public interface VendorService {
     List<Events> searchMyEvents(Users company, String search);
     List<WorkhnadRegistrationDto> getWorkhandRequestsForEvent(Events event);
     List<WorkhnadRegistrationDto> getApprovedRequestsForEvent(Events event);
+    List<WorkhnadRegistrationDto> getRejectedRequestsForEvent(Events event);
     List<WorkhnadRegistrationDto> getWorkhandsForPayment(Events event);
     int calculateTotalPrice(List<WorkhnadRegistrationDto> approvedWorkhands);
     void processWorkhandPayment(Long registrationId, int rating);

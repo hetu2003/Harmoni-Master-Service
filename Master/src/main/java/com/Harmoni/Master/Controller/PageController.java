@@ -1,21 +1,37 @@
 package com.Harmoni.Master.Controller;
 
+import com.Harmoni.Master.Entity.Events;
+import com.Harmoni.Master.Repository.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Controller
 public class PageController {
 
+    @Autowired
+    private EventRepository eventRepo;
+
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        loadHomeEvents(model);
         return "index";
     }
 
     @GetMapping("/home")
     public String loadPage(Model model) {
-        model.addAttribute("viewName", "index");
+        loadHomeEvents(model);
         return "index";
+    }
+
+    private void loadHomeEvents(Model model) {
+        List<Events> events = eventRepo.findActiveEvents(LocalDateTime.now(), PageRequest.of(0, 8));
+        model.addAttribute("upcomingEvents", events);
     }
 
     @GetMapping("/about")

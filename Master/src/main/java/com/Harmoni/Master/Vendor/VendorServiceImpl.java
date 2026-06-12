@@ -57,12 +57,20 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public List<WorkhnadRegistrationDto> getWorkhandRequestsForEvent(Events event) {
-        return toDto(registrationRepo.findByEventOrderByRegistrationDateDesc(event.getId().intValue()));
+        return toDto(registrationRepo.findByEventAndApplicationStatus(
+                event.getId().intValue(), "PENDING"));
     }
 
     @Override
     public List<WorkhnadRegistrationDto> getApprovedRequestsForEvent(Events event) {
-        return toDto(registrationRepo.findByEventAndRegistrationStatusTrueOrderByEventWorkhandAsc(event.getId().intValue()));
+        return toDto(registrationRepo.findByEventAndApplicationStatus(
+                event.getId().intValue(), "ACCEPTED"));
+    }
+
+    @Override
+    public List<WorkhnadRegistrationDto> getRejectedRequestsForEvent(Events event) {
+        return toDto(registrationRepo.findByEventAndApplicationStatus(
+                event.getId().intValue(), "REJECTED"));
     }
 
     @Override
@@ -126,7 +134,7 @@ public class VendorServiceImpl implements VendorService {
                     ? userRepo.findById(reg.getWorkhand().longValue()).orElse(null)
                     : null;
             EventWorkhand ew = reg.getEventWorkhand() != null
-                    ? eventWorkhandRepo.findById(reg.getEventWorkhand().longValue()).orElse(null)
+                    ? eventWorkhandRepo.findByIdWithCategory(reg.getEventWorkhand().longValue()).orElse(null)
                     : null;
             Events ev = reg.getEvent() != null
                     ? eventRepo.findById(reg.getEvent().longValue()).orElse(null)
@@ -136,7 +144,8 @@ public class VendorServiceImpl implements VendorService {
                     reg.getRegistrationDate(),
                     reg.isRegistrationStatus(),
                     reg.isPaymentStatus(),
-                    reg.getRating());
+                    reg.getRating(),
+                    reg.getApplicationStatus());
         }).collect(Collectors.toList());
     }
 }

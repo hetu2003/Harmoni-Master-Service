@@ -38,33 +38,28 @@
                     <div class="col-lg-8 col-md-10 col-sm-12">
 
                         <div class="form-item">
-                            <label for="username" style="text-align:left;display:block;margin-bottom:6px;font-weight:600;">Username</label>
-                            <input type="text" id="username" name="username" placeholder="Your username" required style="width:100%;">
+                            <input type="text" id="username" name="username" placeholder="Username *" required style="width:100%;">
                         </div>
 
                         <div class="form-item" style="position:relative;">
-                            <label for="oldPassword" style="text-align:left;display:block;margin-bottom:6px;font-weight:600;">Current Password</label>
-                            <input type="password" id="oldPassword" name="oldPassword" placeholder="Current password" required style="width:100%;">
-                            <span class="toggle-pw" onclick="togglePw('oldPassword')" style="position:absolute;right:14px;top:38px;cursor:pointer;color:#888;">&#128065;</span>
+                            <input type="password" id="oldPassword" name="oldPassword" placeholder="Current Password *" required style="width:100%;">
+                            <span class="toggle-pw" onclick="togglePw('oldPassword')" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); cursor:pointer; color:#888; font-size:18px;">&#128065;</span>
                         </div>
+
+                        <div class="form-item" style="position:relative; margin-bottom: 20px;">
+                            <input type="password" id="newPassword" name="newPassword" placeholder="New Password (min 8 chars) *" minlength="8" required style="width:100%;">
+                            <span class="toggle-pw" onclick="togglePw('newPassword')" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); cursor:pointer; color:#888; font-size:18px;">&#128065;</span>
+                        </div>
+
+                        <div id="strengthBar" style="height:6px; border-radius:3px; background:#eee; margin:-12px 0 6px; transition:all .3s;">
+                            <div id="strengthFill" style="height:100%; border-radius:3px; width:0%; transition:all .3s;"></div>
+                        </div>
+                        <div id="strengthLabel" style="text-align:left; font-size:12px; color:#888; margin-bottom:20px;"></div>
 
                         <div class="form-item" style="position:relative;">
-                            <label for="newPassword" style="text-align:left;display:block;margin-bottom:6px;font-weight:600;">New Password</label>
-                            <input type="password" id="newPassword" name="newPassword" placeholder="New password (min 8 chars)" minlength="8" required style="width:100%;">
-                            <span class="toggle-pw" onclick="togglePw('newPassword')" style="position:absolute;right:14px;top:38px;cursor:pointer;color:#888;">&#128065;</span>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password *" required style="width:100%;">
+                            <span class="toggle-pw" onclick="togglePw('confirmPassword')" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); cursor:pointer; color:#888; font-size:18px;">&#128065;</span>
                         </div>
-
-                        <div class="form-item" style="position:relative;">
-                            <label for="confirmPassword" style="text-align:left;display:block;margin-bottom:6px;font-weight:600;">Confirm New Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required style="width:100%;">
-                            <span class="toggle-pw" onclick="togglePw('confirmPassword')" style="position:absolute;right:14px;top:38px;cursor:pointer;color:#888;">&#128065;</span>
-                        </div>
-
-                        <!-- Password strength indicator -->
-                        <div id="strengthBar" style="height:6px;border-radius:3px;background:#eee;margin:-10px 0 18px;transition:all .3s;">
-                            <div id="strengthFill" style="height:100%;border-radius:3px;width:0%;transition:all .3s;"></div>
-                        </div>
-                        <div id="strengthLabel" style="text-align:left;font-size:12px;color:#888;margin-bottom:14px;"></div>
 
                         <div class="text-center">
                             <button type="submit" id="submitBtn" class="custom-btn">CHANGE PASSWORD</button>

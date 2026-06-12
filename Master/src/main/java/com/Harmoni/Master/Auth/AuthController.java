@@ -3,7 +3,12 @@ package com.Harmoni.Master.Auth;
 
 import com.Harmoni.Master.Auth.dto.*;
 import com.Harmoni.Master.Dto.AjaxResponse;
+import com.Harmoni.Master.Entity.UserWorkhnadCategory;
+import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.StateRepository;
+import com.Harmoni.Master.Repository.UserRepository;
+import com.Harmoni.Master.Repository.UserWorkhnadCategoryRepository;
+import com.Harmoni.Master.Repository.WorkhandCategoryRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +28,16 @@ public class AuthController {
     private AuthService authService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private StateRepository stateRepository;
+
+    @Autowired
+    private WorkhandCategoryRepository workhnadCategoryRepo;
+
+    @Autowired
+    private UserWorkhnadCategoryRepository userWorkhnadCategoryRepo;
 
     // Show the login page
     @GetMapping("/login")
@@ -36,6 +50,7 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
+        model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("viewName", "login/registration");
         return "base/base";
     }
@@ -50,6 +65,20 @@ public class AuthController {
         String result = authService.register(registrationRequest, profilePhoto);
 
         if (result != null && result.contains("successful")) {
+            // Persist workhand skill categories for WORKHAND registrations
+            if (Integer.valueOf(1).equals(registrationRequest.getRoleId())
+                    && registrationRequest.getWorkhnadCategoryIds() != null
+                    && !registrationRequest.getWorkhnadCategoryIds().isEmpty()) {
+                try {
+                    Users user = userRepository.findByUsername(registrationRequest.getUsername()).orElse(null);
+                    if (user != null) {
+                        for (Integer catId : registrationRequest.getWorkhnadCategoryIds()) {
+                            userWorkhnadCategoryRepo.save(
+                                    new UserWorkhnadCategory(null, user.getUserId(), catId, null));
+                        }
+                    }
+                } catch (Exception ignored) {}
+            }
             String loginUrl = request.getContextPath() + "/login";
             return ResponseEntity.ok(new AjaxResponse(true, result, loginUrl));
         } else {
@@ -110,13 +139,17 @@ public class AuthController {
     }
 
     @GetMapping("/dashboard")
-    public String showDashboard(HttpSession session, Model model) {
-        if (session.getAttribute("userToken") == null) {
-             return "redirect:/login";
+    public String showDashboard(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return "redirect:/login";
+
+        Users user = userRepository.findById(userId).orElse(null);
+        if (user == null) return "redirect:/login";
+
+        if (user.getRole() != null && "ADMIN".equalsIgnoreCase(user.getRole().getRoleName())) {
+            return "redirect:/admin/dashboard";
         }
-        model.addAttribute("email", session.getAttribute("userEmail"));
-        model.addAttribute("viewName", "description/dashboard");
-        return "base/base";
+        return "redirect:/home";
     }
 
     @GetMapping("/logout")

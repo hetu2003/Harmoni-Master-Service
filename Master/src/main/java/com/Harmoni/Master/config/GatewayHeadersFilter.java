@@ -33,7 +33,7 @@ public class GatewayHeadersFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             String grantedRole = "ROLE_WORKHAND";
             try {
-                Users user = userRepository.findByUsername(username).orElse(null);
+                Users user = userRepository.findByUsernameWithRole(username).orElse(null);
                 if (user != null && user.getRole() != null) {
                     grantedRole = "ROLE_" + user.getRole().getRoleName().toUpperCase();
                 }

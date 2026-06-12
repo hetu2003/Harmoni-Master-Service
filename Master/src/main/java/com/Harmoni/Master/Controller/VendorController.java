@@ -4,6 +4,7 @@ import com.Harmoni.Master.Dto.WorkhnadRegistrationDto;
 import com.Harmoni.Master.Entity.Events;
 import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.EventRegistration.EventRegistrationService;
+import com.Harmoni.Master.Repository.EventRegistrationRepository;
 import com.Harmoni.Master.Vendor.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class VendorController {
 
     private final VendorService vendorService;
     private final EventRegistrationService registrationService;
+    private final EventRegistrationRepository registrationRepo;
 
     private static final int PAGE_SIZE = 2;
 
@@ -44,7 +46,8 @@ public class VendorController {
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", eventPage.getNumber() + 1);
         model.addAttribute("totalEvent", eventPage.getTotalElements());
-        return "User/company-events";
+        model.addAttribute("viewName", "User/company-events");
+        return "base/base";
     }
 
     @PostMapping("/my-events/search")
@@ -63,17 +66,36 @@ public class VendorController {
     @GetMapping("/workhand-requests/{eventId}")
     public String workhandRequests(@PathVariable Long eventId, Model model) {
         Events event = vendorService.findEventById(eventId);
+        long acceptedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "ACCEPTED");
+        long pendingCount  = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "PENDING");
+        long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
+
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
         model.addAttribute("workhnadRequests", vendorService.getWorkhandRequestsForEvent(event));
-        return "Event/request-approve";
+        model.addAttribute("acceptedCount", acceptedCount);
+        model.addAttribute("pendingCount", pendingCount);
+        model.addAttribute("rejectedCount", rejectedCount);
+        model.addAttribute("viewName", "Event/request-approve");
+        return "base/base";
     }
 
-    @GetMapping("/request-approve")
+    @PostMapping("/request-approve")
     public String approveRequest(@RequestParam("registrationId") Long registrationId,
                                  RedirectAttributes redirectAttrs) {
         String error = registrationService.approveRegistration(registrationId);
         if (error != null) redirectAttrs.addFlashAttribute("errorMessage", error);
+        else redirectAttrs.addFlashAttribute("successMessage", "Workhand accepted successfully.");
+        Long eventId = registrationService.getRegistrationById(registrationId).getEvent().longValue();
+        return "redirect:/vendor/workhand-requests/" + eventId;
+    }
+
+    @PostMapping("/request-reject")
+    public String rejectRequest(@RequestParam("registrationId") Long registrationId,
+                                RedirectAttributes redirectAttrs) {
+        String error = registrationService.rejectRegistration(registrationId);
+        if (error != null) redirectAttrs.addFlashAttribute("errorMessage", error);
+        else redirectAttrs.addFlashAttribute("successMessage", "Application rejected.");
         Long eventId = registrationService.getRegistrationById(registrationId).getEvent().longValue();
         return "redirect:/vendor/workhand-requests/" + eventId;
     }
@@ -81,10 +103,35 @@ public class VendorController {
     @GetMapping("/approved-requests/{eventId}")
     public String approvedRequests(@PathVariable Long eventId, Model model) {
         Events event = vendorService.findEventById(eventId);
+        long acceptedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "ACCEPTED");
+        long pendingCount  = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "PENDING");
+        long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
+
         model.addAttribute("active", "myevent");
         model.addAttribute("event", event);
         model.addAttribute("approvedRequests", vendorService.getApprovedRequestsForEvent(event));
-        return "Event/approved-requests";
+        model.addAttribute("acceptedCount", acceptedCount);
+        model.addAttribute("pendingCount", pendingCount);
+        model.addAttribute("rejectedCount", rejectedCount);
+        model.addAttribute("viewName", "Event/approved-requests");
+        return "base/base";
+    }
+
+    @GetMapping("/rejected-requests/{eventId}")
+    public String rejectedRequests(@PathVariable Long eventId, Model model) {
+        Events event = vendorService.findEventById(eventId);
+        long acceptedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "ACCEPTED");
+        long pendingCount  = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "PENDING");
+        long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
+
+        model.addAttribute("active", "myevent");
+        model.addAttribute("event", event);
+        model.addAttribute("rejectedRequests", vendorService.getRejectedRequestsForEvent(event));
+        model.addAttribute("acceptedCount", acceptedCount);
+        model.addAttribute("pendingCount", pendingCount);
+        model.addAttribute("rejectedCount", rejectedCount);
+        model.addAttribute("viewName", "Event/rejected-requests");
+        return "base/base";
     }
 
     @PostMapping("/approved-requests/{eventId}/revoke")
@@ -104,7 +151,8 @@ public class VendorController {
         model.addAttribute("event", event);
         model.addAttribute("workhands", approved);
         model.addAttribute("totalPrice", totalPrice);
-        return "Payment/payment";
+        model.addAttribute("viewName", "Payment/payment");
+        return "base/base";
     }
 
     @GetMapping("/payment/success")
@@ -134,6 +182,7 @@ public class VendorController {
         Users company = vendorService.getCompanyFromPrincipal(principal);
         model.addAttribute("active", "myevent");
         model.addAttribute("rows", vendorService.getEventHistoryWithStats(company));
-        return "Event/event-history";
+        model.addAttribute("viewName", "Event/event-history");
+        return "base/base";
     }
 }

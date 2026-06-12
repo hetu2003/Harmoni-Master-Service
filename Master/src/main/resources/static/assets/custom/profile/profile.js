@@ -62,3 +62,28 @@ function getCtx() {
     }
     return "";
 }
+
+function loadCities(stateSelect, citySelectId) {
+    var stateId = stateSelect.value;
+    var citySelect = document.getElementById(citySelectId);
+    citySelect.innerHTML = '<option value="">Loading cities…</option>';
+    if (!stateId) {
+        citySelect.innerHTML = '<option value="" disabled selected>Select City *</option>';
+        return;
+    }
+    fetch(getCtx() + "/location/cities/" + stateId)
+        .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function (cities) {
+            citySelect.innerHTML = '<option value="" disabled selected>Select City *</option>';
+            cities.forEach(function (c) {
+                var opt = document.createElement("option");
+                opt.value = c.id;
+                opt.textContent = c.name;
+                citySelect.appendChild(opt);
+            });
+        })
+        .catch(function (err) {
+            citySelect.innerHTML = '<option value="">Error loading cities</option>';
+            console.error("City load failed:", err);
+        });
+}

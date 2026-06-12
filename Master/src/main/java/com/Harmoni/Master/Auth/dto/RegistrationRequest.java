@@ -1,5 +1,7 @@
 package com.Harmoni.Master.Auth.dto;
 
+import java.util.List;
+
 // This DTO mirrors the UserRegisterDto in the Auth service
 public class RegistrationRequest {
     private Integer roleId;
@@ -12,6 +14,7 @@ public class RegistrationRequest {
     private Integer stateId;
     private Integer cityId;
     private String specialCategory;
+    private List<Integer> workhnadCategoryIds;
 
     // Getters and Setters
     public Integer getRoleId() { return roleId; }
@@ -34,4 +37,6 @@ public class RegistrationRequest {
     public void setCityId(Integer cityId) { this.cityId = cityId; }
     public String getSpecialCategory() { return specialCategory; }
     public void setSpecialCategory(String specialCategory) { this.specialCategory = specialCategory; }
+    public List<Integer> getWorkhnadCategoryIds() { return workhnadCategoryIds; }
+    public void setWorkhnadCategoryIds(List<Integer> workhnadCategoryIds) { this.workhnadCategoryIds = workhnadCategoryIds; }
 }

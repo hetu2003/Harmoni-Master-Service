@@ -149,6 +149,23 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="form-item">
+                                <label style="display:block;margin-bottom:8px;font-weight:600;">
+                                    Your Skill Categories <span style="color:red">*</span>
+                                    <small style="color:#888;font-weight:normal;"> (select one or more)</small>
+                                </label>
+                                <select name="workhnadCategoryIds" multiple required
+                                        style="width:100%;padding:10px;border:1px solid #e0e0e0;border-radius:4px;
+                                               font-size:14px;color:#555;min-height:160px;">
+                                    <c:forEach var="cat" items="${workhnadCategories}">
+                                        <option value="${cat.workhnadCategoryId}">${cat.workhnadCategoryName}</option>
+                                    </c:forEach>
+                                </select>
+                                <small style="color:#888;font-size:12px;">Hold Ctrl (Windows) or Cmd (Mac) to select multiple.</small>
+                            </div>
+                        </div>
+
                         <div class="col-lg-12 col-md-12 col-sm-12 text-center mt-20">
                             <button type="submit" id="btnWorkhand" class="custom-btn">REGISTER AS WORKHAND</button>
                         </div>

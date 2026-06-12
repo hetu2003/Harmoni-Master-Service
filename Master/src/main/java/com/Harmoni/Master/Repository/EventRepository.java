@@ -39,4 +39,7 @@ public interface EventRepository extends JpaRepository<Events, Long> {
     long countByFeaturedTrue();
 
     List<Events> findByFeaturedTrueOrderByStartDatetimeAsc();
+
+    @Query("SELECT e FROM Events e WHERE e.endDatetime >= :now AND e.isActive = 1 ORDER BY e.startDatetime ASC")
+    List<Events> findActiveEvents(@Param("now") LocalDateTime now, Pageable pageable);
 }

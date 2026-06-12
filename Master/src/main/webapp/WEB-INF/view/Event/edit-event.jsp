@@ -247,29 +247,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         var CTX = '${pageContext.request.contextPath}';
-        /* Selected city ID so AJAX city-load can re-select it after state change */
         var SELECTED_CITY_ID = ${event.city.cityId};
+        var WORKHAND_CATS = [
+            <c:forEach var="cat" items="${workhnadCategories}" varStatus="vs">
+                { id: ${cat.workhnadCategoryId}, name: '${cat.workhnadCategoryName}' }<c:if test="${not vs.last}">,</c:if>
+            </c:forEach>
+        ];
     </script>
     <script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>
     <script>
-        /* Pre-fill existing workhand slot rows from embedded JSON */
+        /* Pre-fill existing workhand slot rows using addSlotRow() so category dropdowns render properly */
         (function () {
             var raw = document.getElementById('existingSlotsData');
             if (!raw) return;
             var slots;
             try { slots = JSON.parse(raw.textContent); } catch (e) { return; }
-            var n = slots.length;
-            var countInput = document.getElementById('slotCount');
-            if (countInput) countInput.value = n;
-            generateSlots(n);
-            slots.forEach(function (s, i) {
-                var catInput  = document.getElementById('wh_cat_' + i);
-                var numInput  = document.getElementById('wh_num_' + i);
-                var priceInput = document.getElementById('wh_price_' + i);
-                if (catInput)   catInput.value   = s.categoryId;
-                if (numInput)   numInput.value   = s.count;
-                if (priceInput) priceInput.value = s.price;
+            document.getElementById('slotContainer').innerHTML = '';
+            slots.forEach(function (s) {
+                addSlotRow(s.categoryId, s.count, s.price);
             });
+            var countInput = document.getElementById('slotCount');
+            if (countInput) countInput.value = slots.length;
         })();
     </script>
 </body>

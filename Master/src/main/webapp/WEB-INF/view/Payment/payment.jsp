@@ -1,40 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Process Payments - ${event.eventName}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background: #f4f6fb; }
-        .star-icon { font-size: 1.5rem; cursor: pointer; color: #ccc; transition: color .15s; }
-        .star-icon:hover, .star-icon.active { color: #f5c518; }
-        .event-banner { height: 180px; object-fit: cover; border-radius: 12px; }
-        .event-banner-placeholder {
-            height: 180px; border-radius: 12px; background: linear-gradient(135deg, #0d6efd, #6610f2);
-            display: flex; align-items: center; justify-content: center; color: #fff; font-size: 3rem;
-        }
-    </style>
-</head>
-<body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/home">
-            <i class="fas fa-calendar-star me-2"></i>Harmoni
-        </a>
-        <div class="d-flex align-items-center gap-3">
-            <a href="${pageContext.request.contextPath}/vendor/my-events" class="nav-link text-white">
-                <i class="fas fa-arrow-left me-1"></i>My Events
-            </a>
-        </div>
-    </div>
-</nav>
+<%-- Bootstrap 5 + FA6 loaded here so modal/flex classes work alongside base.jsp's Bootstrap 4 --%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .star-icon { font-size: 1.5rem; cursor: pointer; color: #ccc; transition: color .15s; }
+    .star-icon:hover, .star-icon.active { color: #f5c518; }
+    .event-banner { height: 180px; object-fit: cover; border-radius: 12px; }
+    .event-banner-placeholder {
+        height: 180px; border-radius: 12px; background: linear-gradient(135deg, #0d6efd, #6610f2);
+        display: flex; align-items: center; justify-content: center; color: #fff; font-size: 3rem;
+    }
+</style>
 
 <div class="container my-4">
 
@@ -190,9 +169,10 @@
                                         <td class="text-center">
                                             <c:choose>
                                                 <c:when test="${dto.paymentStatus}">
-                                                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
+                                                    <span class="badge bg-success px-3 py-2"
+                                                          title="Paid on ${dto.paymentDate}">
+                                                        <i class="fas fa-check-circle me-1"></i>Already Paid
+                                                    </span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <button class="btn btn-sm btn-primary"
@@ -208,7 +188,7 @@
                                         </td>
                                     </tr>
 
-                                    <%-- Rating + Pay modal for each workhand --%>
+                                    <%-- Rating + Pay modal for each unpaid workhand --%>
                                     <c:if test="${!dto.paymentStatus}">
                                     <div class="modal fade" id="payModal${dto.registrationId}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -300,7 +280,6 @@
 <script>
     var CTX = '${pageContext.request.contextPath}';
 
-    // Star rating interaction
     document.querySelectorAll('.star-icon').forEach(function(star) {
         star.addEventListener('click', function() {
             var regId  = this.getAttribute('data-reg-id');
@@ -312,15 +291,15 @@
             document.getElementById('ratingError' + regId).style.display = 'none';
         });
         star.addEventListener('mouseover', function() {
-            var regId  = this.getAttribute('data-reg-id');
-            var val    = parseInt(this.getAttribute('data-value'));
+            var regId = this.getAttribute('data-reg-id');
+            var val   = parseInt(this.getAttribute('data-value'));
             document.querySelectorAll('#stars' + regId + ' .star-icon').forEach(function(s, idx) {
                 s.style.color = idx < val ? '#f5c518' : '#ccc';
             });
         });
         star.addEventListener('mouseout', function() {
-            var regId  = this.getAttribute('data-reg-id');
-            var saved  = parseInt(document.getElementById('ratingInput' + regId).value);
+            var regId = this.getAttribute('data-reg-id');
+            var saved = parseInt(document.getElementById('ratingInput' + regId).value);
             document.querySelectorAll('#stars' + regId + ' .star-icon').forEach(function(s, idx) {
                 s.style.color = idx < saved ? '#f5c518' : '#ccc';
             });
@@ -334,12 +313,10 @@
             return;
         }
 
-        var amountPaise = Math.round(priceRaw * 100); // price is in rupees, Razorpay needs paise
-
         fetch(CTX + '/payment/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'registrationId=' + registrationId + '&amount=' + amountPaise + '&rating=' + rating
+            body: 'registrationId=' + registrationId + '&amount=' + Math.round(priceRaw * 100) + '&rating=' + rating
         })
         .then(function(r) { return r.json(); })
         .then(function(data) {
@@ -381,5 +358,3 @@
         });
     }
 </script>
-</body>
-</html>

@@ -1,263 +1,171 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Events - Harmoni</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .event-card { transition: transform .18s, box-shadow .18s; }
-        .event-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
-        .filter-bar { background: #f8f9fa; border-bottom: 1px solid #dee2e6; }
-    </style>
-</head>
-<body>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<!-- page banner -->
+<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 60px 0;">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="${pageContext.request.contextPath}/home">
-            <i class="fas fa-calendar-star me-2"></i>Harmoni
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a></li>
-                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/event">Events</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/company">Companies</a></li>
-            </ul>
-            <ul class="navbar-nav ms-auto">
+        <div class="section-title text-center mb-0">
+            <small class="sub-title">upcoming events</small>
+            <h2 class="big-title white-color mt-2">Browse <strong>Events</strong></h2>
+            <p class="white-color mb-0 mt-2">
                 <c:choose>
-                    <c:when test="${pageContext.request.userPrincipal != null}">
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/history">History</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
-                        </li>
+                    <c:when test="${not empty keyword}">
+                        Search results for &ldquo;<strong>${keyword}</strong>&rdquo; &mdash; ${totalEvents} events found
                     </c:when>
-                    <c:otherwise>
-                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a></li>
-                    </c:otherwise>
+                    <c:otherwise>${totalEvents} upcoming events available</c:otherwise>
                 </c:choose>
-            </ul>
+            </p>
         </div>
-    </div>
-</nav>
-
-<!-- Header -->
-<section class="py-4 bg-dark text-white">
-    <div class="container">
-        <h3 class="mb-1">Browse <strong>Events</strong></h3>
-        <p class="text-white-50 mb-0">
-            <c:choose>
-                <c:when test="${not empty keyword}">
-                    Search results for "<strong>${keyword}</strong>" —
-                    <c:choose>
-                        <c:when test="${events instanceof java.util.List}">${events.size()}</c:when>
-                        <c:otherwise>${totalEvents}</c:otherwise>
-                    </c:choose>
-                    events found
-                </c:when>
-                <c:otherwise>
-                    ${totalEvents} upcoming events available
-                </c:otherwise>
-            </c:choose>
-        </p>
     </div>
 </section>
 
-<!-- Filter & Search Bar -->
-<div class="filter-bar py-3">
-    <div class="container">
-        <div class="row g-2 align-items-end">
+<!-- Create Event button — COMPANY / ADMIN only -->
+<c:if test="${not empty user && (user.roleId == 2 || user.roleId == 3)}">
+<div style="background:#fff; border-bottom:1px solid #eee; padding:10px 0;">
+    <div class="container text-right">
+        <a href="<c:url value='/vendor/event/add' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
+            <i class="fas fa-plus mr-1"></i>Create New Event
+        </a>
+    </div>
+</div>
+</c:if>
 
-            <!-- Keyword search -->
-            <div class="col-md-5">
-                <form action="${pageContext.request.contextPath}/event/search" method="POST" id="searchForm">
+<!-- filter bar -->
+<div style="background: #f8f9fa; border-bottom: 1px solid #dee2e6; padding: 14px 0;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-2 mb-md-0">
+                <form action="<c:url value='/event/search' />" method="POST">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                     <c:if test="${not empty selectedCatId}">
                         <input type="hidden" name="catId" value="${selectedCatId}">
                     </c:if>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="keyword"
-                               value="${keyword}" placeholder="Search by name, city, company...">
-                        <button class="btn btn-dark" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        <c:if test="${not empty keyword}">
-                            <a href="${pageContext.request.contextPath}/event" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i>
-                            </a>
-                        </c:if>
+                        <input type="text" class="form-control" name="keyword" value="${keyword}" placeholder="Search by name, city, company...">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
+                            <c:if test="${not empty keyword}">
+                                <a href="<c:url value='/event' />" class="btn btn-outline-secondary ml-1"><i class="fas fa-times"></i></a>
+                            </c:if>
+                        </div>
                     </div>
                 </form>
             </div>
-
-            <!-- Category filter -->
-            <div class="col-md-4">
-                <select class="form-select" id="catFilter" onchange="applyCatFilter(this.value)">
+            <div class="col-md-4 mb-2 mb-md-0">
+                <select class="form-control" id="catFilter" onchange="applyCatFilter(this.value)">
                     <option value="">All Categories</option>
                     <c:forEach var="cat" items="${categories}">
-                        <option value="${cat.eventCategoryId}"
-                            <c:if test="${cat.eventCategoryId == selectedCatId}">selected</c:if>>
-                            ${cat.eventCategoryName}
-                        </option>
+                        <option value="${cat.eventCategoryId}" <c:if test="${cat.eventCategoryId == selectedCatId}">selected</c:if>>${cat.eventCategoryName}</option>
                     </c:forEach>
                 </select>
             </div>
-
-            <!-- Reset -->
-            <div class="col-md-3 text-end">
-                <a href="${pageContext.request.contextPath}/event" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-redo me-1"></i>Reset Filters
-                </a>
+            <div class="col-md-2 text-right">
+                <a href="<c:url value='/event' />" class="btn btn-outline-secondary btn-sm"><i class="fas fa-redo mr-1"></i>Reset</a>
             </div>
-
         </div>
     </div>
 </div>
 
-<!-- Event Grid -->
-<div class="container py-5">
+<!-- events grid -->
+<section style="padding: 60px 0;">
+    <div class="container">
+        <c:choose>
+            <c:when test="${events.totalElements == 0}">
+                <div class="text-center" style="padding: 80px 0;">
+                    <i class="fas fa-search fa-4x mb-3 d-block" style="color: #ddd;"></i>
+                    <h5>No events found</h5>
+                    <c:if test="${not empty keyword}">
+                        <p class="text-muted">Try different keywords or <a href="<c:url value='/event' />">browse all events</a>.</p>
+                    </c:if>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="row">
+                    <c:forEach var="ev" items="${events.content}">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div style="border-radius:10px; box-shadow:0 3px 18px rgba(0,0,0,0.1); overflow:hidden; height:100%; display:flex; flex-direction:column; background:#fff; transition:transform .2s;">
 
-    <c:choose>
-        <c:when test="${(events instanceof java.util.List and empty events) or
-                        (not (events instanceof java.util.List) and events.totalElements == 0)}">
-            <div class="text-center py-5">
-                <i class="fas fa-search fa-3x text-muted mb-3 d-block"></i>
-                <h5 class="text-muted">No events found</h5>
-                <c:if test="${not empty keyword}">
-                    <p class="text-muted">Try different keywords or
-                        <a href="${pageContext.request.contextPath}/event">browse all events</a>.
-                    </p>
-                </c:if>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="row g-4">
-                <c:forEach var="ev" items="${events}">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 event-card border-0 shadow-sm">
+                                <!-- banner -->
+                                <c:choose>
+                                    <c:when test="${not empty ev.imagePath}">
+                                        <img src="${pageContext.request.contextPath}/${ev.imagePath}" style="height:190px; object-fit:cover; width:100%;" alt="${ev.eventName}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="height:190px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center;">
+                                            <i class="fas fa-calendar-alt fa-3x" style="color:rgba(255,255,255,0.45);"></i>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
 
-                            <%-- Banner image --%>
-                            <c:choose>
-                                <c:when test="${not empty ev.imagePath}">
-                                    <img src="${pageContext.request.contextPath}/${ev.imagePath}"
-                                         class="card-img-top"
-                                         style="height:160px; object-fit:cover;"
-                                         alt="${ev.eventName}">
-                                </c:when>
-                                <c:otherwise>
-                                    <div style="height:160px; background:linear-gradient(135deg,#0d6efd,#6610f2);
-                                                display:flex; align-items:center; justify-content:center;">
-                                        <i class="fas fa-calendar-alt fa-3x text-white opacity-50"></i>
+                                <div style="padding:20px; flex:1; display:flex; flex-direction:column;">
+
+                                    <!-- badges -->
+                                    <div class="mb-2">
+                                        <span style="background:#0056d2; color:#fff; padding:3px 9px; border-radius:4px; font-size:0.75rem;">${ev.eventCategory.eventCategoryName}</span>
+                                        <c:if test="${not empty ev.eventSubcategory.eventSubcategoryName}">
+                                            <span style="border:1px solid #ddd; padding:3px 9px; border-radius:4px; font-size:0.75rem; margin-left:4px;">${ev.eventSubcategory.eventSubcategoryName}</span>
+                                        </c:if>
+                                        <c:if test="${ev.featured}">
+                                            <span style="background:#f0a500; color:#fff; padding:3px 9px; border-radius:4px; font-size:0.75rem; margin-left:4px;"><i class="fas fa-star mr-1"></i>Featured</span>
+                                        </c:if>
                                     </div>
-                                </c:otherwise>
-                            </c:choose>
 
-                            <div class="card-body d-flex flex-column p-4">
+                                    <h5 class="font-weight-bold mb-2" style="line-height:1.3;">${ev.eventName}</h5>
 
-                                <div class="mb-2 d-flex flex-wrap gap-1">
-                                    <span class="badge bg-primary">${ev.eventCategory.eventCategoryName}</span>
-                                    <span class="badge bg-light text-dark border">
-                                        ${ev.eventSubcategory.eventSubcategoryName}
-                                    </span>
-                                    <c:if test="${ev.featured}">
-                                        <span class="badge bg-warning text-dark">
-                                            <i class="fas fa-star me-1"></i>Featured
-                                        </span>
-                                    </c:if>
-                                </div>
+                                    <p class="mb-1" style="font-size:0.85rem; color:#666;">
+                                        <i class="fas fa-building mr-1" style="color:#0056d2;"></i>
+                                        <a href="${pageContext.request.contextPath}/company/${ev.company.userId}" style="color:#666; text-decoration:none;">${ev.company.name}</a>
+                                    </p>
+                                    <p class="mb-1" style="font-size:0.85rem; color:#666;">
+                                        <i class="fas fa-map-marker-alt mr-1" style="color:#e44;"></i>${ev.city.cityName}, ${ev.state.stateName}
+                                    </p>
+                                    <p class="mb-3" style="font-size:0.85rem; color:#666;">
+                                        <i class="fas fa-calendar-alt mr-1" style="color:#28a745;"></i>${ev.startDatetime}
+                                    </p>
 
-                                <h5 class="fw-bold mb-1">${ev.eventName}</h5>
-
-                                <p class="text-muted small mb-1">
-                                    <i class="fas fa-building me-1"></i>
-                                    <a href="${pageContext.request.contextPath}/company/${ev.company.userId}"
-                                       class="text-muted text-decoration-none">
-                                        ${ev.company.name}
-                                    </a>
-                                </p>
-
-                                <p class="text-muted small mb-1">
-                                    <i class="fas fa-map-marker-alt me-1"></i>
-                                    ${ev.streetAddress}, ${ev.city.cityName}, ${ev.state.stateName}
-                                </p>
-
-                                <p class="text-muted small mb-3">
-                                    <i class="fas fa-calendar-alt me-1"></i>
-                                    ${ev.startDatetime}
-                                </p>
-
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <div class="small">
-                                        <span class="text-info fw-semibold">
-                                            <i class="fas fa-users me-1"></i>${ev.totalWorkhand} needed
-                                        </span>
-                                        <br>
-                                        <span class="text-success fw-semibold">
-                                            <i class="fas fa-rupee-sign me-1"></i>${ev.totalPrice}
-                                        </span>
+                                    <!-- footer -->
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span style="font-size:0.82rem; color:#17a2b8; font-weight:600; display:block;"><i class="fas fa-users mr-1"></i>${ev.totalWorkhand} needed</span>
+                                            <span style="font-size:0.82rem; color:#28a745; font-weight:600;"><i class="fas fa-rupee-sign mr-1"></i>${ev.totalPrice}</span>
+                                        </div>
+                                        <a href="${pageContext.request.contextPath}/event-details/${ev.eventId}" class="custom-btn" style="padding:8px 18px; font-size:0.82rem;">View &amp; Apply</a>
                                     </div>
-                                    <a href="${pageContext.request.contextPath}/event-details/${ev.eventId}"
-                                       class="btn btn-sm btn-dark">
-                                        View &amp; Apply
-                                    </a>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </c:forEach>
-            </div>
+                    </c:forEach>
+                </div>
 
-            <%-- Pagination (only when result is a Page, not a List from search) --%>
-            <c:if test="${not empty totalPageList}">
-                <nav class="mt-5 d-flex justify-content-center">
-                    <ul class="pagination">
-                        <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
-                            <a class="page-link"
-                               href="${pageContext.request.contextPath}/event?page=${currentPage - 2}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">
-                                &laquo;
-                            </a>
-                        </li>
-                        <c:forEach var="pg" items="${totalPageList}">
-                            <li class="page-item <c:if test='${pg == currentPage}'>active</c:if>">
-                                <a class="page-link"
-                                   href="${pageContext.request.contextPath}/event?page=${pg - 1}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">
-                                    ${pg}
-                                </a>
+                <!-- pagination -->
+                <c:if test="${not empty totalPageList}">
+                    <div class="d-flex justify-content-center mt-4">
+                        <ul class="pagination">
+                            <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
+                                <a class="page-link" href="${pageContext.request.contextPath}/event?page=${currentPage - 2}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">&laquo;</a>
                             </li>
-                        </c:forEach>
-                        <li class="page-item <c:if test='${currentPage == totalPageList.size()}'>disabled</c:if>">
-                            <a class="page-link"
-                               href="${pageContext.request.contextPath}/event?page=${currentPage}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">
-                                &raquo;
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </c:if>
+                            <c:forEach var="pg" items="${totalPageList}">
+                                <li class="page-item <c:if test='${pg == currentPage}'>active</c:if>">
+                                    <a class="page-link" href="${pageContext.request.contextPath}/event?page=${pg - 1}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">${pg}</a>
+                                </li>
+                            </c:forEach>
+                            <li class="page-item <c:if test='${currentPage == totalPageList.size()}'>disabled</c:if>">
+                                <a class="page-link" href="${pageContext.request.contextPath}/event?page=${currentPage}<c:if test='${not empty selectedCatId}'>&catId=${selectedCatId}</c:if>">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+                </c:if>
 
-        </c:otherwise>
-    </c:choose>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</section>
 
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    var CTX = '${pageContext.request.contextPath}';
-    function applyCatFilter(catId) {
-        var url = CTX + '/event';
-        if (catId) url += '?catId=' + catId;
-        window.location.href = url;
-    }
+function applyCatFilter(catId) {
+    var url = '${pageContext.request.contextPath}/event';
+    if (catId) url += '?catId=' + catId;
+    window.location.href = url;
+}
 </script>
-</body>
-</html>

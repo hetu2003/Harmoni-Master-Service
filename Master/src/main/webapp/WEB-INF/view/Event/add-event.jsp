@@ -1,199 +1,199 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Event - Harmoni</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-    <%-- Flash messages --%>
-    <c:if test="${not empty successMessage}">
-        <div class="alert alert-success alert-dismissible fade show m-3" id="flashMsg">
-            <i class="fas fa-check-circle me-2"></i>${successMessage}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<!-- page banner -->
+<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
+    <div class="container">
+        <div class="section-title text-center mb-0">
+            <small class="sub-title">company dashboard</small>
+            <h2 class="big-title white-color mt-2">Add <strong>New Event</strong></h2>
+            <p class="white-color mb-0 mt-2">Fill in the details below to create a new event</p>
         </div>
-    </c:if>
-    <c:if test="${not empty errorMessage}">
-        <div class="alert alert-danger alert-dismissible fade show m-3" id="flashMsg">
-            <i class="fas fa-exclamation-circle me-2"></i>${errorMessage}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    </c:if>
+    </div>
+</section>
 
-    <!-- Header -->
-    <section class="py-3 bg-dark text-white">
-        <div class="container">
-            <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add <strong>New Event</strong></h4>
-        </div>
-    </section>
-
-    <div class="container my-5">
+<section style="padding: 50px 0;">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9">
 
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-
-                        <form id="addEventForm"
-                              action="${pageContext.request.contextPath}/vendor/event/add"
-                              method="POST"
-                              enctype="multipart/form-data">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-
-                            <!-- ── Category & Subcategory ── -->
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        Event Category <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="cat_id" id="catSelect" required>
-                                        <option value="" disabled selected>-- Choose Category --</option>
-                                        <c:forEach var="cat" items="${eventCategories}">
-                                            <option value="${cat.eventCategoryId}">
-                                                ${cat.eventCategoryName}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        Event Subcategory <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="subcat_id" id="subcatSelect" required>
-                                        <option value="" disabled selected>-- Select category first --</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- ── Event Name ── -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">
-                                    Event Name <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="event_name"
-                                       placeholder="e.g. Annual Gala Dinner 2025" required>
-                            </div>
-
-                            <!-- ── Start & End Date/Time ── -->
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        Start Date &amp; Time <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="datetime-local" class="form-control"
-                                           name="start_datetime" id="startDatetime" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        End Date &amp; Time <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="datetime-local" class="form-control"
-                                           name="end_datetime" id="endDatetime" required>
-                                    <div class="invalid-feedback">
-                                        End time must be after start time.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- ── Workhand Slots ── -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">
-                                    Number of Workhand Category Slots <span class="text-danger">*</span>
-                                </label>
-                                <input type="number" class="form-control" id="slotCount"
-                                       min="1" max="20" placeholder="e.g. 3"
-                                       oninput="generateSlots(this.value)">
-                                <div class="form-text text-muted">
-                                    Enter how many different worker categories this event needs,
-                                    then fill in the details below.
-                                </div>
-                            </div>
-
-                            <!-- Dynamic slot rows injected here by JS -->
-                            <div id="slotContainer" class="mb-3"></div>
-
-                            <!-- ── Address ── -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">
-                                    Street Address <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="street_address"
-                                       placeholder="e.g. 12, MG Road" required>
-                            </div>
-
-                            <!-- ── State & City ── -->
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        State <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="state_id" id="stateSelect" required>
-                                        <option value="" disabled selected>-- Choose State --</option>
-                                        <c:forEach var="st" items="${states}">
-                                            <option value="${st.stateId}">${st.stateName}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">
-                                        City <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select" name="city_id" id="citySelect" required>
-                                        <option value="" disabled selected>-- Select state first --</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- ── Description ── -->
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">
-                                    Event Description <span class="text-danger">*</span>
-                                </label>
-                                <textarea class="form-control" name="description" rows="5"
-                                          placeholder="Describe the event..." required></textarea>
-                            </div>
-
-                            <!-- ── Event Banner Image ── -->
-                            <div class="mb-4">
-                                <label class="form-label fw-semibold">
-                                    Event Banner Image <span class="text-muted small">(optional, JPG/PNG)</span>
-                                </label>
-                                <input type="file" class="form-control" name="imageFile"
-                                       accept="image/jpeg,image/png,image/webp">
-                                <div class="form-text text-muted">
-                                    Recommended: 1200×400 px, max 5 MB.
-                                </div>
-                            </div>
-
-                            <!-- ── Submit ── -->
-                            <div class="d-flex gap-3">
-                                <button type="submit" class="btn btn-primary px-5" id="submitBtn">
-                                    <i class="fas fa-calendar-plus me-2"></i>Create Event
-                                </button>
-                                <a href="${pageContext.request.contextPath}/vendor/my-events"
-                                   class="btn btn-outline-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Back to My Events
-                                </a>
-                            </div>
-
-                        </form>
+                <!-- flash messages -->
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success alert-dismissible fade show mb-4">
+                        <i class="fas fa-check-circle mr-2"></i>${successMessage}
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
+                </c:if>
+                <c:if test="${not empty errorMessage}">
+                    <div class="alert alert-danger alert-dismissible fade show mb-4">
+                        <i class="fas fa-exclamation-circle mr-2"></i>${errorMessage}
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                    </div>
+                </c:if>
+
+                <div style="background:#fff; border-radius:10px; box-shadow:0 3px 18px rgba(0,0,0,0.08); padding:32px;">
+                    <form id="addEventForm"
+                          action="<c:url value='/vendor/event/add' />"
+                          method="POST"
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
+                        <!-- Category & Subcategory -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="font-weight-bold">Event Category <span class="text-danger">*</span></label>
+                                <select class="form-control" name="cat_id" id="catSelect" required>
+                                    <option value="" disabled <c:if test="${empty f_cat_id}">selected</c:if>>-- Choose Category --</option>
+                                    <c:forEach var="cat" items="${eventCategories}">
+                                        <option value="${cat.eventCategoryId}"
+                                            <c:if test="${cat.eventCategoryId == f_cat_id}">selected</c:if>>
+                                            ${cat.eventCategoryName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="font-weight-bold">Event Subcategory <span class="text-danger">*</span></label>
+                                <select class="form-control" name="subcat_id" id="subcatSelect" required>
+                                    <option value="" disabled selected>-- Select category first --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Event Name -->
+                        <div class="mb-3">
+                            <label class="font-weight-bold">Event Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="event_name"
+                                   value="${f_event_name}"
+                                   placeholder="e.g. Annual Gala Dinner 2025" required>
+                        </div>
+
+                        <!-- Start & End Date/Time -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="font-weight-bold">Start Date &amp; Time <span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="start_datetime"
+                                       id="startDatetime" value="${f_start_datetime}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="font-weight-bold">End Date &amp; Time <span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="end_datetime"
+                                       id="endDatetime" value="${f_end_datetime}" required>
+                                <div class="invalid-feedback">End time must be after start time.</div>
+                            </div>
+                        </div>
+
+                        <!-- Workhand Role Slots -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="font-weight-bold mb-0">
+                                    Workhand Roles Required <span class="text-danger">*</span>
+                                </label>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotRow()">
+                                    <i class="fas fa-plus mr-1"></i>Add Another Role
+                                </button>
+                            </div>
+                            <div style="background:#f8f9fa; border-radius:6px; padding:12px 14px; margin-bottom:6px;">
+                                <div class="row mb-1" style="font-size:0.8rem; font-weight:600; color:#666;">
+                                    <div class="col-md-5">Role / Category</div>
+                                    <div class="col-md-3">No. of People</div>
+                                    <div class="col-md-3">Price per Person (&#8377;)</div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="slotContainer"></div>
+                        </div>
+
+                        <!-- Street Address -->
+                        <div class="mb-3">
+                            <label class="font-weight-bold">Street Address <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="street_address"
+                                   value="${f_street_address}"
+                                   placeholder="e.g. 12, MG Road" required>
+                        </div>
+
+                        <!-- State & City -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="font-weight-bold">State <span class="text-danger">*</span></label>
+                                <select class="form-control" name="state_id" id="stateSelect" required>
+                                    <option value="" disabled <c:if test="${empty f_state_id}">selected</c:if>>-- Choose State --</option>
+                                    <c:forEach var="st" items="${states}">
+                                        <option value="${st.stateId}"
+                                            <c:if test="${st.stateId == f_state_id}">selected</c:if>>
+                                            ${st.stateName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="font-weight-bold">City <span class="text-danger">*</span></label>
+                                <select class="form-control" name="city_id" id="citySelect" required>
+                                    <option value="" disabled selected>-- Select state first --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label class="font-weight-bold">Event Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="description" rows="5"
+                                      placeholder="Describe the event..." required>${f_description}</textarea>
+                        </div>
+
+                        <!-- Event Banner Image -->
+                        <div class="mb-4">
+                            <label class="font-weight-bold">Event Banner Image <span class="text-muted small">(optional, JPG/PNG)</span></label>
+                            <input type="file" class="form-control-file" name="imageFile"
+                                   accept="image/jpeg,image/png,image/webp">
+                            <small class="form-text text-muted">Recommended: 1200&times;400 px, max 5 MB.</small>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-flex">
+                            <button type="submit" class="custom-btn mr-3" id="submitBtn">
+                                <i class="fas fa-calendar-plus mr-2"></i>Create Event
+                            </button>
+                            <a href="<c:url value='/vendor/my-events' />" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i>Back to My Events
+                            </a>
+                        </div>
+
+                    </form>
                 </div>
 
             </div>
         </div>
     </div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        /* Context path for AJAX calls */
-        var CTX = '${pageContext.request.contextPath}';
-    </script>
-    <script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>
-</body>
-</html>
+<%-- Pass workhand categories and pre-fill data to JavaScript --%>
+<script>
+var CTX = '${pageContext.request.contextPath}';
+
+var WORKHAND_CATS = [
+    <c:forEach var="cat" items="${workhnadCategories}" varStatus="s">
+    { id: ${cat.workhnadCategoryId}, name: '${cat.workhnadCategoryName}' }<c:if test="${!s.last}">,</c:if>
+    </c:forEach>
+];
+
+<%-- Pre-fill slots after a validation error --%>
+<c:if test="${not empty f_workhand_category_ids}">
+var PREFILL_SLOTS = [
+    <c:forEach var="catId" items="${f_workhand_category_ids}" varStatus="s">
+    { catId: ${catId}, num: ${f_workhand_numbers[s.index]}, price: '${f_prices[s.index]}' }<c:if test="${!s.last}">,</c:if>
+    </c:forEach>
+];
+</c:if>
+
+<%-- Pre-load subcategory + city dropdowns on validation reload --%>
+<c:if test="${not empty f_cat_id}">
+var PREFILL_CAT = ${f_cat_id};
+var PREFILL_SUBCAT = ${not empty f_subcat_id ? f_subcat_id : 0};
+</c:if>
+<c:if test="${not empty f_state_id}">
+var PREFILL_STATE = ${f_state_id};
+var PREFILL_CITY  = ${not empty f_city_id ? f_city_id : 0};
+</c:if>
+</script>
+<script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>

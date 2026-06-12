@@ -33,7 +33,8 @@ public class EventListController {
         model.addAttribute("currentPage",   events.getNumber() + 1);
         model.addAttribute("totalEvents",   events.getTotalElements());
         model.addAttribute("active", "event");
-        return "Event/event-list";
+        model.addAttribute("viewName", "Event/event-list");
+        return "base/base";
     }
 
     @PostMapping("/event/search")
@@ -56,7 +57,8 @@ public class EventListController {
         model.addAttribute("currentPage",   results.getNumber() + 1);
         model.addAttribute("totalEvents",   results.getTotalElements());
         model.addAttribute("active", "event");
-        return "Event/event-list";
+        model.addAttribute("viewName", "Event/event-list");
+        return "base/base";
     }
 
     private List<Integer> pageNumbers(Page<?> p) {

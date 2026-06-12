@@ -12,4 +12,6 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     @Query(value = "SELECT id, city_name, state_id FROM cities WHERE state_id = :stateId ORDER BY city_name ASC", nativeQuery = true)
     List<Object[]> findCitiesByStateId(@Param("stateId") Integer stateId);
+
+    List<City> findByStateRawIdOrderByCityNameAsc(Integer stateRawId);
 }

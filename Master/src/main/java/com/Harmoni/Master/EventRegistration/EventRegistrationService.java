@@ -46,6 +46,7 @@ public class EventRegistrationService {
                 .registrationDate(LocalDate.now())
                 .registrationStatus(false)
                 .paymentStatus(false)
+                .applicationStatus("PENDING")
                 .build();
         reg.setCreatedBy(workhand.getUserId().intValue());
         reg.setModifiedBy(workhand.getUserId().intValue());
@@ -66,16 +67,22 @@ public class EventRegistrationService {
     public String approveRegistration(Long registrationId) {
         EventRegistration reg = getRegistrationById(registrationId);
 
-        // Capacity check — count already-approved for this slot and compare to slot size
+        if ("ACCEPTED".equals(reg.getApplicationStatus())) {
+            return "This application is already accepted.";
+        }
+
+        // Capacity check per slot — count already-accepted for this slot vs slot size
         EventWorkhand slot = eventWorkhnadRepo.findById(reg.getEventWorkhand().longValue()).orElse(null);
         if (slot != null) {
-            long approved = registrationRepo.countByEventWorkhandAndRegistrationStatusTrue(reg.getEventWorkhand());
-            if (approved >= slot.getNumberOfWorkhand()) {
-                return "Slot is already full (" + slot.getNumberOfWorkhand() + " approved). Cannot approve more.";
+            long accepted = registrationRepo.countByEventWorkhandAndApplicationStatus(
+                    reg.getEventWorkhand(), "ACCEPTED");
+            if (accepted >= slot.getNumberOfWorkhand()) {
+                return "This slot is full (" + slot.getNumberOfWorkhand() + " accepted). Cannot accept more.";
             }
         }
 
         reg.setRegistrationStatus(true);
+        reg.setApplicationStatus("ACCEPTED");
         reg.setModifiedBy(reg.getCompany());
         registrationRepo.save(reg);
 
@@ -125,15 +132,43 @@ public class EventRegistrationService {
     }
 
     @Transactional
-    public void revokeApproval(Long registrationId) {
+    public String rejectRegistration(Long registrationId) {
         EventRegistration reg = getRegistrationById(registrationId);
+
+        if ("ACCEPTED".equals(reg.getApplicationStatus())) {
+            return "Cannot reject an already-accepted application. Revoke first.";
+        }
+
         reg.setRegistrationStatus(false);
-        reg.setPaymentStatus(false);
+        reg.setApplicationStatus("REJECTED");
+        reg.setModifiedBy(reg.getCompany());
         registrationRepo.save(reg);
 
         notificationService.notify(
                 reg.getWorkhand().longValue(),
-                "Your registration approval was revoked.",
+                "Your application was not accepted for this event.",
+                "REJECTION",
+                reg.getEvent().longValue()
+        );
+
+        userRepo.findById(reg.getWorkhand().longValue()).ifPresent(wh ->
+                sendRejectionEmail(wh.getEmail(), wh.getName()));
+
+        return null;
+    }
+
+    @Transactional
+    public void revokeApproval(Long registrationId) {
+        EventRegistration reg = getRegistrationById(registrationId);
+        reg.setRegistrationStatus(false);
+        reg.setApplicationStatus("PENDING");
+        reg.setPaymentStatus(false);
+        reg.setModifiedBy(reg.getCompany());
+        registrationRepo.save(reg);
+
+        notificationService.notify(
+                reg.getWorkhand().longValue(),
+                "Your acceptance was revoked. Your application is pending again.",
                 "REJECTION",
                 reg.getEvent().longValue()
         );
@@ -156,6 +191,14 @@ public class EventRegistrationService {
                 + "<p>Great news! Your event registration has been <strong>approved</strong>.</p>"
                 + "<p>Please log in to Harmoni to view your event details.</p>"
                 + "<p>Thank you, <strong>Harmoni Event Management</strong></p>";
+        sendEmail(toEmail, subject, body);
+    }
+
+    public void sendRejectionEmail(String toEmail, String displayName) {
+        String subject = "Application Update - Harmoni";
+        String body = "<p>Dear <strong>" + displayName + "</strong>,</p>"
+                + "<p>We regret to inform you that your event application was not accepted at this time.</p>"
+                + "<p>Thank you for your interest in <strong>Harmoni Event Management</strong>!</p>";
         sendEmail(toEmail, subject, body);
     }
 

@@ -34,7 +34,6 @@
 
             <div id="message" style="display:none;"></div>
 
-            <!-- Current Profile Picture -->
             <div class="text-center mb-30">
                 <div style="display:inline-block;position:relative;">
                     <c:choose>
@@ -68,45 +67,49 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <label for="name">Full Name <span style="color:red">*</span></label>
-                            <input type="text" id="name" name="name" value="${user.name}" required>
+                            <input type="text" id="name" name="name" value="${user.name}" placeholder="Full Name *" required>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <label for="contactNumber">Contact Number <span style="color:red">*</span></label>
                             <input type="tel" id="contactNumber" name="contactNumber"
                                    value="${user.contactNumber}" pattern="[0-9]{10}"
-                                   title="10-digit phone number" required>
+                                   title="10-digit phone number" placeholder="Contact Number *" required>
                         </div>
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="form-item">
-                            <label for="streetAddress">Street Address <span style="color:red">*</span></label>
                             <input type="text" id="streetAddress" name="streetAddress"
-                                   value="${user.streetAddress}" required>
+                                   value="${user.streetAddress}" placeholder="Street Address *" required>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <label for="stateId">State ID <span style="color:red">*</span></label>
-                            <input type="number" id="stateId" name="stateId"
-                                   value="${user.stateId}" min="1" required>
+                            <select id="stateId" name="stateId" required
+                                    onchange="loadCities(this,'cityId')"
+                                    style="width:100%; height:50px; padding:0 20px; border:1px solid #e0e0e0; border-radius:4px; font-family:inherit; font-size:14px; color:#555;">
+                                <option value="" disabled selected>Select State *</option>
+                                <c:forEach var="state" items="${states}">
+                                    <option value="${state.id}" <c:if test="${state.id == user.stateId}">selected</c:if>>${state.stateName}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-item">
-                            <label for="cityId">City ID <span style="color:red">*</span></label>
-                            <input type="number" id="cityId" name="cityId"
-                                   value="${user.cityId}" min="1" required>
+                            <select id="cityId" name="cityId" required style="width:100%; height:50px; padding:0 20px; border:1px solid #e0e0e0; border-radius:4px; font-family:inherit; font-size:14px; color:#555;">
+                                <option value="" disabled selected>Select City *</option>
+                                <c:forEach var="city" items="${cities}">
+                                    <option value="${city.id}" <c:if test="${city.id == user.cityId}">selected</c:if>>${city.cityName}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Hidden file input triggered by edit icon above -->
                     <input type="file" id="profilePhoto" name="profilePhoto"
                            accept="image/png,image/jpeg" style="display:none;"
                            onchange="previewProfileImg(this,'profilePreview')">

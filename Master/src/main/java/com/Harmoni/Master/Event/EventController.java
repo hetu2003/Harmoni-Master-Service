@@ -34,6 +34,9 @@ public class EventController {
     private final StateRepository stateRepo;
     private final CityRepository cityRepo;
     private final UserRepository userRepo;
+    private final WorkhandCategoryRepository workhnadCategoryRepo;
+
+    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     // ─────────────────────────────────────────────────────────────
     // CREATE
@@ -43,8 +46,10 @@ public class EventController {
     public String showAddForm(@AuthenticationPrincipal UserDetails principal, Model model) {
         model.addAttribute("eventCategories", eventCategoryRepo.findAll());
         model.addAttribute("states", stateRepo.findAllByOrderByStateNameDesc());
+        model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("active", "myevent");
-        return "Event/add-event";
+        model.addAttribute("viewName", "Event/add-event");
+        return "base/base";
     }
 
     @PostMapping("/add")
@@ -60,33 +65,46 @@ public class EventController {
             @RequestParam("state_id")                                 Long stateId,
             @RequestParam("city_id")                                  Long cityId,
             @RequestParam("description")                              String description,
-            @RequestParam("workhand_category_ids")                    List<Integer> workhandCategoryIds,
-            @RequestParam("workhand_numbers")                         List<Integer> workhandNumbers,
-            @RequestParam("prices")                                   List<BigDecimal> prices,
-            @RequestParam(value = "imageFile", required = false)      MultipartFile imageFile,
+            @RequestParam(value = "workhand_category_ids", required = false) List<Integer> workhandCategoryIds,
+            @RequestParam(value = "workhand_numbers",      required = false) List<Integer> workhandNumbers,
+            @RequestParam(value = "prices",                required = false) List<BigDecimal> prices,
+            @RequestParam(value = "imageFile",             required = false) MultipartFile imageFile,
             @AuthenticationPrincipal UserDetails principal,
-            RedirectAttributes redirectAttrs) {
+            RedirectAttributes redirectAttrs,
+            Model model) {
 
         try {
+            if (workhandCategoryIds == null || workhandCategoryIds.isEmpty()) {
+                return reloadAddForm(model, categoryId, subcategoryId, eventName,
+                        startDatetime, endDatetime, streetAddress, stateId, cityId, description,
+                        null, null, null, "Please add at least one workhand role slot.");
+            }
             if (!startDatetime.isAfter(LocalDateTime.now())) {
-                redirectAttrs.addFlashAttribute("errorMessage", "Start date must be in the future.");
-                return "redirect:/vendor/event/add";
+                return reloadAddForm(model, categoryId, subcategoryId, eventName,
+                        startDatetime, endDatetime, streetAddress, stateId, cityId, description,
+                        workhandCategoryIds, workhandNumbers, prices, "Start date must be in the future.");
             }
             if (!endDatetime.isAfter(startDatetime)) {
-                redirectAttrs.addFlashAttribute("errorMessage", "End datetime must be after start datetime.");
-                return "redirect:/vendor/event/add";
+                return reloadAddForm(model, categoryId, subcategoryId, eventName,
+                        startDatetime, endDatetime, streetAddress, stateId, cityId, description,
+                        workhandCategoryIds, workhandNumbers, prices, "End datetime must be after start datetime.");
             }
-            if (workhandCategoryIds.size() != workhandNumbers.size() || workhandCategoryIds.size() != prices.size()) {
-                redirectAttrs.addFlashAttribute("errorMessage", "Workhand slot data is inconsistent.");
-                return "redirect:/vendor/event/add";
+            if (workhandCategoryIds.size() != workhandNumbers.size()
+                    || workhandCategoryIds.size() != prices.size()) {
+                return reloadAddForm(model, categoryId, subcategoryId, eventName,
+                        startDatetime, endDatetime, streetAddress, stateId, cityId, description,
+                        workhandCategoryIds, workhandNumbers, prices, "Workhand slot data is inconsistent. Please re-check.");
             }
+
             Users company = getCompany(principal);
             eventService.createEvent(categoryId, subcategoryId, eventName,
                     startDatetime, endDatetime, streetAddress, stateId, cityId,
                     description, workhandCategoryIds, workhandNumbers, prices, company, imageFile);
             redirectAttrs.addFlashAttribute("successMessage", "Event created successfully!");
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return reloadAddForm(model, categoryId, subcategoryId, eventName,
+                    startDatetime, endDatetime, streetAddress, stateId, cityId, description,
+                    workhandCategoryIds, workhandNumbers, prices, "Something went wrong: " + e.getMessage());
         }
         return "redirect:/vendor/event/add";
     }
@@ -103,11 +121,10 @@ public class EventController {
         Events event = findEvent(eventId);
         List<EventWorkhand> slots = eventWorkhnadRepo.findByEvent(event.getId().intValue());
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         model.addAttribute("event", event);
         model.addAttribute("slots", slots);
-        model.addAttribute("startDatetimeStr", event.getStartDatetime().format(dtf));
-        model.addAttribute("endDatetimeStr",   event.getEndDatetime().format(dtf));
+        model.addAttribute("startDatetimeStr", event.getStartDatetime().format(DT_FMT));
+        model.addAttribute("endDatetimeStr",   event.getEndDatetime().format(DT_FMT));
         model.addAttribute("eventCategories", eventCategoryRepo.findAll());
         model.addAttribute("eventSubcategories",
                 eventSubcategoryRepo.findByEventCategoryEventCategoryId(
@@ -119,8 +136,10 @@ public class EventController {
                 event.getState() != null
                         ? cityRepo.findByState(event.getState())
                         : List.of());
+        model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("active", "myevent");
-        return "Event/edit-event";
+        model.addAttribute("viewName", "Event/edit-event");
+        return "base/base";
     }
 
     @PostMapping("/{eventId}/edit")
@@ -176,6 +195,37 @@ public class EventController {
             redirectAttrs.addFlashAttribute("errorMessage", "Delete failed: " + e.getMessage());
         }
         return "redirect:/vendor/my-events";
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // HELPERS
+    // ─────────────────────────────────────────────────────────────
+
+    private String reloadAddForm(Model model,
+                                 Long categoryId, Long subcategoryId, String eventName,
+                                 LocalDateTime startDatetime, LocalDateTime endDatetime,
+                                 String streetAddress, Long stateId, Long cityId, String description,
+                                 List<Integer> workhandCategoryIds, List<Integer> workhandNumbers,
+                                 List<BigDecimal> prices, String errorMessage) {
+        model.addAttribute("eventCategories", eventCategoryRepo.findAll());
+        model.addAttribute("states", stateRepo.findAllByOrderByStateNameDesc());
+        model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
+        model.addAttribute("active", "myevent");
+        model.addAttribute("viewName", "Event/add-event");
+        model.addAttribute("errorMessage", errorMessage);
+        if (categoryId   != null) model.addAttribute("f_cat_id",        categoryId);
+        if (subcategoryId != null) model.addAttribute("f_subcat_id",    subcategoryId);
+        if (eventName    != null) model.addAttribute("f_event_name",     eventName);
+        if (startDatetime != null) model.addAttribute("f_start_datetime", startDatetime.format(DT_FMT));
+        if (endDatetime   != null) model.addAttribute("f_end_datetime",   endDatetime.format(DT_FMT));
+        if (streetAddress != null) model.addAttribute("f_street_address", streetAddress);
+        if (stateId      != null) model.addAttribute("f_state_id",       stateId);
+        if (cityId       != null) model.addAttribute("f_city_id",        cityId);
+        if (description  != null) model.addAttribute("f_description",    description);
+        if (workhandCategoryIds != null) model.addAttribute("f_workhand_category_ids", workhandCategoryIds);
+        if (workhandNumbers     != null) model.addAttribute("f_workhand_numbers",       workhandNumbers);
+        if (prices              != null) model.addAttribute("f_prices",                prices);
+        return "base/base";
     }
 
     private Users getCompany(UserDetails principal) {

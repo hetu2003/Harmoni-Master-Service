@@ -66,6 +66,8 @@ public class EventServiceImpl implements EventService {
                 .isActive(1)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .createdBy(company.getUserId().intValue())
+                .modifiedBy(company.getUserId().intValue())
+                .modifiedOn(new Timestamp(System.currentTimeMillis()))
                 .build();
 
         Events saved = eventRepo.save(event);
@@ -131,6 +133,7 @@ public class EventServiceImpl implements EventService {
         if (!existing.isEmpty()) {
             eventWorkhnadRepo.deleteAll(existing);
         }
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         for (int i = 0; i < workhandCategoryIds.size(); i++) {
             EventWorkhand slot = EventWorkhand.builder()
                     .event(event.getId().intValue())
@@ -138,7 +141,10 @@ public class EventServiceImpl implements EventService {
                     .numberOfWorkhand(numberOfWorkhandList.get(i))
                     .price(priceList.get(i))
                     .isActive(1)
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .createdAt(now)
+                    .createdBy(event.getCreatedBy())
+                    .modifiedBy(event.getCreatedBy())
+                    .modifiedOn(now)
                     .build();
             eventWorkhnadRepo.save(slot);
         }

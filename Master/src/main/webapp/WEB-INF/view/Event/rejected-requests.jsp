@@ -2,23 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:if test="${not empty successMessage}">
-<div class="alert alert-success alert-dismissible m-3" style="border-left:4px solid #28a745;">
-    <i class="fas fa-check-circle mr-2"></i>${successMessage}
-    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-</div>
-</c:if>
-<c:if test="${not empty errorMessage}">
-<div class="alert alert-danger alert-dismissible m-3" style="border-left:4px solid #dc3545;">
-    <i class="fas fa-exclamation-circle mr-2"></i>${errorMessage}
-    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-</div>
-</c:if>
-
 <!-- Banner -->
 <section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 40px 0;">
     <div class="container">
-        <h4 class="white-color font-weight-bold mb-1">Workhand <strong>Applications</strong></h4>
+        <h4 class="white-color font-weight-bold mb-1">Rejected <strong>Applications</strong></h4>
         <p class="mb-0" style="color:#ccc;">${event.eventName} &mdash; Event #${event.eventId}</p>
     </div>
 </section>
@@ -46,22 +33,16 @@
                     <small class="text-muted">Rejected</small>
                 </div>
             </div>
-            <div class="mt-3">
-                <div class="progress" style="height:10px; border-radius:5px;">
-                    <div class="progress-bar bg-success" style="width:${(acceptedCount * 100) / (event.totalWorkhand > 0 ? event.totalWorkhand : 1)}%"></div>
-                </div>
-                <small class="text-muted">${acceptedCount} of ${event.totalWorkhand} positions filled</small>
-            </div>
         </div>
     </div>
 
     <!-- Tab nav -->
     <div class="d-flex mb-4" style="gap:8px; flex-wrap:wrap;">
         <a href="<c:url value='/vendor/workhand-requests/${event.eventId}' />"
-           class="btn btn-primary">
+           class="btn btn-outline-primary">
             <i class="fas fa-clock mr-1"></i>Pending
             <c:if test="${pendingCount > 0}">
-                <span class="badge badge-light ml-1">${pendingCount}</span>
+                <span class="badge badge-primary ml-1">${pendingCount}</span>
             </c:if>
         </a>
         <a href="<c:url value='/vendor/approved-requests/${event.eventId}' />"
@@ -72,10 +53,10 @@
             </c:if>
         </a>
         <a href="<c:url value='/vendor/rejected-requests/${event.eventId}' />"
-           class="btn btn-outline-danger">
+           class="btn btn-danger">
             <i class="fas fa-times mr-1"></i>Rejected
             <c:if test="${rejectedCount > 0}">
-                <span class="badge badge-danger ml-1">${rejectedCount}</span>
+                <span class="badge badge-light ml-1">${rejectedCount}</span>
             </c:if>
         </a>
         <a href="<c:url value='/vendor/payment/${event.eventId}' />"
@@ -85,26 +66,25 @@
     </div>
 
     <c:choose>
-        <c:when test="${empty workhnadRequests}">
+        <c:when test="${empty rejectedRequests}">
             <div class="alert alert-info">
-                <i class="fas fa-info-circle mr-2"></i>No pending applications for this event.
+                <i class="fas fa-info-circle mr-2"></i>No rejected applications for this event.
             </div>
         </c:when>
         <c:otherwise>
             <div class="table-responsive">
-                <table class="table table-hover align-middle shadow-sm" style="background:#fff; border-radius:8px; overflow:hidden;">
-                    <thead class="thead-dark">
+                <table class="table table-hover shadow-sm" style="background:#fff; border-radius:8px; overflow:hidden;">
+                    <thead style="background:#dc3545; color:#fff;">
                         <tr>
                             <th>#</th>
                             <th>Applicant</th>
                             <th>Role Applied For</th>
                             <th>Pay</th>
                             <th>Applied On</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="req" items="${workhnadRequests}" varStatus="loop">
+                        <c:forEach var="req" items="${rejectedRequests}" varStatus="loop">
                             <tr>
                                 <td class="text-muted small">${loop.index + 1}</td>
                                 <td>
@@ -122,29 +102,9 @@
                                         </c:when>
                                         <c:otherwise>Category #${req.eventWorkhand.workhnadCategoryId}</c:otherwise>
                                     </c:choose>
-                                    <br>
-                                    <small class="text-muted">${req.eventWorkhand.numberOfWorkhand} positions in this slot</small>
                                 </td>
                                 <td>&#8377;<fmt:formatNumber value="${req.eventWorkhand.price}" maxFractionDigits="0"/></td>
                                 <td>${req.registrationDate}</td>
-                                <td>
-                                    <form action="<c:url value='/vendor/request-approve' />" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Accept ${req.workhand.name} for this event?')">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                        <input type="hidden" name="registrationId" value="${req.registrationId}">
-                                        <button type="submit" class="btn btn-sm btn-success mr-1">
-                                            <i class="fas fa-check mr-1"></i>Accept
-                                        </button>
-                                    </form>
-                                    <form action="<c:url value='/vendor/request-reject' />" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Reject ${req.workhand.name}\'s application?')">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                        <input type="hidden" name="registrationId" value="${req.registrationId}">
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-times mr-1"></i>Reject
-                                        </button>
-                                    </form>
-                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
