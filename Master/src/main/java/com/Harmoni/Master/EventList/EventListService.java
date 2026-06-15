@@ -10,4 +10,5 @@ public interface EventListService {
     Page<Events> getUpcomingEvents(int page, int pageSize, Long catId);
     List<EventCategory> getAllCategories();
     Page<Events> searchUpcomingEvents(String keyword, Long catId, int page, int pageSize);
+    Page<Events> getRecentlyClosedEvents(int page, int pageSize);
 }

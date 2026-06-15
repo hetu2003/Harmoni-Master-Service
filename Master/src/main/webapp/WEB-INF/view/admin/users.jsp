@@ -1,231 +1,247 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - Harmoni Admin</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background: #f4f6fb; }
-        .sidebar { min-height: 100vh; background: #1a1d2e; }
-        .sidebar .nav-link { color: #adb5bd; border-radius: 8px; margin-bottom: 4px; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #0d6efd22; color: #fff; }
-    </style>
-</head>
-<body>
-<div class="d-flex">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-    <!-- Sidebar -->
-    <div class="sidebar d-flex flex-column p-3" style="width:230px; min-width:230px;">
-        <a class="text-white text-decoration-none mb-4 d-block" href="${pageContext.request.contextPath}/admin/dashboard">
-            <i class="fas fa-calendar-star me-2 text-primary"></i><strong>Harmoni Admin</strong>
-        </a>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">
-                    <i class="fas fa-tachometer-alt fa-fw me-2"></i>Dashboard
+<!-- Admin Banner -->
+<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%);
+                border-bottom: 4px solid #ffbe30; padding: 28px 0;">
+    <div class="container">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div>
+                <div style="color:#ffbe30; font-size:12px; font-weight:700; letter-spacing:2px;
+                            text-transform:uppercase; margin-bottom:6px;">
+                    <i class="fas fa-crown" style="margin-right:6px;"></i>Administration Panel
+                </div>
+                <h2 style="color:#fff; font-size:26px; font-weight:800; margin:0;">User Management</h2>
+                <p style="color:#aaa; font-size:13px; margin:6px 0 0;">${users.totalElements} total users</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="${pageContext.request.contextPath}/admin/dashboard"
+                   style="background:rgba(255,190,48,.15); color:#ffbe30; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-gauge-high" style="margin-right:5px;"></i>Dashboard
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="${pageContext.request.contextPath}/admin/users">
-                    <i class="fas fa-users fa-fw me-2"></i>Users
+                <a href="${pageContext.request.contextPath}/admin/users"
+                   style="background:#ffbe30; color:#1c1c2e; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-users" style="margin-right:5px;"></i>Users
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/events">
-                    <i class="fas fa-calendar-alt fa-fw me-2"></i>Events
+                <a href="${pageContext.request.contextPath}/admin/events"
+                   style="background:rgba(255,190,48,.15); color:#ffbe30; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-calendar-alt" style="margin-right:5px;"></i>Events
                 </a>
-            </li>
-        </ul>
-        <div class="mt-auto">
-            <a class="nav-link text-danger" href="${pageContext.request.contextPath}/logout">
-                <i class="fas fa-sign-out-alt fa-fw me-2"></i>Logout
-            </a>
+            </div>
         </div>
     </div>
+</section>
 
-    <!-- Main content -->
-    <div class="flex-grow-1 p-4">
+<!-- Content -->
+<section style="background:#f8f9fa; padding:40px 0; min-height:60vh;">
+    <div class="container">
 
         <c:if test="${not empty successMessage}">
-            <div class="alert alert-success alert-dismissible fade show">
-                ${successMessage} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div style="background:#d4edda; border:1px solid #c3e6cb; color:#155724;
+                        border-radius:8px; padding:12px 18px; margin-bottom:20px; font-size:14px;">
+                <i class="fas fa-check-circle" style="margin-right:8px;"></i>${successMessage}
             </div>
         </c:if>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">User Management</h4>
-            <span class="text-muted small">${users.totalElements} total users</span>
-        </div>
-
-        <!-- Filters -->
-        <div class="card shadow-sm border-0 mb-3">
-            <div class="card-body py-2">
-                <form method="GET" action="${pageContext.request.contextPath}/admin/users"
-                      class="row g-2 align-items-center">
-                    <div class="col-auto">
-                        <select name="role" class="form-select form-select-sm">
-                            <option value="ALL"      ${selectedRole == 'ALL'      ? 'selected' : ''}>All Roles</option>
-                            <option value="ADMIN"    ${selectedRole == 'ADMIN'    ? 'selected' : ''}>Admin</option>
-                            <option value="COMPANY"  ${selectedRole == 'COMPANY'  ? 'selected' : ''}>Company</option>
-                            <option value="WORKHAND" ${selectedRole == 'WORKHAND' ? 'selected' : ''}>Workhand</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <input type="text" name="search" class="form-control form-control-sm"
-                               placeholder="Search by name..." value="${search}">
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="fas fa-search me-1"></i>Filter
-                        </button>
-                        <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-outline-secondary btn-sm ms-1">
-                            Reset
-                        </a>
-                    </div>
-                </form>
+        <!-- Filter Bar -->
+        <form method="GET" action="${pageContext.request.contextPath}/admin/users">
+            <div style="background:#fff; border-radius:10px; padding:14px 20px; margin-bottom:20px;
+                        border:1px solid #e9ecef; box-shadow:0 1px 4px rgba(0,0,0,.05);
+                        display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <select name="role"
+                        style="background:#fff; border:1px solid #ced4da; color:#333;
+                               border-radius:8px; padding:8px 12px; font-size:13px; outline:none;">
+                    <option value="ALL"      ${selectedRole == 'ALL'      ? 'selected' : ''}>All Roles</option>
+                    <option value="ADMIN"    ${selectedRole == 'ADMIN'    ? 'selected' : ''}>Admin</option>
+                    <option value="COMPANY"  ${selectedRole == 'COMPANY'  ? 'selected' : ''}>Company</option>
+                    <option value="WORKHAND" ${selectedRole == 'WORKHAND' ? 'selected' : ''}>Workhand</option>
+                </select>
+                <input type="text" name="search" placeholder="Search by name..." value="${search}"
+                       style="background:#fff; border:1px solid #ced4da; color:#333;
+                              border-radius:8px; padding:8px 12px; font-size:13px; outline:none; flex:1; min-width:180px;">
+                <button type="submit" class="custom-btn" style="padding:8px 20px; font-size:13px;">
+                    <i class="fas fa-search" style="margin-right:4px;"></i>Filter
+                </button>
+                <a href="${pageContext.request.contextPath}/admin/users"
+                   style="background:#fff; border:1px solid #ced4da; color:#666;
+                          border-radius:8px; padding:8px 14px; font-size:13px; text-decoration:none;">Reset</a>
             </div>
-        </div>
+        </form>
 
-        <!-- Users table -->
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Location</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${empty users.content}">
-                                    <tr>
-                                        <td colspan="8" class="text-center text-muted py-4">
-                                            No users found.
+        <!-- Table -->
+        <div style="background:#fff; border-radius:12px; border:1px solid #e9ecef;
+                    box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden;">
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <thead>
+                        <tr style="background:#ffbe30;">
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; white-space:nowrap;">#</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Name</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Username</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Email</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Role</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Location</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; text-align:center;">Status</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:choose>
+                            <c:when test="${empty users.content}">
+                                <tr>
+                                    <td colspan="8" style="text-align:center; color:#aaa; padding:40px;">
+                                        <i class="fas fa-users-slash" style="font-size:30px; display:block; margin-bottom:10px; color:#ccc;"></i>
+                                        No users found.
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="u" items="${users.content}" varStatus="loop">
+                                    <tr style="border-bottom:1px solid #f0f0f0;">
+                                        <td style="padding:11px 16px; color:#aaa; font-size:12px;">${(currentPage - 1) * 10 + loop.index + 1}</td>
+                                        <td style="padding:11px 16px;">
+                                            <div style="display:flex; align-items:center; gap:10px;">
+                                                <c:choose>
+                                                    <c:when test="${not empty u.profilePath}">
+                                                        <img src="${pageContext.request.contextPath}${u.profilePath}"
+                                                             style="width:34px; height:34px; border-radius:50%; object-fit:cover;
+                                                                    border:2px solid #ffbe30;" alt="${u.name}">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span style="width:34px; height:34px; border-radius:50%; background:#f0f0f0;
+                                                                     display:inline-flex; align-items:center; justify-content:center;
+                                                                     color:#aaa; font-size:13px; border:2px solid #e0e0e0;">
+                                                            <i class="fas fa-user"></i>
+                                                        </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <span style="font-weight:600; color:#1c1c2e;">${u.name}</span>
+                                            </div>
+                                        </td>
+                                        <td style="padding:11px 16px; color:#888; font-size:12px;">@${u.username}</td>
+                                        <td style="padding:11px 16px; font-size:12px; color:#555;">${u.email}</td>
+                                        <td style="padding:11px 16px;">
+                                            <c:choose>
+                                                <c:when test="${u.role.roleName == 'ADMIN'}">
+                                                    <span style="background:#f8d7da; color:#721c24;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">Admin</span>
+                                                </c:when>
+                                                <c:when test="${u.role.roleName == 'COMPANY'}">
+                                                    <span style="background:#fff3cd; color:#856404;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">Company</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="background:#cce5ff; color:#004085;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">Workhand</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td style="padding:11px 16px; font-size:12px; color:#888;">
+                                            <c:if test="${u.city != null}">${u.city.cityName},&nbsp;</c:if>
+                                            <c:if test="${u.state != null}">${u.state.stateName}</c:if>
+                                        </td>
+                                        <td style="padding:11px 16px; text-align:center;">
+                                            <c:choose>
+                                                <c:when test="${u.isActive == 1}">
+                                                    <span style="background:#d4edda; color:#155724;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">Active</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="background:#f8f9fa; color:#888;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px;">Inactive</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td style="padding:11px 16px; text-align:center; white-space:nowrap;">
+                                            <form action="${pageContext.request.contextPath}/admin/users/${u.userId}/toggle"
+                                                  method="POST" style="display:inline-block;">
+                                                <c:choose>
+                                                    <c:when test="${u.isActive == 1}">
+                                                        <button type="submit"
+                                                                style="background:#f8d7da; border:1px solid #f5c6cb; color:#721c24;
+                                                                       border-radius:6px; padding:5px 10px; font-size:13px;
+                                                                       cursor:pointer; min-width:32px;"
+                                                                onclick="return confirm('Deactivate ${u.name}?')"
+                                                                title="Deactivate">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button type="submit"
+                                                                style="background:#d4edda; border:1px solid #c3e6cb; color:#155724;
+                                                                       border-radius:6px; padding:5px 10px; font-size:13px;
+                                                                       cursor:pointer; min-width:32px;"
+                                                                onclick="return confirm('Activate ${u.name}?')"
+                                                                title="Activate">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </form>
                                         </td>
                                     </tr>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach var="user" items="${users.content}" varStatus="loop">
-                                        <tr>
-                                            <td class="text-muted small">${loop.index + 1}</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <c:choose>
-                                                        <c:when test="${not empty user.profilePath}">
-                                                            <img src="${pageContext.request.contextPath}/${user.profilePath}"
-                                                                 class="rounded-circle" width="32" height="32"
-                                                                 style="object-fit:cover;" alt="${user.name}">
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <div class="rounded-circle bg-secondary d-flex align-items-center
-                                                                        justify-content-center text-white"
-                                                                 style="width:32px;height:32px;font-size:.8rem;">
-                                                                <i class="fas fa-user"></i>
-                                                            </div>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                    <span class="fw-semibold">${user.name}</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-muted small">@${user.username}</td>
-                                            <td class="small">${user.email}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${user.role.roleName == 'ADMIN'}">
-                                                        <span class="badge bg-danger">Admin</span>
-                                                    </c:when>
-                                                    <c:when test="${user.role.roleName == 'COMPANY'}">
-                                                        <span class="badge bg-primary">Company</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-info text-dark">Workhand</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="small text-muted">
-                                                <c:if test="${user.city != null}">${user.city.cityName},&nbsp;</c:if>
-                                                <c:if test="${user.state != null}">${user.state.stateName}</c:if>
-                                            </td>
-                                            <td class="text-center">
-                                                <c:choose>
-                                                    <c:when test="${user.isActive == 1}">
-                                                        <span class="badge bg-success">Active</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-danger">Inactive</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="text-center">
-                                                <form action="${pageContext.request.contextPath}/admin/users/${user.userId}/toggle"
-                                                      method="POST" class="d-inline">
-                                                    <c:choose>
-                                                        <c:when test="${user.isActive == 1}">
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                    onclick="return confirm('Deactivate ${user.name}?')">
-                                                                <i class="fas fa-ban"></i>
-                                                            </button>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <button type="submit" class="btn btn-sm btn-outline-success"
-                                                                    onclick="return confirm('Activate ${user.name}?')">
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Pagination -->
         <c:if test="${users.totalPages > 1}">
-            <nav class="mt-3" aria-label="User pagination">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item ${users.first ? 'disabled' : ''}">
-                        <a class="page-link"
-                           href="?page=${users.number - 1}&role=${selectedRole}&search=${search}">
+            <div style="display:flex; justify-content:center; gap:6px; margin-top:24px; flex-wrap:wrap;">
+                <c:choose>
+                    <c:when test="${users.first}">
+                        <span style="background:#f8f9fa; border:1px solid #dee2e6;
+                                     color:#aaa; border-radius:8px; padding:6px 12px; font-size:13px;">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="?page=${users.number - 1}&role=${selectedRole}&search=${search}"
+                           style="background:#fff; border:1px solid #dee2e6; color:#555;
+                                  border-radius:8px; padding:6px 12px; font-size:13px; text-decoration:none;">
                             <i class="fas fa-chevron-left"></i>
                         </a>
-                    </li>
-                    <c:forEach var="pg" items="${totalPageList}">
-                        <li class="page-item ${pg == currentPage ? 'active' : ''}">
-                            <a class="page-link"
-                               href="?page=${pg - 1}&role=${selectedRole}&search=${search}">${pg}</a>
-                        </li>
-                    </c:forEach>
-                    <li class="page-item ${users.last ? 'disabled' : ''}">
-                        <a class="page-link"
-                           href="?page=${users.number + 1}&role=${selectedRole}&search=${search}">
+                    </c:otherwise>
+                </c:choose>
+                <c:forEach var="pg" items="${totalPageList}">
+                    <a href="?page=${pg - 1}&role=${selectedRole}&search=${search}"
+                       style="background:${pg == currentPage ? '#ffbe30' : '#fff'};
+                              color:${pg == currentPage ? '#1c1c2e' : '#555'};
+                              border:1px solid ${pg == currentPage ? '#ffbe30' : '#dee2e6'};
+                              border-radius:8px; padding:6px 12px; font-size:13px;
+                              font-weight:${pg == currentPage ? '700' : '400'};
+                              text-decoration:none;">${pg}</a>
+                </c:forEach>
+                <c:choose>
+                    <c:when test="${users.last}">
+                        <span style="background:#f8f9fa; border:1px solid #dee2e6;
+                                     color:#aaa; border-radius:8px; padding:6px 12px; font-size:13px;">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="?page=${users.number + 1}&role=${selectedRole}&search=${search}"
+                           style="background:#fff; border:1px solid #dee2e6; color:#555;
+                                  border-radius:8px; padding:6px 12px; font-size:13px; text-decoration:none;">
                             <i class="fas fa-chevron-right"></i>
                         </a>
-                    </li>
-                </ul>
-            </nav>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </c:if>
 
     </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</section>

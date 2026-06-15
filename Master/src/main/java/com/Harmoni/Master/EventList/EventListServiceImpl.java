@@ -40,6 +40,12 @@ public class EventListServiceImpl implements EventListService {
     }
 
     @Override
+    public Page<Events> getRecentlyClosedEvents(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("endDatetime").descending());
+        return eventRepo.findRecentlyClosed(LocalDateTime.now(), pageable);
+    }
+
+    @Override
     public Page<Events> searchUpcomingEvents(String keyword, Long catId, int page, int pageSize) {
         LocalDateTime now = LocalDateTime.now();
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("startDatetime").ascending());

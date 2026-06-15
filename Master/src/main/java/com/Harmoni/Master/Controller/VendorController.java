@@ -60,7 +60,8 @@ public class VendorController {
         model.addAttribute("active", "myevent");
         model.addAttribute("events", events);
         model.addAttribute("totalEvent", events.size());
-        return "User/company-events";
+        model.addAttribute("viewName", "User/company-events");
+        return "base/base";
     }
 
     @GetMapping("/workhand-requests/{eventId}")

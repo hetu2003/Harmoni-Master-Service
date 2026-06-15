@@ -39,7 +39,7 @@
             <!-- ── Step 1: Choose Role ── -->
             <div id="role-selector" class="text-center mb-40">
                 <p style="font-size:17px;color:#555;margin-bottom:22px;">
-                    I am registering as a…
+                    I am registering as
                 </p>
                 <div class="d-flex justify-content-center" style="gap:24px;flex-wrap:wrap;">
 
@@ -89,20 +89,23 @@
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <input type="text" name="firstName" placeholder="First Name *" required>
+                                <input type="text" name="firstName" placeholder="First Name *"
+                                       pattern="[A-Za-z ]{2,50}" title="Letters only, 2–50 characters" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
-                                <input type="text" name="lastName" placeholder="Last Name * hidden" required>
+                                <input type="text" name="lastName" placeholder="Last Name *"
+                                       pattern="[A-Za-z ]{2,50}" title="Letters only, 2–50 characters" required>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
                                 <input type="tel" name="contactNumber" placeholder="Contact Number (10-digit phone) *"
-                                       pattern="[0-9]{10}" title="Enter a 10-digit phone number" required>
+                                       pattern="[0-9]{10}" title="Enter a 10-digit phone number"
+                                       maxlength="10" required>
                             </div>
                         </div>
 
@@ -209,7 +212,8 @@
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-item">
                                 <input type="tel" name="contactNumber" placeholder="Contact Number (10-digit phone) *"
-                                       pattern="[0-9]{10}" title="Enter a 10-digit phone number" required>
+                                       pattern="[0-9]{10}" title="Enter a 10-digit phone number"
+                                       maxlength="10" required>
                             </div>
                         </div>
 

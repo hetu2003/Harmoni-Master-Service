@@ -116,7 +116,7 @@
                 <div class="col-lg-7">
                     <div class="mainmenu-wrapper">
                         <div class="menu-item-list ul-li clearfix">
-                            <ul>
+                            <ul id="main-nav-list">
                                 <li><a href="<c:url value='/home' />">home</a></li>
                                 <li><a href="<c:url value='/about' />">about</a></li>
                                 <li><a href="<c:url value='/event' />">events</a></li>
@@ -126,8 +126,11 @@
                                     <c:when test="${user.roleId == 1}">
                                         <li><a href="<c:url value='/history' />">History</a></li>
                                     </c:when>
-                                    <c:when test="${user.roleId == 2 or user.roleId == 3}">
+                                    <c:when test="${user.roleId == 2}">
                                         <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+                                    </c:when>
+                                    <c:when test="${user.roleId == 3}">
+                                        <li><a href="<c:url value='/admin/dashboard' />">Admin</a></li>
                                     </c:when>
                                 </c:choose>
                             </ul>
@@ -159,7 +162,7 @@
                                 </button>
                                 <div class="search-body">
                                     <div class="search-form">
-                                        <form action="<c:url value='/home-search' />" method="get">
+                                        <form action="<c:url value='/event/search' />" method="post">
                                             <input class="search-input" type="search" name="keyword" placeholder="Search Here">
                                             <div class="outer-close toggle-overlay">
                                                 <button type="button" class="search-close">
@@ -226,8 +229,11 @@
                                             <c:when test="${user.roleId == 1}">
                                                 <li><a href="<c:url value='/history' />">My History</a></li>
                                             </c:when>
-                                            <c:when test="${user.roleId == 2 or user.roleId == 3}">
+                                            <c:when test="${user.roleId == 2}">
                                                 <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+                                            </c:when>
+                                            <c:when test="${user.roleId == 3}">
+                                                <li><a href="<c:url value='/admin/dashboard' />">Admin Panel</a></li>
                                             </c:when>
                                         </c:choose>
                                     </c:when>
@@ -331,6 +337,23 @@
     <!-- Note: main.js and addEvent.js were not found in the directory structure, you may need to verify their locations -->
     <!-- <script src="<c:url value='/login/js/main.js' />"></script> -->
     <!-- <script src="<c:url value='/login/js/addEvent.js' />"></script> -->
+
+    <script>
+    (function() {
+        var ctx = '${pageContext.request.contextPath}';
+        var rel = window.location.pathname.replace(ctx, '').replace(/\/$/, '') || '/';
+        document.querySelectorAll('#main-nav-list > li > a').forEach(function(a) {
+            var link = (a.getAttribute('href') || '').replace(ctx, '').replace(/\/$/, '');
+            var match = (rel === link) ||
+                        (link.length > 1 && (rel.startsWith(link + '/') || rel.startsWith(link + '-')));
+            // /vendor/event/* should not highlight public "events" tab
+            if (link === '/event' && rel.indexOf('/vendor') !== -1) match = false;
+            // /payment-history → highlight History tab
+            if (link === '/history' && rel.indexOf('/payment') !== -1) match = true;
+            if (match) a.parentElement.classList.add('active');
+        });
+    })();
+    </script>
 
 </body>
 </html>

@@ -1,191 +1,239 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Management - Harmoni Admin</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { background: #f4f6fb; }
-        .sidebar { min-height: 100vh; background: #1a1d2e; }
-        .sidebar .nav-link { color: #adb5bd; border-radius: 8px; margin-bottom: 4px; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: #0d6efd22; color: #fff; }
-    </style>
-</head>
-<body>
-<div class="d-flex">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-    <!-- Sidebar -->
-    <div class="sidebar d-flex flex-column p-3" style="width:230px; min-width:230px;">
-        <a class="text-white text-decoration-none mb-4 d-block" href="${pageContext.request.contextPath}/admin/dashboard">
-            <i class="fas fa-calendar-star me-2 text-primary"></i><strong>Harmoni Admin</strong>
-        </a>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">
-                    <i class="fas fa-tachometer-alt fa-fw me-2"></i>Dashboard
+<!-- Admin Banner -->
+<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%);
+                border-bottom: 4px solid #ffbe30; padding: 28px 0;">
+    <div class="container">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div>
+                <div style="color:#ffbe30; font-size:12px; font-weight:700; letter-spacing:2px;
+                            text-transform:uppercase; margin-bottom:6px;">
+                    <i class="fas fa-crown" style="margin-right:6px;"></i>Administration Panel
+                </div>
+                <h2 style="color:#fff; font-size:26px; font-weight:800; margin:0;">Event Management</h2>
+                <p style="color:#aaa; font-size:13px; margin:6px 0 0;">${events.totalElements} total events</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="${pageContext.request.contextPath}/admin/dashboard"
+                   style="background:rgba(255,190,48,.15); color:#ffbe30; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-gauge-high" style="margin-right:5px;"></i>Dashboard
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
-                    <i class="fas fa-users fa-fw me-2"></i>Users
+                <a href="${pageContext.request.contextPath}/admin/users"
+                   style="background:rgba(255,190,48,.15); color:#ffbe30; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-users" style="margin-right:5px;"></i>Users
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="${pageContext.request.contextPath}/admin/events">
-                    <i class="fas fa-calendar-alt fa-fw me-2"></i>Events
+                <a href="${pageContext.request.contextPath}/admin/events"
+                   style="background:#ffbe30; color:#1c1c2e; border:1px solid #ffbe30;
+                          border-radius:20px; padding:7px 18px; font-size:13px; font-weight:600; text-decoration:none;">
+                    <i class="fas fa-calendar-alt" style="margin-right:5px;"></i>Events
                 </a>
-            </li>
-        </ul>
-        <div class="mt-auto">
-            <a class="nav-link text-danger" href="${pageContext.request.contextPath}/logout">
-                <i class="fas fa-sign-out-alt fa-fw me-2"></i>Logout
-            </a>
+            </div>
         </div>
     </div>
+</section>
 
-    <!-- Main content -->
-    <div class="flex-grow-1 p-4">
+<!-- Content -->
+<section style="background:#f8f9fa; padding:40px 0; min-height:60vh;">
+    <div class="container">
 
         <c:if test="${not empty successMessage}">
-            <div class="alert alert-success alert-dismissible fade show">
-                ${successMessage} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div style="background:#d4edda; border:1px solid #c3e6cb; color:#155724;
+                        border-radius:8px; padding:12px 18px; margin-bottom:20px; font-size:14px;">
+                <i class="fas fa-check-circle" style="margin-right:8px;"></i>${successMessage}
             </div>
         </c:if>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Event Management</h4>
-            <span class="text-muted small">${events.totalElements} total events</span>
-        </div>
+        <!-- Filter Bar -->
+        <form method="GET" action="${pageContext.request.contextPath}/admin/events">
+            <div style="background:#fff; border-radius:10px; padding:14px 20px; margin-bottom:20px;
+                        border:1px solid #e9ecef; box-shadow:0 1px 4px rgba(0,0,0,.05);
+                        display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <input type="text" name="search" placeholder="Search by event name..." value="${search}"
+                       style="background:#fff; border:1px solid #ced4da; color:#333;
+                              border-radius:8px; padding:8px 12px; font-size:13px; outline:none; flex:1; min-width:200px;">
+                <select name="featured"
+                        style="background:#fff; border:1px solid #ced4da; color:#333;
+                               border-radius:8px; padding:8px 12px; font-size:13px; outline:none;">
+                    <option value="ALL" ${selectedFeatured == 'ALL' ? 'selected' : ''}>All Events</option>
+                    <option value="YES" ${selectedFeatured == 'YES' ? 'selected' : ''}>Featured Only</option>
+                    <option value="NO"  ${selectedFeatured == 'NO'  ? 'selected' : ''}>Not Featured</option>
+                </select>
+                <button type="submit"
+                        style="background:#ffbe30; border:none; color:#1c1c2e; border-radius:8px;
+                               padding:8px 20px; font-size:13px; font-weight:700; cursor:pointer;">
+                    <i class="fas fa-search" style="margin-right:4px;"></i>Filter
+                </button>
+                <a href="${pageContext.request.contextPath}/admin/events"
+                   style="background:#fff; border:1px solid #ced4da; color:#666;
+                          border-radius:8px; padding:8px 14px; font-size:13px; text-decoration:none;">Reset</a>
+            </div>
+        </form>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Event Name</th>
-                                <th>Company</th>
-                                <th>Category</th>
-                                <th>Date</th>
-                                <th class="text-center">Featured</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:choose>
-                                <c:when test="${empty events.content}">
-                                    <tr>
-                                        <td colspan="8" class="text-center text-muted py-4">No events found.</td>
-                                    </tr>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach var="ev" items="${events.content}" varStatus="loop">
-                                        <tr>
-                                            <td class="text-muted small">${loop.index + 1}</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <c:if test="${not empty ev.imagePath}">
-                                                        <img src="${pageContext.request.contextPath}/${ev.imagePath}"
-                                                             width="40" height="40" class="rounded"
-                                                             style="object-fit:cover;" alt="">
-                                                    </c:if>
-                                                    <div>
-                                                        <span class="fw-semibold">${ev.eventName}</span>
-                                                        <br><small class="text-muted">ID #${ev.id}</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="small text-muted">
-                                                <c:if test="${ev.company != null}">${ev.company.name}</c:if>
-                                            </td>
-                                            <td>
-                                                <c:if test="${ev.eventCategory != null}">
-                                                    <span class="badge bg-primary">${ev.eventCategory.eventCategoryName}</span>
+        <div style="background:#fff; border-radius:12px; border:1px solid #e9ecef;
+                    box-shadow:0 2px 8px rgba(0,0,0,.06); overflow:hidden;">
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <thead>
+                        <tr style="background:#ffbe30;">
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; white-space:nowrap;">#</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Event Name</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Company</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Category</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px;">Date</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; text-align:center;">Featured</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; text-align:center;">Status</th>
+                            <th style="padding:12px 16px; color:#1c1c2e; font-size:11px; font-weight:700;
+                                       text-transform:uppercase; letter-spacing:.6px; text-align:center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:choose>
+                            <c:when test="${empty events.content}">
+                                <tr>
+                                    <td colspan="8" style="text-align:center; color:#aaa; padding:40px;">
+                                        <i class="fas fa-calendar-times" style="font-size:30px; display:block; margin-bottom:10px; color:#ccc;"></i>
+                                        No events found.
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="ev" items="${events.content}" varStatus="loop">
+                                    <tr style="border-bottom:1px solid #f0f0f0;">
+                                        <td style="padding:11px 16px; color:#aaa; font-size:12px;">${(currentPage - 1) * 15 + loop.index + 1}</td>
+                                        <td style="padding:11px 16px;">
+                                            <div style="display:flex; align-items:center; gap:10px;">
+                                                <c:if test="${not empty ev.imagePath}">
+                                                    <img src="${pageContext.request.contextPath}/${ev.imagePath}"
+                                                         width="36" height="36"
+                                                         style="border-radius:8px; object-fit:cover; border:1px solid #e0e0e0;" alt="">
                                                 </c:if>
-                                            </td>
-                                            <td class="small text-muted">${ev.startDatetime}</td>
-                                            <td class="text-center">
-                                                <c:choose>
-                                                    <c:when test="${ev.featured}">
-                                                        <span class="badge bg-warning text-dark">
-                                                            <i class="fas fa-star me-1"></i>Featured
-                                                        </span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-light text-muted">—</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="text-center">
-                                                <c:choose>
-                                                    <c:when test="${ev.isActive == 1}">
-                                                        <span class="badge bg-success">Active</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-secondary">Inactive</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="text-center">
-                                                <form action="${pageContext.request.contextPath}/admin/events/${ev.id}/toggle-featured"
-                                                      method="POST" class="d-inline">
-                                                    <input type="hidden" name="from" value="events">
-                                                    <button type="submit" class="btn btn-sm btn-outline-warning"
-                                                            title="Toggle Featured">
-                                                        <i class="fas fa-star"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="${pageContext.request.contextPath}/admin/events/${ev.id}/delete"
-                                                      method="POST" class="d-inline"
-                                                      onsubmit="return confirm('Permanently delete this event?')">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                            title="Delete Event">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
-                        </tbody>
-                    </table>
-                </div>
+                                                <div>
+                                                    <div style="font-weight:600; color:#1c1c2e;">${ev.eventName}</div>
+                                                    <div style="font-size:11px; color:#aaa;">ID #${ev.id}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding:11px 16px; color:#888; font-size:12px;">
+                                            <c:if test="${ev.company != null}">${ev.company.name}</c:if>
+                                        </td>
+                                        <td style="padding:11px 16px;">
+                                            <c:if test="${ev.eventCategory != null}">
+                                                <span style="background:#cce5ff; color:#004085;
+                                                             border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">
+                                                    ${ev.eventCategory.eventCategoryName}
+                                                </span>
+                                            </c:if>
+                                        </td>
+                                        <td style="padding:11px 16px; color:#888; font-size:12px;">${ev.startDatetime}</td>
+                                        <td style="padding:11px 16px; text-align:center;">
+                                            <c:choose>
+                                                <c:when test="${ev.featured}">
+                                                    <span style="background:#fff3cd; color:#856404;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">
+                                                        <i class="fas fa-star"></i> Featured
+                                                    </span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="background:#f8f9fa; color:#aaa;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px;">—</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td style="padding:11px 16px; text-align:center;">
+                                            <c:choose>
+                                                <c:when test="${ev.isActive == 1}">
+                                                    <span style="background:#d4edda; color:#155724;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600;">Active</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="background:#f8f9fa; color:#888;
+                                                                 border-radius:20px; padding:2px 10px; font-size:11px;">Inactive</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td style="padding:11px 16px; text-align:center; white-space:nowrap;">
+                                            <form action="${pageContext.request.contextPath}/admin/events/${ev.id}/toggle-featured"
+                                                  method="POST" style="display:inline-block; margin-right:6px;">
+                                                <input type="hidden" name="from" value="events">
+                                                <button type="submit"
+                                                        style="background:#fff3cd; border:1px solid #ffc107; color:#856404;
+                                                               border-radius:6px; padding:5px 10px; font-size:13px;
+                                                               cursor:pointer; min-width:32px;"
+                                                        title="Toggle Featured"><i class="fas fa-star"></i></button>
+                                            </form>
+                                            <form action="${pageContext.request.contextPath}/admin/events/${ev.id}/delete"
+                                                  method="POST" style="display:inline-block;"
+                                                  onsubmit="return confirm('Permanently delete this event?')">
+                                                <input type="hidden" name="from" value="events">
+                                                <button type="submit"
+                                                        style="background:#f8d7da; border:1px solid #f5c6cb; color:#721c24;
+                                                               border-radius:6px; padding:5px 10px; font-size:13px;
+                                                               cursor:pointer; min-width:32px;"
+                                                        title="Delete"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Pagination -->
         <c:if test="${events.totalPages > 1}">
-            <nav class="mt-3" aria-label="Events pagination">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item ${events.first ? 'disabled' : ''}">
-                        <a class="page-link" href="?page=${events.number - 1}">
+            <div style="display:flex; justify-content:center; gap:6px; margin-top:24px; flex-wrap:wrap;">
+                <c:choose>
+                    <c:when test="${events.first}">
+                        <span style="background:#f8f9fa; border:1px solid #dee2e6;
+                                     color:#aaa; border-radius:8px; padding:6px 12px; font-size:13px;">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="?page=${events.number - 1}&search=${search}&featured=${selectedFeatured}"
+                           style="background:#fff; border:1px solid #dee2e6; color:#555;
+                                  border-radius:8px; padding:6px 12px; font-size:13px; text-decoration:none;">
                             <i class="fas fa-chevron-left"></i>
                         </a>
-                    </li>
-                    <c:forEach var="pg" items="${totalPageList}">
-                        <li class="page-item ${pg == currentPage ? 'active' : ''}">
-                            <a class="page-link" href="?page=${pg - 1}">${pg}</a>
-                        </li>
-                    </c:forEach>
-                    <li class="page-item ${events.last ? 'disabled' : ''}">
-                        <a class="page-link" href="?page=${events.number + 1}">
+                    </c:otherwise>
+                </c:choose>
+                <c:forEach var="pg" items="${totalPageList}">
+                    <a href="?page=${pg - 1}&search=${search}&featured=${selectedFeatured}"
+                       style="background:${pg == currentPage ? '#ffbe30' : '#fff'};
+                              color:${pg == currentPage ? '#1c1c2e' : '#555'};
+                              border:1px solid ${pg == currentPage ? '#ffbe30' : '#dee2e6'};
+                              border-radius:8px; padding:6px 12px; font-size:13px;
+                              font-weight:${pg == currentPage ? '700' : '400'};
+                              text-decoration:none;">${pg}</a>
+                </c:forEach>
+                <c:choose>
+                    <c:when test="${events.last}">
+                        <span style="background:#f8f9fa; border:1px solid #dee2e6;
+                                     color:#aaa; border-radius:8px; padding:6px 12px; font-size:13px;">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="?page=${events.number + 1}&search=${search}&featured=${selectedFeatured}"
+                           style="background:#fff; border:1px solid #dee2e6; color:#555;
+                                  border-radius:8px; padding:6px 12px; font-size:13px; text-decoration:none;">
                             <i class="fas fa-chevron-right"></i>
                         </a>
-                    </li>
-                </ul>
-            </nav>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </c:if>
 
     </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</section>

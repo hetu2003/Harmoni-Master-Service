@@ -10,18 +10,21 @@
 </c:if>
 
 <!-- Banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
+<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 55px 0; border-bottom: 4px solid #ffbe30;">
     <div class="container">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" style="background:transparent; padding:0; margin-bottom:10px;">
-                <li class="breadcrumb-item"><a href="<c:url value='/home' />" style="color:#ccc;">Home</a></li>
-                <li class="breadcrumb-item"><a href="<c:url value='/event' />" style="color:#ccc;">Events</a></li>
-                <li class="breadcrumb-item"><a href="<c:url value='/event-details/${event.eventId}' />" style="color:#ccc;">${event.eventName}</a></li>
-                <li class="breadcrumb-item active" style="color:#f0a500;">Apply</li>
+            <ol class="breadcrumb" style="background:transparent; padding:0; margin-bottom:12px;">
+                <li class="breadcrumb-item"><a href="<c:url value='/home' />" style="color:#aaa; text-decoration:none;">Home</a></li>
+                <li class="breadcrumb-item"><a href="<c:url value='/event' />" style="color:#aaa; text-decoration:none;">Events</a></li>
+                <li class="breadcrumb-item"><a href="<c:url value='/event-details/${event.eventId}' />" style="color:#aaa; text-decoration:none;">${event.eventName}</a></li>
+                <li class="breadcrumb-item active" style="color:#ffbe30;">Apply</li>
             </ol>
         </nav>
-        <h2 class="white-color font-weight-bold mb-1">Apply for <strong>${event.eventName}</strong></h2>
-        <p class="mb-0" style="color:#ccc;">Select your role and submit your application</p>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <span style="width:4px; height:36px; background:#ffbe30; border-radius:3px; display:inline-block;"></span>
+            <h2 style="color:#fff; font-weight:700; margin:0;">Apply for <span style="color:#ffbe30;">${event.eventName}</span></h2>
+        </div>
+        <p class="mb-0" style="color:#aaa; margin-left:16px;">Select your role and submit your application</p>
     </div>
 </section>
 
@@ -39,11 +42,11 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover text-center mb-0">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Role / Category</th>
-                                        <th>Positions Needed</th>
-                                        <th>Pay (per person)</th>
+                                <thead>
+                                    <tr style="background:#ffbe30; color:#1c1c2e;">
+                                        <th style="border:none; font-weight:700;">Role / Category</th>
+                                        <th style="border:none; font-weight:700;">Positions Needed</th>
+                                        <th style="border:none; font-weight:700;">Pay (per person)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,7 +136,15 @@
                                 <button type="submit" class="custom-btn" id="submitBtn">
                                     <i class="fas fa-paper-plane mr-2"></i>Submit Application
                                 </button>
-                                <a href="<c:url value='/event-details/${event.eventId}' />" class="btn btn-outline-secondary ml-2">Cancel</a>
+                                <a href="<c:url value='/event-details/${event.eventId}' />"
+                                   style="display:inline-flex; align-items:center; padding:15px 35px; border-radius:50px;
+                                          border:2px solid #ffbe30; color:#ffbe30; font-weight:600; font-size:14px;
+                                          text-transform:uppercase; text-decoration:none; margin-left:10px;
+                                          transition:background .2s, color .2s;"
+                                   onmouseover="this.style.background='#ffbe30';this.style.color='#fff';"
+                                   onmouseout="this.style.background='transparent';this.style.color='#ffbe30';">
+                                    Cancel
+                                </a>
                             </div>
                         </form>
                     </div>

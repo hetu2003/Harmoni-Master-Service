@@ -43,16 +43,18 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Page<Events> getMyEvents(Users company, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return eventRepo.findByCompanyOrderByStartDatetimeDesc(company, pageable);
+        return eventRepo.findActiveByCompanyOrderByStartDatetimeDesc(company, pageable);
     }
 
     @Override
     public List<Events> searchMyEvents(Users company, String search) {
         if ("all".equals(search)) return List.of();
         EventSubcategory sub = eventSubcategoryRepo.findById(Long.parseLong(search)).orElse(null);
-        return (sub != null)
-                ? eventRepo.findByCompanyAndEventSubcategoryOrderByStartDatetime(company, sub)
-                : List.of();
+        if (sub == null) return List.of();
+        return eventRepo.findByCompanyAndEventSubcategoryOrderByStartDatetime(company, sub)
+                .stream()
+                .filter(e -> e.getIsActive() != null && e.getIsActive() == 1)
+                .collect(Collectors.toList());
     }
 
     @Override

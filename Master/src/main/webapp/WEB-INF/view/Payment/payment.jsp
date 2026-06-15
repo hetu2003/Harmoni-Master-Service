@@ -169,8 +169,7 @@
                                         <td class="text-center">
                                             <c:choose>
                                                 <c:when test="${dto.paymentStatus}">
-                                                    <span class="badge bg-success px-3 py-2"
-                                                          title="Paid on ${dto.paymentDate}">
+                                                    <span class="badge bg-success px-3 py-2">
                                                         <i class="fas fa-check-circle me-1"></i>Already Paid
                                                     </span>
                                                 </c:when>

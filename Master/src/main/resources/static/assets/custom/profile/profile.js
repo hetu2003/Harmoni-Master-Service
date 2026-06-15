@@ -10,21 +10,24 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.textContent = "Saving…";
 
         const formData = new FormData(form);
+        const ctx = (typeof CTX_PATH !== "undefined" ? CTX_PATH : "");
 
-        fetch(getCtx() + "/profile/update", {
+        fetch(ctx + "/profile/update", {
             method: "POST",
             body: formData,
         })
-            .then((r) => r.json())
-            .then((result) => {
-                btn.disabled = false;
-                btn.textContent = "SAVE CHANGES";
-                showMsg(result.success ? "success" : "danger", result.message);
+            .then(function (r) { return r.json(); })
+            .then(function (result) {
                 if (result.success) {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    showMsg("success", result.message + " Refreshing…");
+                    setTimeout(function () { window.location.reload(); }, 1000);
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = "SAVE CHANGES";
+                    showMsg("danger", result.message || "Update failed. Please try again.");
                 }
             })
-            .catch(() => {
+            .catch(function () {
                 btn.disabled = false;
                 btn.textContent = "SAVE CHANGES";
                 showMsg("danger", "An unexpected error occurred. Please try again.");
@@ -35,11 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
 function previewProfileImg(input, previewId) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = function (e) {
             const el = document.getElementById(previewId);
+            const placeholder = document.getElementById("profilePlaceholder") || document.getElementById("logoPlaceholder");
             if (el) {
                 el.src = e.target.result;
                 el.style.display = "block";
+            }
+            if (placeholder) {
+                placeholder.style.display = "none";
             }
         };
         reader.readAsDataURL(input.files[0]);
@@ -54,15 +61,6 @@ function showMsg(type, text) {
     div.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-function getCtx() {
-    const scripts = document.querySelectorAll("script[src]");
-    for (const s of scripts) {
-        const m = s.src.match(/^(https?:\/\/[^/]+)(\/[^/]+)?\/assets\/custom\/profile\/profile\.js/);
-        if (m) return m[2] || "";
-    }
-    return "";
-}
-
 function loadCities(stateSelect, citySelectId) {
     var stateId = stateSelect.value;
     var citySelect = document.getElementById(citySelectId);
@@ -71,7 +69,8 @@ function loadCities(stateSelect, citySelectId) {
         citySelect.innerHTML = '<option value="" disabled selected>Select City *</option>';
         return;
     }
-    fetch(getCtx() + "/location/cities/" + stateId)
+    var ctx = (typeof CTX_PATH !== "undefined" ? CTX_PATH : "");
+    fetch(ctx + "/location/cities/" + stateId)
         .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
         .then(function (cities) {
             citySelect.innerHTML = '<option value="" disabled selected>Select City *</option>';

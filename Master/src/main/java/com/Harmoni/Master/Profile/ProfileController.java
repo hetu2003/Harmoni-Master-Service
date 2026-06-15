@@ -37,13 +37,17 @@ public class ProfileController {
             return "redirect:/login";
         }
 
+        if (Integer.valueOf(3).equals(user.getRoleId())) {
+            return "redirect:/admin/dashboard";
+        }
+
         model.addAttribute("user", user);
         model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
         if (user.getStateId() != null) {
             model.addAttribute("cities", cityRepository.findByStateRawIdOrderByCityNameAsc(user.getStateId()));
         }
 
-        if (user.getRoleId() != null && user.getRoleId() == 2) {
+        if (Integer.valueOf(2).equals(user.getRoleId())) {
             model.addAttribute("viewName", "profile/company-profile-edit");
         } else {
             model.addAttribute("viewName", "profile/workhand-profile-edit");

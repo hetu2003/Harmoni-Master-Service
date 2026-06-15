@@ -33,9 +33,10 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Page<Users> findByRoleRoleName(String roleName, Pageable pageable);
     long countByRoleRoleName(String roleName);
 
-    // Company search by name
     List<Users> findByRoleRoleNameAndNameContainingIgnoreCase(String roleName, String keyword);
 
-    // Admin: all users paginated
+    Page<Users> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Users> findByRoleRoleNameAndNameContainingIgnoreCase(String roleName, String keyword, Pageable pageable);
+
     Page<Users> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

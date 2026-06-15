@@ -41,14 +41,31 @@ public class AuthController {
 
     // Show the login page
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
+    public String showLoginPage(HttpSession session,
+                                @RequestParam(value = "expired", required = false) String expired,
+                                Model model) {
+        if (session.getAttribute("userId") != null) {
+            if ("true".equals(expired)) {
+                // Gateway forced this redirect because the JWT expired — clear the stale session
+                // so the user can re-authenticate and get a fresh JWT + session.
+                session.invalidate();
+                model.addAttribute("sessionExpired", true);
+            } else {
+                // User navigated here manually while still logged in — send them home
+                return "redirect:/home";
+            }
+        }
         model.addAttribute("viewName", "login/login");
         return "base/base";
     }
 
     // Show the registration page
     @GetMapping("/register")
-    public String showRegisterPage(Model model) {
+    public String showRegisterPage(HttpSession session, Model model) {
+        if (session.getAttribute("userId") != null) {
+            // Already logged in — redirect to home with no confusing blank transition
+            return "redirect:/home";
+        }
         model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
         model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("viewName", "login/registration");
@@ -98,8 +115,15 @@ public class AuthController {
 
         if (response != null) {
             setJwtCookie(httpResponse, response.getToken());
-            String contextPath = request.getContextPath();
-            return ResponseEntity.ok(new AjaxResponse(true, "Login successful", contextPath + "/dashboard"));
+            String redirectUrl = request.getContextPath() + "/home";
+            try {
+                Long userId = Long.parseLong(response.getUserId());
+                Users u = userRepository.findById(userId).orElse(null);
+                if (u != null && Integer.valueOf(3).equals(u.getRoleId())) {
+                    redirectUrl = request.getContextPath() + "/admin/dashboard";
+                }
+            } catch (Exception ignored) {}
+            return ResponseEntity.ok(new AjaxResponse(true, "Login successful", redirectUrl));
         } else {
             return ResponseEntity.ok(new AjaxResponse(false, "Invalid username or password", null));
         }
@@ -113,7 +137,14 @@ public class AuthController {
 
         if (response != null) {
             setJwtCookie(httpResponse, response.getToken());
-            return "redirect:/dashboard";
+            try {
+                Long userId = Long.parseLong(response.getUserId());
+                Users u = userRepository.findById(userId).orElse(null);
+                if (u != null && Integer.valueOf(3).equals(u.getRoleId())) {
+                    return "redirect:/admin/dashboard";
+                }
+            } catch (Exception ignored) {}
+            return "redirect:/home";
         } else {
             model.addAttribute("error", "Invalid username or password");
             model.addAttribute("viewName", "login/login");
@@ -131,32 +162,17 @@ public class AuthController {
 
         if (response != null) {
             setJwtCookie(httpResponse, response.getToken());
-            String contextPath = request.getContextPath();
-            return ResponseEntity.ok(new AjaxResponse(true, "Google Sign-In successful", contextPath + "/dashboard"));
+            return ResponseEntity.ok(new AjaxResponse(true, "Google Sign-In successful", request.getContextPath() + "/home"));
         } else {
             return ResponseEntity.ok(new AjaxResponse(false, "Google Sign-In failed. Please try again.", null));
         }
-    }
-
-    @GetMapping("/dashboard")
-    public String showDashboard(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return "redirect:/login";
-
-        Users user = userRepository.findById(userId).orElse(null);
-        if (user == null) return "redirect:/login";
-
-        if (user.getRole() != null && "ADMIN".equalsIgnoreCase(user.getRole().getRoleName())) {
-            return "redirect:/admin/dashboard";
-        }
-        return "redirect:/home";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse httpResponse) {
         session.invalidate();
         clearJwtCookie(httpResponse);
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     // --- Change Password ---
@@ -179,8 +195,9 @@ public class AuthController {
         }
         String result = authService.changePassword(request);
         if (result != null && result.contains("successfully")) {
-            session.invalidate();
-            return ResponseEntity.ok(new AjaxResponse(true, result, "/login"));
+            userRepository.findByUsername(request.getUsername())
+                    .ifPresent(u -> authService.sendPasswordChangeEmail(u.getEmail()));
+            return ResponseEntity.ok(new AjaxResponse(true, result, "/home"));
         }
         return ResponseEntity.ok(new AjaxResponse(false, result, null));
     }
@@ -203,7 +220,7 @@ public class AuthController {
         AuthResponse response = authService.verifyEmailOtp(otpRequest, session);
         if (response != null) {
             setJwtCookie(httpResponse, response.getToken());
-            return ResponseEntity.ok(new AjaxResponse(true, "Login successful", request.getContextPath() + "/dashboard"));
+            return ResponseEntity.ok(new AjaxResponse(true, "Login successful", request.getContextPath() + "/home"));
         } else {
             return ResponseEntity.ok(new AjaxResponse(false, "Invalid or expired OTP. Please try again.", null));
         }

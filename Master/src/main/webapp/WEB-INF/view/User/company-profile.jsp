@@ -15,6 +15,17 @@
             background: linear-gradient(135deg, #1a1a2e, #0f3460);
             min-height: 200px;
         }
+        .btn-theme {
+            background: linear-gradient(to bottom right, #ff3e00, #ffbe30);
+            color: #fff !important;
+            border: none;
+            font-weight: 600;
+            transition: all .3s ease-in-out;
+        }
+        .btn-theme:hover {
+            background: linear-gradient(to bottom right, #ffbe30, #ff3e00);
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
@@ -33,8 +44,18 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <c:choose>
-                    <c:when test="${pageContext.request.userPrincipal != null}">
-                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/history">History</a></li>
+                    <c:when test="${not empty user}">
+                        <c:choose>
+                            <c:when test="${user.roleId == 1}">
+                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/history">History</a></li>
+                            </c:when>
+                            <c:when test="${user.roleId == 2}">
+                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/vendor/my-events">My Events</a></li>
+                            </c:when>
+                            <c:when test="${user.roleId == 3}">
+                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">Admin</a></li>
+                            </c:when>
+                        </c:choose>
                         <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a></li>
                     </c:when>
                     <c:otherwise>
@@ -119,7 +140,7 @@
             </div>
 
             <a href="${pageContext.request.contextPath}/company"
-               class="btn btn-outline-secondary w-100 mt-3">
+               class="btn btn-theme w-100 mt-3">
                 <i class="fas fa-arrow-left me-2"></i>Back to Companies
             </a>
         </div>
@@ -141,7 +162,7 @@
                             <div class="col-md-6">
                                 <div class="card h-100 event-card border-0 shadow-sm">
                                     <div class="card-body p-3">
-                                        <span class="badge bg-primary mb-2">${ev.eventCategory.eventCategoryName}</span>
+                                        <span class="badge mb-2" style="background:linear-gradient(to bottom right,#ff3e00,#ffbe30);color:#fff;">${ev.eventCategory.eventCategoryName}</span>
                                         <h6 class="fw-bold mb-1">${ev.eventName}</h6>
                                         <p class="text-muted small mb-1">
                                             <i class="fas fa-map-marker-alt me-1"></i>
@@ -155,7 +176,7 @@
                                                 <i class="fas fa-users me-1"></i>${ev.totalWorkhand} slots
                                             </small>
                                             <a href="${pageContext.request.contextPath}/event-details/${ev.eventId}"
-                                               class="btn btn-sm btn-dark">Apply</a>
+                                               class="btn btn-sm btn-theme">Apply</a>
                                         </div>
                                     </div>
                                 </div>

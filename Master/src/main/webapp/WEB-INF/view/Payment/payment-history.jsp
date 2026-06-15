@@ -139,12 +139,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td class="small text-muted">
-                                            <c:choose>
-                                                <c:when test="${reg.paymentDate != null}">${reg.paymentDate}</c:when>
-                                                <c:otherwise>—</c:otherwise>
-                                            </c:choose>
-                                        </td>
+                                        <td class="small text-muted">—</td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${reg.rating != null and reg.rating > 0}">

@@ -5,7 +5,7 @@
 <section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
     <div class="container">
         <div class="section-title text-center mb-0">
-            <small class="sub-title">company dashboard</small>
+            <small class="sub-title">My Events</small>
             <h2 class="big-title white-color mt-2">Add <strong>New Event</strong></h2>
             <p class="white-color mb-0 mt-2">Fill in the details below to create a new event</p>
         </div>
@@ -89,7 +89,7 @@
                                 <label class="font-weight-bold mb-0">
                                     Workhand Roles Required <span class="text-danger">*</span>
                                 </label>
-                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotRow()">
+                                <button type="button" class="custom-btn" style="padding:6px 16px; font-size:0.82rem;" onclick="addSlotRow()">
                                     <i class="fas fa-plus mr-1"></i>Add Another Role
                                 </button>
                             </div>
@@ -197,3 +197,37 @@ var PREFILL_CITY  = ${not empty f_city_id ? f_city_id : 0};
 </c:if>
 </script>
 <script src="${pageContext.request.contextPath}/assets/custom/Event/addEvent.js"></script>
+<script>
+(function() {
+    var startEl = document.getElementById('startDatetime');
+    var endEl   = document.getElementById('endDatetime');
+
+    function updateEndMin() {
+        if (startEl.value) endEl.min = startEl.value;
+    }
+    if (startEl) {
+        startEl.addEventListener('change', updateEndMin);
+        updateEndMin();
+    }
+
+    var form = document.getElementById('addEventForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (startEl.value && endEl.value && endEl.value <= startEl.value) {
+                endEl.classList.add('is-invalid');
+                endEl.setCustomValidity('End time must be after start time.');
+                e.preventDefault();
+            } else {
+                endEl.classList.remove('is-invalid');
+                endEl.setCustomValidity('');
+            }
+        });
+        endEl && endEl.addEventListener('change', function() {
+            if (startEl.value && endEl.value > startEl.value) {
+                endEl.classList.remove('is-invalid');
+                endEl.setCustomValidity('');
+            }
+        });
+    }
+})();
+</script>

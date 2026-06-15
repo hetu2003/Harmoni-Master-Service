@@ -12,7 +12,7 @@
                         </div>
                         <div class="breadcrumb-list">
                             <ul>
-                                <li class="breadcrumb-item"><a href="<c:url value='/dashboard' />" class="breadcrumb-link">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="#" aria-current="page">Edit Profile</a></li>
                             </ul>
                         </div>
@@ -38,19 +38,22 @@
                 <div style="display:inline-block;position:relative;">
                     <c:choose>
                         <c:when test="${not empty user.profilePath}">
-                            <img id="logoPreview" src="${user.profilePath}" alt="Company Logo"
-                                 style="width:130px;height:130px;object-fit:cover;border-radius:10px;
-                                        border:3px solid #ff8a00;">
+                            <img id="logoPreview"
+                                 src="${pageContext.request.contextPath}${user.profilePath}"
+                                 alt="Company Logo"
+                                 style="width:140px;height:140px;object-fit:cover;border-radius:10px;
+                                        border:4px solid #ff8a00;display:block;">
                         </c:when>
                         <c:otherwise>
                             <div id="logoPlaceholder"
-                                 style="width:130px;height:130px;border-radius:10px;border:3px dashed #ccc;
+                                 style="width:140px;height:140px;border-radius:10px;border:3px dashed #ccc;
                                         display:flex;align-items:center;justify-content:center;
                                         background:#f9f9f9;color:#bbb;font-size:13px;margin:0 auto;">
                                 No Logo
                             </div>
-                            <img id="logoPreview" src="" alt="" style="display:none;width:130px;height:130px;
-                                 object-fit:cover;border-radius:10px;border:3px solid #ff8a00;">
+                            <img id="logoPreview" src="" alt=""
+                                 style="display:none;width:140px;height:140px;
+                                        object-fit:cover;border-radius:10px;border:4px solid #ff8a00;">
                         </c:otherwise>
                     </c:choose>
                     <label for="profilePhoto"
@@ -126,8 +129,7 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 d-flex justify-content-between align-items-center mt-20"
                          style="flex-wrap:wrap;gap:12px;">
-                        <a href="<c:url value='/change-password' />" class="custom-btn"
-                           style="background:#555;">CHANGE PASSWORD</a>
+                        <a href="<c:url value='/change-password' />" class="custom-btn">CHANGE PASSWORD</a>
                         <button type="submit" id="updateBtn" class="custom-btn">SAVE CHANGES</button>
                     </div>
 

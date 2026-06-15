@@ -61,6 +61,17 @@ public class EventListController {
         return "base/base";
     }
 
+    @GetMapping("/closed-event")
+    public String closedEventList(@RequestParam(defaultValue = "0") int page, Model model) {
+        Page<Events> events = eventListService.getRecentlyClosedEvents(page, PAGE_SIZE);
+        model.addAttribute("events",        events);
+        model.addAttribute("totalPageList", pageNumbers(events));
+        model.addAttribute("currentPage",   events.getNumber() + 1);
+        model.addAttribute("totalEvents",   events.getTotalElements());
+        model.addAttribute("viewName", "Event/closed-event");
+        return "base/base";
+    }
+
     private List<Integer> pageNumbers(Page<?> p) {
         return IntStream.rangeClosed(1, p.getTotalPages())
                 .boxed().collect(Collectors.toList());

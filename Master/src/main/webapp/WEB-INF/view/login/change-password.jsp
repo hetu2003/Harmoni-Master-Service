@@ -12,7 +12,7 @@
                         </div>
                         <div class="breadcrumb-list">
                             <ul>
-                                <li class="breadcrumb-item"><a href="<c:url value='/dashboard' />" class="breadcrumb-link">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="#" aria-current="page">Change Password</a></li>
                             </ul>
                         </div>

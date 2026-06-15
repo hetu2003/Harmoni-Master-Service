@@ -26,7 +26,7 @@ public class RazorpayService {
      * @param receipt         Unique string — use "reg_<registrationId>"
      */
     public Order createOrder(BigDecimal amountInRupees, String receipt) throws RazorpayException {
-        RazorpayClient client = new RazorpayClient(keyId, keySecret);
+        RazorpayClient client = new RazorpayClient(keyId.trim(), keySecret.trim());
 
         // Razorpay requires amount in paise (1 INR = 100 paise)
         int amountInPaise = amountInRupees.multiply(BigDecimal.valueOf(100)).intValue();

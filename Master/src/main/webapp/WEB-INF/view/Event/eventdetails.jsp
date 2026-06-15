@@ -49,6 +49,15 @@
     </div>
 </section>
 
+<!-- Back to Events -->
+<div style="background:#fff; border-bottom:1px solid #eee; padding:10px 0;">
+    <div class="container">
+        <a href="<c:url value='/event' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Events
+        </a>
+    </div>
+</div>
+
 <!-- Event banner image -->
 <c:if test="${not empty event.imagePath}">
 <div style="max-height:300px; overflow:hidden;">
@@ -113,7 +122,7 @@
                         <a href="<c:url value='/vendor/workhand-requests/${event.eventId}' />" class="custom-btn mr-2">
                             <i class="fas fa-users mr-2"></i>Manage Applications
                         </a>
-                        <a href="<c:url value='/vendor/event/${event.eventId}/edit' />" class="btn btn-outline-secondary">
+                        <a href="<c:url value='/vendor/event/${event.eventId}/edit' />" class="custom-btn">
                             <i class="fas fa-edit mr-1"></i>Edit Event
                         </a>
                     </div>

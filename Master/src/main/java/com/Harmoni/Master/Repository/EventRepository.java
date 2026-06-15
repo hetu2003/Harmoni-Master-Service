@@ -18,6 +18,9 @@ public interface EventRepository extends JpaRepository<Events, Long> {
     Page<Events> findByCompanyOrderByStartDatetimeDesc(Users company, Pageable pageable);
     List<Events> findByCompanyOrderByStartDatetimeDesc(Users company);
 
+    @Query("SELECT e FROM Events e WHERE e.company = :company AND e.isActive = 1 ORDER BY e.startDatetime DESC")
+    Page<Events> findActiveByCompanyOrderByStartDatetimeDesc(@Param("company") Users company, Pageable pageable);
+
     Page<Events> findByStartDatetimeAfterAndEventCategoryOrderByStartDatetime(
             LocalDateTime now, EventCategory eventCategory, Pageable pageable);
 
@@ -42,4 +45,11 @@ public interface EventRepository extends JpaRepository<Events, Long> {
 
     @Query("SELECT e FROM Events e WHERE e.endDatetime >= :now AND e.isActive = 1 ORDER BY e.startDatetime ASC")
     List<Events> findActiveEvents(@Param("now") LocalDateTime now, Pageable pageable);
+
+    Page<Events> findByEventNameContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Events> findByFeatured(Boolean featured, Pageable pageable);
+    Page<Events> findByEventNameContainingIgnoreCaseAndFeatured(String keyword, Boolean featured, Pageable pageable);
+
+    @Query("SELECT e FROM Events e WHERE e.endDatetime < :now AND e.isActive = 1 ORDER BY e.endDatetime DESC")
+    Page<Events> findRecentlyClosed(@Param("now") LocalDateTime now, Pageable pageable);
 }

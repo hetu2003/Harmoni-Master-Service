@@ -6,9 +6,9 @@ import com.Harmoni.Master.Entity.Users;
 import com.Harmoni.Master.Repository.EventRegistrationRepository;
 import com.Harmoni.Master.Repository.EventRepository;
 import com.Harmoni.Master.Repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- *  Admin Dashboard.
- *
- *  GET  /admin/dashboard              → stats + recent activity
- *  GET  /admin/users                  → paginated user list with toggle
- *  POST /admin/users/{id}/toggle      → activate / deactivate a user
- *  POST /admin/events/{id}/delete     → hard-delete an event (admin only)
- */
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final UserRepository userRepo;
@@ -38,10 +29,18 @@ public class AdminController {
 
     private static final int USER_PAGE_SIZE = 10;
 
+    private boolean isAdmin(HttpSession session) {
+        Object raw = session.getAttribute("userId");
+        if (!(raw instanceof Long)) return false;
+        Users u = userRepo.findById((Long) raw).orElse(null);
+        return u != null && Integer.valueOf(3).equals(u.getRoleId());
+    }
+
     // ── Dashboard ─────────────────────────────────────────────────────────────
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(HttpSession session, Model model) {
+        if (!isAdmin(session)) return "redirect:/login";
 
         // Stats
         long totalWorkhands   = userRepo.countByRoleRoleName("WORKHAND");
@@ -68,34 +67,31 @@ public class AdminController {
         model.addAttribute("recentRegs",     recentRegs.getContent());
         model.addAttribute("recentEvents",   recentEvents.getContent());
         model.addAttribute("active", "dashboard");
-        return "admin/dashboard";
+        model.addAttribute("viewName", "admin/dashboard");
+        return "base/base";
     }
 
     // ── User Management ───────────────────────────────────────────────────────
 
     @GetMapping("/users")
-    public String userList(@RequestParam(defaultValue = "0") int page,
+    public String userList(HttpSession session,
+                           @RequestParam(defaultValue = "0") int page,
                            @RequestParam(value = "role", defaultValue = "ALL") String role,
                            @RequestParam(value = "search", required = false) String search,
                            Model model) {
+        if (!isAdmin(session)) return "redirect:/login";
 
         Pageable pageable = PageRequest.of(page, USER_PAGE_SIZE, Sort.by("createdAt").descending());
         Page<Users> users;
 
-        if (search != null && !search.isBlank()) {
-            // Simple: fetch all matching and paginate manually — fine for admin volume
-            List<Users> matched = "ALL".equals(role)
-                    ? userRepo.findAll().stream()
-                    .filter(u -> u.getName() != null
-                            && u.getName().toLowerCase().contains(search.toLowerCase()))
-                    .collect(Collectors.toList())
-                    : userRepo.findByRoleRoleNameAndNameContainingIgnoreCase(role, search);
-            int start = (int) pageable.getOffset();
-            int end   = Math.min(start + USER_PAGE_SIZE, matched.size());
-            users = new PageImpl<>(
-                    start <= matched.size() ? matched.subList(start, end) : List.of(),
-                    pageable, matched.size());
-        } else if ("ALL".equals(role)) {
+        boolean hasSearch = search != null && !search.isBlank();
+        boolean allRoles  = "ALL".equals(role);
+
+        if (hasSearch && allRoles) {
+            users = userRepo.findByNameContainingIgnoreCase(search, pageable);
+        } else if (hasSearch) {
+            users = userRepo.findByRoleRoleNameAndNameContainingIgnoreCase(role, search, pageable);
+        } else if (allRoles) {
             users = userRepo.findAllByOrderByCreatedAtDesc(pageable);
         } else {
             users = userRepo.findByRoleRoleName(role, pageable);
@@ -110,13 +106,15 @@ public class AdminController {
         model.addAttribute("selectedRole",  role);
         model.addAttribute("search",        search);
         model.addAttribute("active", "users");
-        return "admin/users";
+        model.addAttribute("viewName", "admin/users");
+        return "base/base";
     }
 
     // ── Toggle user active / inactive ─────────────────────────────────────────
 
     @PostMapping("/users/{userId}/toggle")
-    public String toggleUser(@PathVariable Long userId, RedirectAttributes redirectAttrs) {
+    public String toggleUser(HttpSession session, @PathVariable Long userId, RedirectAttributes redirectAttrs) {
+        if (!isAdmin(session)) return "redirect:/login";
         Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
 
@@ -133,23 +131,48 @@ public class AdminController {
     // ── Events list ───────────────────────────────────────────────────────────
 
     @GetMapping("/events")
-    public String eventList(@RequestParam(defaultValue = "0") int page, Model model) {
-        Page<Events> events = eventRepo.findAll(PageRequest.of(page, 15, Sort.by("createdAt").descending()));
+    public String eventList(HttpSession session,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(value = "search", required = false) String search,
+                            @RequestParam(value = "featured", defaultValue = "ALL") String featured,
+                            Model model) {
+        if (!isAdmin(session)) return "redirect:/login";
+
+        String  kw   = (search != null && !search.isBlank()) ? search : null;
+        Boolean feat = "YES".equals(featured) ? Boolean.TRUE : "NO".equals(featured) ? Boolean.FALSE : null;
+        Pageable pageable = PageRequest.of(page, 15, Sort.by("createdAt").descending());
+
+        Page<Events> events;
+        if (kw != null && feat != null) {
+            events = eventRepo.findByEventNameContainingIgnoreCaseAndFeatured(kw, feat, pageable);
+        } else if (kw != null) {
+            events = eventRepo.findByEventNameContainingIgnoreCase(kw, pageable);
+        } else if (feat != null) {
+            events = eventRepo.findByFeatured(feat, pageable);
+        } else {
+            events = eventRepo.findAll(pageable);
+        }
+
         List<Integer> pageNumbers = IntStream.rangeClosed(1, events.getTotalPages())
                 .boxed().collect(Collectors.toList());
-        model.addAttribute("events", events);
-        model.addAttribute("totalPageList", pageNumbers);
-        model.addAttribute("currentPage", events.getNumber() + 1);
+
+        model.addAttribute("events",          events);
+        model.addAttribute("totalPageList",    pageNumbers);
+        model.addAttribute("currentPage",      events.getNumber() + 1);
+        model.addAttribute("search",           search);
+        model.addAttribute("selectedFeatured", featured);
         model.addAttribute("active", "events");
-        return "admin/events";
+        model.addAttribute("viewName", "admin/events");
+        return "base/base";
     }
 
     // ── Toggle event featured ─────────────────────────────────────────────────
 
     @PostMapping("/events/{eventId}/toggle-featured")
-    public String toggleFeatured(@PathVariable Long eventId,
+    public String toggleFeatured(HttpSession session, @PathVariable Long eventId,
                                  @RequestParam(value = "from", defaultValue = "dashboard") String from,
                                  RedirectAttributes ra) {
+        if (!isAdmin(session)) return "redirect:/login";
         eventRepo.findById(eventId).ifPresent(e -> {
             e.setFeatured(e.getFeatured() == null || !e.getFeatured());
             eventRepo.save(e);
@@ -161,13 +184,16 @@ public class AdminController {
     // ── Force-delete an event (admin override) ────────────────────────────────
 
     @PostMapping("/events/{eventId}/delete")
-    public String deleteEvent(@PathVariable Long eventId, RedirectAttributes redirectAttrs) {
+    public String deleteEvent(HttpSession session, @PathVariable Long eventId,
+                              @RequestParam(value = "from", defaultValue = "events") String from,
+                              RedirectAttributes redirectAttrs) {
+        if (!isAdmin(session)) return "redirect:/login";
         try {
             eventRepo.deleteById(eventId);
             redirectAttrs.addFlashAttribute("successMessage", "Event deleted.");
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", "Delete failed: " + e.getMessage());
         }
-        return "redirect:/admin/dashboard";
+        return "dashboard".equals(from) ? "redirect:/admin/dashboard" : "redirect:/admin/events";
     }
 }

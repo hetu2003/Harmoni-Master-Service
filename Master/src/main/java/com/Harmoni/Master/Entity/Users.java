@@ -44,7 +44,7 @@ public class Users {
     @Column(name = "avg_rating")
     Integer avgRating;
 
-    @Column(name = "company_description")
+    @Column(name = "company_description", columnDefinition = "TEXT")
     String companyDescription;
 
     @Column(name = "is_active")

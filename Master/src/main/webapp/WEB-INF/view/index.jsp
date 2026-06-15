@@ -110,7 +110,7 @@
 						<div class="col-lg-3">
 							<div class="site-logo-wrapper">
 								<a href="<c:url value='/home' />" class="logo">
-									<img src="<c:url value='/assets/images/1.site-logo.png' />" alt="logo">
+									<img src="<c:url value='/assets/images/0.site-logo.png' />" alt="logo">
 								</a>
 							</div>
 						</div>
@@ -154,7 +154,7 @@
 										<c:choose>
 											<c:when test="${not empty user.profilePath}">
 												<a href="<c:url value='/profile' />">
-													<img src="<c:url value='/${user.profilePath}' />" class="rounded-circle" style="height: 43px; width: 43px; object-fit: cover;">
+													<img src="${pageContext.request.contextPath}${user.profilePath}" class="rounded-circle" style="height: 43px; width: 43px; object-fit: cover;">
 												</a>
 											</c:when>
 											<c:otherwise>
@@ -1883,7 +1883,7 @@
 								<!-- site-logo-wrapper - end -->
 
 								<p class="mb-30">
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.
+									Harmoni events management system.
 								</p>
 
 								<!-- basic-info - start -->
@@ -1895,7 +1895,7 @@
 										</li>
 										<li>
 											<i class="fas fa-envelope"></i>
-											<a href="#!">contact@pantero.com</a>
+											hamoni@gmail.com
 										</li>
 										<li>
 											<i class="fas fa-phone"></i>
@@ -1939,14 +1939,30 @@
 									useful <strong>links</strong>
 								</h3>
 								<ul>
-									<li><a href="<c:url value='/about' />">About Harmoni</a></li>
-									<li><a href="#!">Disclaimer</a></li>
-									<li><a href="<c:url value='/contact' />">Contact us</a></li>
+									<li><a href="<c:url value='/faq' />">FAQ</a></li>
 									<li><a href="<c:url value='/event' />">Events Schedule</a></li>
-									<li><a href="#!">Sponsors</a></li>
-									<li><a href="#!">Venues</a></li>
-									<li><a href="<c:url value='/event' />">Tickets</a></li>
-									<li><a href="#!">Pricing Plans</a></li>
+									<li><a href="<c:url value='/company' />">Companies</a></li>
+									<li><a href="<c:url value='/closed-event' />">Recently Closed Event</a></li>
+
+									<c:choose>
+										<c:when test="${not empty user}">
+											<c:choose>
+												<c:when test="${user.roleId == 1}">
+													<li><a href="<c:url value='/history' />">My History</a></li>
+												</c:when>
+												<c:when test="${user.roleId == 2}">
+													<li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+												</c:when>
+												<c:when test="${user.roleId == 3}">
+													<li><a href="<c:url value='/admin/dashboard' />">Admin Panel</a></li>
+												</c:when>
+											</c:choose>
+										</c:when>
+										<c:otherwise>
+											<li><a href="<c:url value='/register' />">Register</a></li>
+											<li><a href="<c:url value='/login' />">Login</a></li>
+										</c:otherwise>
+									</c:choose>
 								</ul>
 
 							</div>

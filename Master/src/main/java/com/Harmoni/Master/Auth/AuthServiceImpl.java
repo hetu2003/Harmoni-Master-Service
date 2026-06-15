@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import feign.FeignException;
@@ -103,6 +104,9 @@ public class AuthServiceImpl implements AuthService {
         } catch (HttpClientErrorException e) {
             System.err.println("Registration failed: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
             return e.getResponseBodyAsString();
+        } catch (HttpServerErrorException e) {
+            System.err.println("Registration server error: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+            return "Registration failed due to a server error. Please try again.";
         } catch (IOException e) {
             return "Failed to process profile photo.";
         }
@@ -136,6 +140,19 @@ public class AuthServiceImpl implements AuthService {
             System.err.println("Change password failed: " + e.status() + " " + e.getMessage());
             return "Failed to change password.";
         }
+    }
+
+    @Override
+    public void sendPasswordChangeEmail(String toEmail) {
+        try {
+            authClient.sendEmail(new EmailRequest(
+                toEmail,
+                "Your Harmoni password has been changed",
+                "Hello,\n\nYour account password was successfully changed.\n\n" +
+                "If you did not make this change, please contact us immediately.\n\n" +
+                "— Harmoni Team"
+            ));
+        } catch (Exception ignored) {}
     }
 
     @Override

@@ -12,7 +12,7 @@
                         </div>
                         <div class="breadcrumb-list">
                             <ul>
-                                <li class="breadcrumb-item"><a href="<c:url value='/dashboard' />" class="breadcrumb-link">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="#" aria-current="page">Edit Profile</a></li>
                             </ul>
                         </div>
@@ -38,19 +38,22 @@
                 <div style="display:inline-block;position:relative;">
                     <c:choose>
                         <c:when test="${not empty user.profilePath}">
-                            <img id="profilePreview" src="${user.profilePath}" alt="Profile Picture"
-                                 style="width:110px;height:110px;object-fit:cover;border-radius:50%;
-                                        border:3px solid #ff8a00;">
+                            <img id="profilePreview"
+                                 src="${pageContext.request.contextPath}${user.profilePath}"
+                                 alt="Profile Picture"
+                                 style="width:120px;height:120px;object-fit:cover;border-radius:50%;
+                                        border:4px solid #ff8a00;display:block;">
                         </c:when>
                         <c:otherwise>
                             <div id="profilePlaceholder"
-                                 style="width:110px;height:110px;border-radius:50%;border:3px dashed #ccc;
+                                 style="width:120px;height:120px;border-radius:50%;border:3px dashed #ccc;
                                         display:flex;align-items:center;justify-content:center;
                                         background:#f9f9f9;color:#bbb;font-size:13px;margin:0 auto;">
                                 No Photo
                             </div>
-                            <img id="profilePreview" src="" alt="" style="display:none;width:110px;height:110px;
-                                 object-fit:cover;border-radius:50%;border:3px solid #ff8a00;">
+                            <img id="profilePreview" src="" alt=""
+                                 style="display:none;width:120px;height:120px;
+                                        object-fit:cover;border-radius:50%;border:4px solid #ff8a00;">
                         </c:otherwise>
                     </c:choose>
                     <label for="profilePhoto"

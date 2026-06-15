@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class GatewayHeadersFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(GatewayHeadersFilter.class);
+
     private final UserRepository userRepository;
 
     @Override
@@ -33,11 +37,17 @@ public class GatewayHeadersFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             String grantedRole = "ROLE_WORKHAND";
             try {
-                Users user = userRepository.findByUsernameWithRole(username).orElse(null);
-                if (user != null && user.getRole() != null) {
-                    grantedRole = "ROLE_" + user.getRole().getRoleName().toUpperCase();
+                Users user = userRepository.findByUsername(username).orElse(null);
+                if (user != null && user.getRoleId() != null) {
+                    switch (user.getRoleId()) {
+                        case 2: grantedRole = "ROLE_COMPANY"; break;
+                        case 3: grantedRole = "ROLE_ADMIN";   break;
+                        default: grantedRole = "ROLE_WORKHAND"; break;
+                    }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                logger.warn("Could not resolve role for user '{}': {}", username, e.getMessage());
+            }
 
             UserDetails userDetails = new User(username, "",
                     Collections.singletonList(new SimpleGrantedAuthority(grantedRole)));

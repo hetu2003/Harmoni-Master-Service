@@ -5,7 +5,7 @@
 <section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
     <div class="container">
         <div class="section-title text-center mb-0">
-            <small class="sub-title">company dashboard</small>
+            <small class="sub-title">My Events</small>
             <h2 class="big-title white-color mt-2">Event <strong>History</strong></h2>
             <p class="white-color mb-0 mt-2">All your events with registration and payment summary</p>
         </div>

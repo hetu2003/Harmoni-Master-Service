@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     btn.disabled = false;
                     btn.textContent = "CHANGE PASSWORD";
                     if (result.success) {
-                        showMsg("success", result.message + " Redirecting to login…");
-                        setTimeout(() => (window.location.href = getCtx() + "/login"), 2000);
+                        showMsg("success", result.message + " Redirecting to home…");
+                        setTimeout(() => (window.location.href = getCtx() + "/home"), 2000);
                     } else {
                         showMsg("danger", result.message || "Failed to change password.");
                     }

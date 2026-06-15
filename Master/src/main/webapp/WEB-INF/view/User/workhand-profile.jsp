@@ -35,7 +35,7 @@
                     <!-- Avatar -->
                     <c:choose>
                         <c:when test="${not empty workhand.profilePath}">
-                            <img src="${pageContext.request.contextPath}/${workhand.profilePath}"
+                            <img src="${pageContext.request.contextPath}${workhand.profilePath}"
                                  class="rounded-circle mb-3 border border-3"
                                  width="110" height="110" style="object-fit:cover;" alt="${workhand.name}">
                         </c:when>

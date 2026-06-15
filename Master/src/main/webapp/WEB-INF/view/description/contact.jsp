@@ -30,6 +30,17 @@
          <h2 class="big-title">Keep in touch <strong>with harmoni</strong></h2>
       </div>
 
+      <c:if test="${contactSuccess}">
+         <div class="alert alert-success mb-30" role="alert">
+            Your message has been sent successfully. We will get back to you soon!
+         </div>
+      </c:if>
+      <c:if test="${contactError}">
+         <div class="alert alert-danger mb-30" role="alert">
+            Something went wrong. Please try again later.
+         </div>
+      </c:if>
+
       <div class="contact-form form-wrapper text-center">
          <form action="<c:url value='/contact-submit' />" method="post">
             <%-- Spring Security CSRF Token --%>
