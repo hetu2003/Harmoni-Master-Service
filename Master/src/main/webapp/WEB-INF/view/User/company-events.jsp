@@ -14,18 +14,39 @@
 </div>
 </c:if>
 
-<!-- Banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div>
-            <h3 class="white-color font-weight-bold mb-1">My <strong>Events</strong></h3>
-            <small style="color:#ccc;">Total Events: ${totalEvent}</small>
+<!-- page banner -->
+<section id="breadcrumb-section" class="breadcrumb-section clearfix">
+    <div class="jarallax" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />');">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">manage your events</span>
+                            <h2 class="big-title">My <strong>Events</strong></h2>
+                            <p class="white-color mb-0 mt-2">Total Events: ${totalEvent}</p>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Events</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="<c:url value='/vendor/event/add' />" class="custom-btn">
-            <i class="fas fa-plus mr-2"></i>Add Event
-        </a>
     </div>
 </section>
+
+<!-- toolbar -->
+<div style="background:#fff; border-bottom:1px solid #eee; padding:10px 0;">
+    <div class="container text-right">
+        <a href="<c:url value='/vendor/event/add' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
+            <i class="fas fa-plus mr-1"></i>Add Event
+        </a>
+    </div>
+</div>
 
 <div class="container" style="padding: 40px 0;">
 

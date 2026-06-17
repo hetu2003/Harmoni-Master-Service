@@ -68,6 +68,7 @@ public class HistoryController {
                 .boxed().collect(Collectors.toList());
 
         model.addAttribute("active", "history");
+        model.addAttribute("title", "Registration History");
         model.addAttribute("registrations", dtoPage);
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", dtoPage.getNumber() + 1);

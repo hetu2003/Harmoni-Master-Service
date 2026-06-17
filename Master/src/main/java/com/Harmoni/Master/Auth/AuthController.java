@@ -41,20 +41,28 @@ public class AuthController {
 
     // Show the login page
     @GetMapping("/login")
-    public String showLoginPage(HttpSession session,
+    public String showLoginPage(HttpServletRequest request,
                                 @RequestParam(value = "expired", required = false) String expired,
                                 Model model) {
-        if (session.getAttribute("userId") != null) {
+        HttpSession session = request.getSession(false);
+        boolean hasSession = session != null && session.getAttribute("userId") != null;
+
+        if (hasSession) {
             if ("true".equals(expired)) {
-                // Gateway forced this redirect because the JWT expired — clear the stale session
-                // so the user can re-authenticate and get a fresh JWT + session.
+                // JWT expired — clear the stale session so the user gets a fresh login
                 session.invalidate();
+                // sessionExpired goes on the request attribute (model), not the old session
                 model.addAttribute("sessionExpired", true);
             } else {
                 // User navigated here manually while still logged in — send them home
                 return "redirect:/home";
             }
+        } else if ("true".equals(expired)) {
+            // Session already gone (e.g. already invalidated) but expired param present
+            model.addAttribute("sessionExpired", true);
         }
+
+        model.addAttribute("title", "Login");
         model.addAttribute("viewName", "login/login");
         return "base/base";
     }
@@ -68,6 +76,7 @@ public class AuthController {
         }
         model.addAttribute("states", stateRepository.findAllByOrderByStateNameDesc());
         model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
+        model.addAttribute("title", "Register");
         model.addAttribute("viewName", "login/registration");
         return "base/base";
     }
@@ -147,6 +156,7 @@ public class AuthController {
             return "redirect:/home";
         } else {
             model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("title", "Login");
             model.addAttribute("viewName", "login/login");
             return "base/base";
         }
@@ -182,6 +192,7 @@ public class AuthController {
         if (session.getAttribute("userToken") == null) {
             return "redirect:/login";
         }
+        model.addAttribute("title", "Change Password");
         model.addAttribute("viewName", "login/change-password");
         return "base/base";
     }
@@ -229,6 +240,7 @@ public class AuthController {
     // --- Forgot / Reset Password Endpoints ---
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage(Model model) {
+        model.addAttribute("title", "Forgot Password");
         model.addAttribute("viewName", "login/forgot-password");
         return "base/base";
     }
@@ -243,6 +255,7 @@ public class AuthController {
     @GetMapping("/reset-password")
     public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
         model.addAttribute("token", token);
+        model.addAttribute("title", "Reset Password");
         model.addAttribute("viewName", "login/reset-password");
         return "base/base";
     }

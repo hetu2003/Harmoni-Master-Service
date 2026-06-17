@@ -31,6 +31,7 @@ public class CompanyController {
         model.addAttribute("companies",  companies);
         model.addAttribute("totalCount", companies.size());
         model.addAttribute("active", "company");
+        model.addAttribute("title", "Companies");
         model.addAttribute("viewName", "User/company-list");
         return "base/base";
     }
@@ -45,6 +46,7 @@ public class CompanyController {
         model.addAttribute("upcomingEvents", allEvents);
         model.addAttribute("totalEvents",    allEvents.size());
         model.addAttribute("active", "company");
+        model.addAttribute("title", company.getName());
         model.addAttribute("viewName", "User/company-profile");
         return "base/base";
     }

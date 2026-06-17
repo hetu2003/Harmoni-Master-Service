@@ -120,19 +120,21 @@
                                 <li><a href="<c:url value='/home' />">home</a></li>
                                 <li><a href="<c:url value='/about' />">about</a></li>
                                 <li><a href="<c:url value='/event' />">events</a></li>
-                                <li><a href="<c:url value='/company' />">Company</a></li>
-                                <li><a href="<c:url value='/contact' />">Contact</a></li>
-                                <c:choose>
-                                    <c:when test="${user.roleId == 1}">
-                                        <li><a href="<c:url value='/history' />">History</a></li>
-                                    </c:when>
-                                    <c:when test="${user.roleId == 2}">
-                                        <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
-                                    </c:when>
-                                    <c:when test="${user.roleId == 3}">
-                                        <li><a href="<c:url value='/admin/dashboard' />">Admin</a></li>
-                                    </c:when>
-                                </c:choose>
+                                <li><a href="<c:url value='/company' />">company</a></li>
+                                <li><a href="<c:url value='/contact' />">contact</a></li>
+                                <c:if test="${not empty user}">
+                                    <c:choose>
+                                        <c:when test="${user.roleId == 1}">
+                                            <li><a href="<c:url value='/history' />">History</a></li>
+                                        </c:when>
+                                        <c:when test="${user.roleId == 2}">
+                                            <li><a href="<c:url value='/vendor/my-events' />">My Events</a></li>
+                                        </c:when>
+                                        <c:when test="${user.roleId == 3}">
+                                            <li><a href="<c:url value='/admin/dashboard' />">Admin</a></li>
+                                        </c:when>
+                                    </c:choose>
+                                </c:if>
                             </ul>
                         </div>
                     </div>

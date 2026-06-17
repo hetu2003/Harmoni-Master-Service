@@ -41,6 +41,7 @@ public class EventRegistrationController {
         model.addAttribute("event", event);
         model.addAttribute("eventWorkhands", eventWorkhands);
         model.addAttribute("workhand", currentUser);
+        model.addAttribute("title", "Apply for Event");
         model.addAttribute("viewName", "Event/event-register");
         return "base/base";
     }

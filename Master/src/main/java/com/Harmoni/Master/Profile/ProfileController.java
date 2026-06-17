@@ -47,6 +47,7 @@ public class ProfileController {
             model.addAttribute("cities", cityRepository.findByStateRawIdOrderByCityNameAsc(user.getStateId()));
         }
 
+        model.addAttribute("title", "Edit Profile");
         if (Integer.valueOf(2).equals(user.getRoleId())) {
             model.addAttribute("viewName", "profile/company-profile-edit");
         } else {

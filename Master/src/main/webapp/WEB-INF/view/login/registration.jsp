@@ -46,7 +46,7 @@
                     <div id="card-workhand" class="role-card" onclick="selectRole(1)"
                          style="cursor:pointer;border:2px solid #e0e0e0;border-radius:12px;padding:28px 36px;
                                 min-width:200px;transition:all .25s;background:#fff;">
-                        <div style="font-size:48px;margin-bottom:10px;">&#128736;</div>
+                        <div style="font-size:48px;margin-bottom:10px;">&#128104;&#127995;</div>
                         <h4 style="margin:0 0 6px;color:#333;">Workhand</h4>
                         <p style="color:#888;font-size:13px;margin:0;">Individual worker / freelancer</p>
                     </div>

@@ -48,6 +48,7 @@ public class EventController {
         model.addAttribute("states", stateRepo.findAllByOrderByStateNameDesc());
         model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Add Event");
         model.addAttribute("viewName", "Event/add-event");
         return "base/base";
     }
@@ -138,6 +139,7 @@ public class EventController {
                         : List.of());
         model.addAttribute("workhnadCategories", workhnadCategoryRepo.findAll());
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Edit Event");
         model.addAttribute("viewName", "Event/edit-event");
         return "base/base";
     }

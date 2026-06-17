@@ -49,14 +49,6 @@
     </div>
 </section>
 
-<!-- Back to Events -->
-<div style="background:#fff; border-bottom:1px solid #eee; padding:10px 0;">
-    <div class="container">
-        <a href="<c:url value='/event' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
-            <i class="fas fa-arrow-left mr-2"></i>Back to Events
-        </a>
-    </div>
-</div>
 
 <!-- Event banner image -->
 <c:if test="${not empty event.imagePath}">
@@ -220,8 +212,13 @@
                     </div>
                 </div>
 
+                <a href="<c:url value='/event' />" class="custom-btn d-block text-center" style="padding:10px 0; font-size:0.88rem;">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Events
+                </a>
+
             </div>
 
         </div>
+
     </div>
 </section>

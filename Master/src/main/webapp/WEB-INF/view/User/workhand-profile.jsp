@@ -40,10 +40,10 @@
                                  width="110" height="110" style="object-fit:cover;" alt="${workhand.name}">
                         </c:when>
                         <c:otherwise>
-                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center
+                            <div class="rounded-circle d-inline-flex align-items-center
                                         justify-content-center mb-3 border border-3 border-white shadow"
-                                 style="width:110px;height:110px;font-size:2.5rem;color:#fff;">
-                                <i class="fas fa-user"></i>
+                                 style="width:110px;height:110px;font-size:3rem;background:#f0f0f0;">
+                                &#128104;&#127995;
                             </div>
                         </c:otherwise>
                     </c:choose>

@@ -2,12 +2,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- page banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 60px 0;">
-    <div class="container">
-        <div class="section-title text-center mb-0">
-            <small class="sub-title">event organizers</small>
-            <h2 class="big-title white-color mt-2">Browse <strong>Companies</strong></h2>
-            <p class="white-color mb-0 mt-2">${totalCount} companies registered on Harmoni</p>
+<section id="breadcrumb-section" class="breadcrumb-section clearfix">
+    <div class="jarallax" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />');">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">event organizers</span>
+                            <h2 class="big-title">Browse <strong>Companies</strong></h2>
+                            <p class="white-color mb-0 mt-2">${totalCount} companies registered on Harmoni</p>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Companies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -58,8 +72,8 @@
                                                 <img src="${pageContext.request.contextPath}/${co.profilePath}" class="rounded-circle" style="width:60px; height:60px; object-fit:cover; flex-shrink:0;" alt="${co.name}">
                                             </c:when>
                                             <c:otherwise>
-                                                <div style="width:60px; height:60px; border-radius:50%; background:#e9ecef; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                                    <i class="fas fa-building" style="font-size:1.5rem; color:#6c757d;"></i>
+                                                <div style="width:60px; height:60px; border-radius:50%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.8rem;">
+                                                    &#127970;
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>

@@ -41,6 +41,7 @@ public class EventDetailsController {
         List<Feedback> feedbacks = feedbackRepo.findByEvent(event.getId().intValue());
 
         model.addAttribute("event", event);
+        model.addAttribute("title", event.getEventName());
         model.addAttribute("workhnadFeedbacks", feedbacks);
 
         // Resolve current user: prefer Spring Security principal, fall back to session

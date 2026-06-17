@@ -46,6 +46,7 @@ public class VendorController {
         model.addAttribute("totalPageList", pageNumbers);
         model.addAttribute("currentPage", eventPage.getNumber() + 1);
         model.addAttribute("totalEvent", eventPage.getTotalElements());
+        model.addAttribute("title", "My Events");
         model.addAttribute("viewName", "User/company-events");
         return "base/base";
     }
@@ -60,6 +61,7 @@ public class VendorController {
         model.addAttribute("active", "myevent");
         model.addAttribute("events", events);
         model.addAttribute("totalEvent", events.size());
+        model.addAttribute("title", "My Events");
         model.addAttribute("viewName", "User/company-events");
         return "base/base";
     }
@@ -72,6 +74,7 @@ public class VendorController {
         long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
 
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Workhand Applications");
         model.addAttribute("event", event);
         model.addAttribute("workhnadRequests", vendorService.getWorkhandRequestsForEvent(event));
         model.addAttribute("acceptedCount", acceptedCount);
@@ -109,6 +112,7 @@ public class VendorController {
         long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
 
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Approved Applications");
         model.addAttribute("event", event);
         model.addAttribute("approvedRequests", vendorService.getApprovedRequestsForEvent(event));
         model.addAttribute("acceptedCount", acceptedCount);
@@ -126,6 +130,7 @@ public class VendorController {
         long rejectedCount = registrationRepo.countByEventAndApplicationStatus(event.getId().intValue(), "REJECTED");
 
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Rejected Applications");
         model.addAttribute("event", event);
         model.addAttribute("rejectedRequests", vendorService.getRejectedRequestsForEvent(event));
         model.addAttribute("acceptedCount", acceptedCount);
@@ -149,6 +154,7 @@ public class VendorController {
         int totalPrice = vendorService.calculateTotalPrice(approved);
 
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Payments");
         model.addAttribute("event", event);
         model.addAttribute("workhands", approved);
         model.addAttribute("totalPrice", totalPrice);
@@ -182,6 +188,7 @@ public class VendorController {
     public String eventHistory(@AuthenticationPrincipal UserDetails principal, Model model) {
         Users company = vendorService.getCompanyFromPrincipal(principal);
         model.addAttribute("active", "myevent");
+        model.addAttribute("title", "Event History");
         model.addAttribute("rows", vendorService.getEventHistoryWithStats(company));
         model.addAttribute("viewName", "Event/event-history");
         return "base/base";

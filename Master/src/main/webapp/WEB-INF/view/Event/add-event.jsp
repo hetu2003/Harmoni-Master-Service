@@ -1,16 +1,29 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- page banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 50px 0;">
-    <div class="container">
-        <div class="section-title text-center mb-0">
-            <small class="sub-title">My Events</small>
-            <h2 class="big-title white-color mt-2">Add <strong>New Event</strong></h2>
-            <p class="white-color mb-0 mt-2">Fill in the details below to create a new event</p>
+<!-- breadcrumb-section - start -->
+<section id="breadcrumb-section" class="breadcrumb-section clearfix" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />'); background-size:cover; background-position:center center;">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">my events</span>
+                            <h2 class="big-title">add <strong>new event</strong></h2>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item"><a href="<c:url value='/vendor/my-events' />" class="breadcrumb-link">My Events</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Add Event</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 </section>
+<!-- breadcrumb-section - end -->
 
 <section style="padding: 50px 0;">
     <div class="container">
@@ -164,7 +177,6 @@
 
             </div>
         </div>
-    </div>
 </section>
 
 <%-- Pass workhand categories and pre-fill data to JavaScript --%>
@@ -231,3 +243,5 @@ var PREFILL_CITY  = ${not empty f_city_id ? f_city_id : 0};
     }
 })();
 </script>
+
+

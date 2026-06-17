@@ -81,9 +81,9 @@
                     </c:when>
                     <c:otherwise>
                         <div class="rounded-3 border border-3 border-white d-flex align-items-center
-                                    justify-content-center bg-secondary"
-                             style="width:100px;height:100px;font-size:2.5rem;">
-                            <i class="fas fa-building text-white"></i>
+                                    justify-content-center"
+                             style="width:100px;height:100px;font-size:3rem;background:#f0f0f0;">
+                            &#127970;
                         </div>
                     </c:otherwise>
                 </c:choose>

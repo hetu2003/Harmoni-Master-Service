@@ -2,19 +2,33 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- page banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 60px 0;">
-    <div class="container">
-        <div class="section-title text-center mb-0">
-            <small class="sub-title">upcoming events</small>
-            <h2 class="big-title white-color mt-2">Browse <strong>Events</strong></h2>
-            <p class="white-color mb-0 mt-2">
-                <c:choose>
-                    <c:when test="${not empty keyword}">
-                        Search results for &ldquo;<strong>${keyword}</strong>&rdquo; &mdash; ${totalEvents} events found
-                    </c:when>
-                    <c:otherwise>${totalEvents} upcoming events available</c:otherwise>
-                </c:choose>
-            </p>
+<section id="breadcrumb-section" class="breadcrumb-section clearfix">
+    <div class="jarallax" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />');">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">upcoming events</span>
+                            <h2 class="big-title">Browse <strong>Events</strong></h2>
+                            <p class="white-color mb-0 mt-2">
+                                <c:choose>
+                                    <c:when test="${not empty keyword}">
+                                        Search results for &ldquo;<strong>${keyword}</strong>&rdquo; &mdash; ${totalEvents} events found
+                                    </c:when>
+                                    <c:otherwise>${totalEvents} upcoming events available</c:otherwise>
+                                </c:choose>
+                            </p>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Events</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

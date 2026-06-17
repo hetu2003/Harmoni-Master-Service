@@ -19,6 +19,7 @@ public class CustomErrorController implements ErrorController {
             code = Integer.parseInt(status.toString());
         }
         model.addAttribute("errorCode", code);
+        model.addAttribute("title", "Page Not Found");
         model.addAttribute("viewName", "error/404");
         return "base/base";
     }

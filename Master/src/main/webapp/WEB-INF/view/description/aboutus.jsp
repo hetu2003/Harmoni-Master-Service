@@ -1,9 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 		<!-- breadcrumb-section - start
 		================================================== -->
-		<section id="breadcrumb-section" class="breadcrumb-section clearfix">
-			<div class="jarallax" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />');">
+		<section id="breadcrumb-section" class="breadcrumb-section clearfix" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />'); background-size:cover; background-position:center center;">
 				<div class="overlay-black">
 					<div class="container">
 						<div class="row justify-content-center">
@@ -29,11 +28,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
 		</section>
 		<!-- breadcrumb-section - end
 		================================================== -->
-
 
 
 
@@ -49,9 +46,6 @@
 						<div class="section-title text-left mb-50 sr-fade1">
 							<small class="sub-title">we are harmoni</small>
 							<h2 class="big-title"><strong>No.1</strong> Events Management</h2>
-							<a href="#!" class="custom-btn">
-								get started!
-							</a>
 						</div>
 					</div>
 					<!-- section-title - end -->
@@ -68,12 +62,12 @@
 										</h3>
 									</div>
 									<p class="black-color mb-30">
-										Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat insignia the consectuer adipiscing elit.
+										At Harmoni, our mission is to simplify event management by bringing companies and skilled workhands together on a single, reliable platform. We empower event organizers to discover, hire, and coordinate the right talent for every occasion — seamlessly and efficiently.
 									</p>
 									<p class="black-color m-0">
 										<strong>
 											<i>
-												Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod.
+												We believe every event deserves the right people — and every skilled professional deserves the right opportunity.
 											</i>
 										</strong>
 									</p>
@@ -86,16 +80,16 @@
 								<div class="management-item sr-fade3">
 									<div class="item-title">
 										<h3 class="title-text">
-											our vission
+											our vision
 										</h3>
 									</div>
 									<p class="black-color mb-30">
-										Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat insignia the consectuer adipiscing elit.
+										Our vision is to become the most trusted event workforce platform in the region — a place where event companies can build dependable teams and workhands can grow their careers through meaningful, well-matched engagements.
 									</p>
 									<p class="black-color m-0">
 										<strong>
 											<i>
-												Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod.
+												Harmoni envisions a future where no event goes understaffed and no talent goes undiscovered.
 											</i>
 										</strong>
 									</p>
@@ -107,142 +101,8 @@
 					</div>
 
 				</div>
-			</div>
 		</section>
 		<!-- our-management-section - end
-		================================================== -->
-
-
-
-
-
-		<!-- award-section - start
-		================================================== -->
-		<section id="award-section" class="award-section sec-ptb-100 clearfix">
-			<div class="container">
-				<div class="row">
-
-					<!-- company-age - start -->
-					<div class="col-lg-6 col-md-12 col-sm-12">
-						<div class="company-age sr-fade1" style="background-image: url(assets/images/about/company-age-bg.jpg);">
-							<div class="banner-img">
-								<img src="assets/images/about/company-banner.png" alt="Image_not_found">
-							</div>
-						</div>
-					</div>
-					<!-- company-age - end -->
-
-					<div class="col-lg-6 col-md-12 col-sm-12">
-						<!-- section-title - start -->
-						<div class="section-title text-left mb-80 sr-fade1">
-							<small class="sub-title">harmoni awaed</small>
-							<h2 class="big-title">Our Winning <strong>Awards</strong></h2>
-						</div>
-						<!-- section-title - end -->
-
-						<!-- awaed-item-area - start -->
-						<div class="awaed-item-area sr-fade2">
-							<span class="arrow-up">
-								<i class="fas fa-chevron-circle-up"></i>
-							</span>
-							<span class="arrow-down">
-								<i class="fas fa-chevron-circle-down"></i>
-							</span>
-							<div class="awaed-wrapper">
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">aug 2015</span>
-											1st Place for Unique Events 2018
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">may 2014</span>
-											1st Winner Best New Years Events
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">dec 2013</span>
-											1st Place International Events Awards
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">aug 2015</span>
-											1st Place for Unique Events 2018
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">may 2014</span>
-											1st Winner Best New Years Events
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-								<!-- awaed-item - start -->
-								<div class="awaed-item">
-									<div class="awaed-content">
-										<h3 class="awaed-title">
-											<span class="awaed-date">dec 2013</span>
-											1st Place International Events Awards
-										</h3>
-										<p class="m-0">
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit diam sed diam nonummy nibh euismod tincidunt.
-										</p>
-									</div>
-								</div>
-								<!-- awaed-item - end -->
-
-							</div>
-						</div>
-						<!-- awaed-item-area - end -->
-					</div>
-
-				</div>
-			</div>
-		</section>
-		<!-- award-section - end
 		================================================== -->
 
 
@@ -254,108 +114,100 @@
 			<div class="container">
 
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-12">
 						<div class="section-title mb-50 sr-fade1">
 							<span class="line-style"></span>
 							<small class="sub-title">why choose us</small>
 							<h2 class="big-title">Harmoni <strong>Advantages</strong></h2>
 						</div>
 					</div>
-
-					<div class="col-lg-6">
-						<div class="team-btn text-right sr-fade2">
-							<a href="#!" class="custom-btn">meet the team</a>
-						</div>
-					</div>
 				</div>
 
 				<div class="service-wrapper sr-fade1">
-					<ul>
+					<ul style="display:flex; flex-wrap:wrap; align-items:stretch; list-style:none; padding:0; margin:0;">
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-handshake"></i>
 								</span>
-								<strong class="service-title">friendly team</strong>
-								<small class="service-sub-title">More than 200 teams</small>
+								<strong class="service-title">Verified Network</strong>
+								<small class="service-sub-title">Trusted workhands &amp; companies</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-cheers"></i>
 								</span>
-								<strong class="service-title">Unique Scenario</strong>
-								<small class="service-sub-title">we thinking out of the box</small>
+								<strong class="service-title">Smart Matching</strong>
+								<small class="service-sub-title">Right talent, right event</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-two-balloons"></i>
 								</span>
-								<strong class="service-title">perfect venues</strong>
-								<small class="service-sub-title">perfect venues</small>
+								<strong class="service-title">All Event Types</strong>
+								<small class="service-sub-title">Corporate, social &amp; more</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-speech-bubble"></i>
 								</span>
-								<strong class="service-title">24/7 hours support</strong>
-								<small class="service-sub-title">anitime anywhere</small>
+								<strong class="service-title">24/7 Support</strong>
+								<small class="service-sub-title">Always here when you need us</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-clown-hat"></i>
 								</span>
-								<strong class="service-title">Unforgetable Times</strong>
-								<small class="service-sub-title">More than 200 teams</small>
+								<strong class="service-title">Memorable Events</strong>
+								<small class="service-sub-title">Experiences that last a lifetime</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-light-bulb"></i>
 								</span>
-								<strong class="service-title">Briliant Idea</strong>
-								<small class="service-sub-title">We thinking out of the box</small>
+								<strong class="service-title">Innovative Platform</strong>
+								<small class="service-sub-title">Built for modern event needs</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-event-date-and-time-symbol"></i>
 								</span>
-								<strong class="service-title">Unique Scenario</strong>
-								<small class="service-sub-title">perfact venues</small>
+								<strong class="service-title">Easy Scheduling</strong>
+								<small class="service-sub-title">Plan events with ease</small>
 							</a>
 						</li>
 
-						<li>
-							<a href="#!">
+						<li style="display:flex;">
+							<a href="#!" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
 								<span class="icon">
 									<i class="flaticon-group"></i>
 								</span>
-								<strong class="service-title">Best Management</strong>
-								<small class="service-sub-title">anytime anywhere</small>
+								<strong class="service-title">Skilled Workforce</strong>
+								<small class="service-sub-title">Professionals at every level</small>
 							</a>
 						</li>
 
 					</ul>
 				</div>
-
-			</div>
 		</section>
 		<!-- service-section - end
 		================================================== -->
@@ -380,11 +232,11 @@
 							<i class="fas fa-quote-right"></i>
 						</span>
 						<p class="clients-comment">
-							“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet. Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet.”
+							"Harmoni transformed the way we manage our event staff. Finding qualified workhands used to take days — now it happens in minutes. The platform is intuitive, the talent pool is reliable, and our events have never run smoother."
 						</p>
 						<div class="client-info">
-							<h3 class="client-name">Jenni Hernandes</h3>
-							<span class="client-sub-title">Graphic Designer</span>
+							<h3 class="client-name">Priya Mehta</h3>
+							<span class="client-sub-title">Event Director, Eventique Co.</span>
 						</div>
 					</div>
 
@@ -393,11 +245,11 @@
 							<i class="fas fa-quote-right"></i>
 						</span>
 						<p class="clients-comment">
-							“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet. Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet.”
+							"As a freelance event coordinator, Harmoni gave me access to opportunities I never had before. I can apply for events, track my applications, and get hired by top companies — all from one place. It's a game changer for independent professionals."
 						</p>
 						<div class="client-info">
-							<h3 class="client-name">Jenni Hernandes</h3>
-							<span class="client-sub-title">Graphic Designer</span>
+							<h3 class="client-name">Rahul Sharma</h3>
+							<span class="client-sub-title">Freelance Event Coordinator</span>
 						</div>
 					</div>
 
@@ -406,11 +258,11 @@
 							<i class="fas fa-quote-right"></i>
 						</span>
 						<p class="clients-comment">
-							“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet. Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet.”
+							"We've hosted over 50 corporate events using Harmoni's platform. The ability to post events, review applications, and manage our workforce in one dashboard has saved us countless hours. Highly recommend it to any event company."
 						</p>
 						<div class="client-info">
-							<h3 class="client-name">Jenni Hernandes</h3>
-							<span class="client-sub-title">Graphic Designer</span>
+							<h3 class="client-name">Anita Desai</h3>
+							<span class="client-sub-title">Operations Head, CelebratePro</span>
 						</div>
 					</div>
 
@@ -419,11 +271,11 @@
 							<i class="fas fa-quote-right"></i>
 						</span>
 						<p class="clients-comment">
-							“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet. Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet.”
+							"Harmoni's category-based matching is brilliant. I registered as a sound technician and immediately started getting relevant event offers. The payment process is transparent and the support team is always responsive."
 						</p>
 						<div class="client-info">
-							<h3 class="client-name">Jenni Hernandes</h3>
-							<span class="client-sub-title">Graphic Designer</span>
+							<h3 class="client-name">Karan Patel</h3>
+							<span class="client-sub-title">Sound Technician & Workhand</span>
 						</div>
 					</div>
 
@@ -435,347 +287,7 @@
 		<!-- testimonial5-section - end
 		================================================== -->
 
-		<!-- absolute-sponsor-section - start
-		================================================== -->
-		<div id="absolute-sponsor-section" class="absolute-sponsor-section sr-fade1 clearfix">
-			<ul>
 
-				<li>
-					<a href="#!">
-						<img src="assets/images/partners/image1.png" alt="Image_not_found">
-					</a>
-				</li>
-				<li>
-					<a href="#!">
-						<img src="assets/images/partners/image2.png" alt="Image_not_found">
-					</a>
-				</li>
-				<li>
-					<a href="#!">
-						<img src="assets/images/partners/image4.png" alt="Image_not_found">
-					</a>
-				</li>
-				<li>
-					<a href="#!">
-						<img src="assets/images/partners/image6.png" alt="Image_not_found">
-					</a>
-				</li>
-
-			</ul>
-		</div>
-		<!-- absolute-sponsor-section - end
-		================================================== -->
-
-
-		<!-- speaker-section - start
-		================================================== -->
-		<section id="speaker-section" class="speaker-section clearfix" style="background-image: url(assets/images/speaker/Black-White-Dubai-Wallpaper.jpg);">
-			<div class="overlay-white">
-				<div class="container">
-
-					<!-- speaker-carousel - start -->
-					<div class="speaker-carousel">
-						<div class="slider-for">
-
-							<div class="item">
-								<div class="row">
-
-									<!-- speaker-image - start -->
-									<div class="col-lg-6">
-										<div class="speaker-image image-wrapper text-center">
-											<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-											<span class="speaker-name"><strong>Jenni</strong> Berthas</span>
-										</div>
-									</div>
-									<!-- speaker-image - end -->
-
-									<!-- speaker-content - start -->
-									<div class="col-lg-6">
-										<div class="speaker-content">
-
-											<!-- section-title - start -->
-											<div class="section-title text-left mb-50">
-												<span class="line-style"></span>
-												<small class="sub-title">harmoni staffs</small>
-												<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-											</div>
-											<!-- section-title - end -->
-
-											<div class="speaker-info">
-												<div class="speaker-title mb-30">
-													<span class="speaker-name"><strong>Jenni</strong> Berthas</span>
-													<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-												</div>
-												<p class="black-color mb-30">
-													Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-												</p>
-												<div class="speaker-social-network ul-li">
-													<h3 class="title title-medium mb-15">
-														<strong>Social</strong> Network
-													</h3>
-													<ul>
-														<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-														<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-														<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-													</ul>
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<!-- speaker-content - end -->
-
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="row">
-
-									<!-- speaker-image - start -->
-									<div class="col-lg-6">
-										<div class="speaker-image image-wrapper text-center">
-											<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-											<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-										</div>
-									</div>
-									<!-- speaker-image - end -->
-
-									<!-- speaker-content - start -->
-									<div class="col-lg-6">
-										<div class="speaker-content">
-
-											<!-- section-title - start -->
-											<div class="section-title text-left mb-50">
-												<span class="line-style"></span>
-												<small class="sub-title">harmoni staffs</small>
-												<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-											</div>
-											<!-- section-title - end -->
-
-											<div class="speaker-info">
-												<div class="speaker-title mb-30">
-													<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-													<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-												</div>
-												<p class="black-color mb-30">
-													Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-												</p>
-												<div class="speaker-social-network ul-li">
-													<h3 class="title title-medium mb-15">
-														<strong>Social</strong> Network
-													</h3>
-													<ul>
-														<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-														<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-														<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-													</ul>
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<!-- speaker-content - end -->
-
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="row">
-
-									<!-- speaker-image - start -->
-									<div class="col-lg-6">
-										<div class="speaker-image image-wrapper text-center">
-											<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-											<span class="speaker-name"><strong>Denies</strong> Suarez</span>
-										</div>
-									</div>
-									<!-- speaker-image - end -->
-
-									<!-- speaker-content - start -->
-									<div class="col-lg-6">
-										<div class="speaker-content">
-
-											<!-- section-title - start -->
-											<div class="section-title text-left mb-50">
-												<span class="line-style"></span>
-												<small class="sub-title">harmoni staffs</small>
-												<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-											</div>
-											<!-- section-title - end -->
-
-											<div class="speaker-info">
-												<div class="speaker-title mb-30">
-													<span class="speaker-name"><strong>Denies</strong> Suarez</span>
-													<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-												</div>
-												<p class="black-color mb-30">
-													Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-												</p>
-												<div class="speaker-social-network ul-li">
-													<h3 class="title title-medium mb-15">
-														<strong>Social</strong> Network
-													</h3>
-													<ul>
-														<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-														<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-														<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-													</ul>
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<!-- speaker-content - end -->
-
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="row">
-
-									<!-- speaker-image - start -->
-									<div class="col-lg-6">
-										<div class="speaker-image image-wrapper text-center">
-											<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-											<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-										</div>
-									</div>
-									<!-- speaker-image - end -->
-
-									<!-- speaker-content - start -->
-									<div class="col-lg-6">
-										<div class="speaker-content">
-
-											<!-- section-title - start -->
-											<div class="section-title text-left mb-50">
-												<span class="line-style"></span>
-												<small class="sub-title">harmoni staffs</small>
-												<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-											</div>
-											<!-- section-title - end -->
-
-											<div class="speaker-info">
-												<div class="speaker-title mb-30">
-													<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-													<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-												</div>
-												<p class="black-color mb-30">
-													Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-												</p>
-												<div class="speaker-social-network ul-li">
-													<h3 class="title title-medium mb-15">
-														<strong>Social</strong> Network
-													</h3>
-													<ul>
-														<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-														<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-														<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-														<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-													</ul>
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<!-- speaker-content - end -->
-
-								</div>
-							</div>
-
-						</div>
-
-						<div class="slider-nav">
-							<div class="item">
-								<div class="item-content">
-									<span class="speaker-thumbnail">
-										<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-									</span>
-									<h3 class="speaker-name">Jenni Berthas</h3>
-									<span class="sub-title">Harmoni Speaker</span>
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="item-content">
-									<span class="speaker-thumbnail">
-										<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-									</span>
-									<h3 class="speaker-name">Jonathan Doe</h3>
-									<span class="sub-title">Harmoni Speaker</span>
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="item-content">
-									<span class="speaker-thumbnail">
-										<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-									</span>
-									<h3 class="speaker-name">Denies Suarez</h3>
-									<span class="sub-title">Harmoni Speaker</span>
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="item-content">
-									<span class="speaker-thumbnail">
-										<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-									</span>
-									<h3 class="speaker-name">Jonathan Doe</h3>
-									<span class="sub-title">Harmoni Speaker</span>
-								</div>
-							</div>
-
-						</div>
-					</div>
-					<!-- speaker-carousel - end -->
-
-				</div>
-			</div>
-		</section>
-		<!-- speaker-section - end
-		================================================== -->
-
-
-
-
-
-		<!-- special-offer-section - start
-		================================================== -->
-		<section id="special-offer-section" class="special-offer-section clearfix" style="background-image: url(assets/images/special-offer-bg.png);">
-			<div class="container">
-				<div class="row">
-
-					<!-- special-offer-content - start -->
-					<div class="col-lg-9">
-						<div class="special-offer-content">
-							<h2>Looking for something <span>special for your moment?</span></h2>
-							<p class="m-0">
-								Contact us now and we will make your event unique & unforgettable
-							</p>
-						</div>
-					</div>
-					<!-- special-offer-content - end -->
-
-					<!-- event-makeing-btn - start -->
-					<div class="col-lg-3">
-						<div class="event-makeing-btn">
-							<a href="#!">join with us now</a>
-						</div>
-					</div>
-					<!-- event-makeing-btn - end -->
-
-				</div>
-			</div>
-		</section>
-		<!-- special-offer-section - end
-		================================================== -->
 
 
 

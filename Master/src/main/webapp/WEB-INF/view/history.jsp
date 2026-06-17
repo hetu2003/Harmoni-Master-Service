@@ -5,11 +5,28 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 40px 0;">
-    <div class="container">
-        <h4 class="text-white mb-0">
-            <i class="fas fa-history me-2"></i>My <strong>Registration History</strong>
-        </h4>
+<!-- page banner -->
+<section id="breadcrumb-section" class="breadcrumb-section clearfix">
+    <div class="jarallax" style="background-image: url('${pageContext.request.contextPath}/assets/images/breadcrumb/0.breadcrumb-bg.jpg');">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">your event journey</span>
+                            <h2 class="big-title">Registration <strong>History</strong></h2>
+                            <p class="white-color mb-0 mt-2">All events you have registered for</p>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">History</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

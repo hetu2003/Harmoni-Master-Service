@@ -48,8 +48,8 @@
                             <div id="profilePlaceholder"
                                  style="width:120px;height:120px;border-radius:50%;border:3px dashed #ccc;
                                         display:flex;align-items:center;justify-content:center;
-                                        background:#f9f9f9;color:#bbb;font-size:13px;margin:0 auto;">
-                                No Photo
+                                        background:#f9f9f9;font-size:3.5rem;margin:0 auto;">
+                                &#128104;&#127995;
                             </div>
                             <img id="profilePreview" src="" alt=""
                                  style="display:none;width:120px;height:120px;

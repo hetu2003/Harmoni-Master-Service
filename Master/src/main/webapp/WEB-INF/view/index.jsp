@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-        <title>Harmoni - Home 1</title>
+        <title>Harmoni - Home</title>
         <link rel="shortcut icon" href="<c:url value='/assets/images/favicon.png' />">
 
         <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/bootstrap.min.css' />">
@@ -64,7 +64,7 @@
 										</c:when>
 										<c:otherwise>
 											<li><a href="mailto:info@harmoni.com"><i class="fas fa-envelope"></i> info@harmoni.com</a></li>
-											<li><a href="#!"><i class="fas fa-phone"></i> 100-2222-9999</a></li>
+											<li><a href="#!"><i class="fas fa-phone"></i> +91 98765 43210</a></li>
 										</c:otherwise>
 									</c:choose>
 								</ul>
@@ -126,7 +126,6 @@
 										<li><a href="<c:url value='/event' />">events</a></li>
 										<li><a href="<c:url value='/company' />">company</a></li>
 										<li><a href="<c:url value='/contact' />">contact</a></li>
-										<li><a href="<c:url value='/faq' />">FAQ</a></li>
 										<c:if test="${not empty user}">
 											<c:choose>
 												<c:when test="${user.roleId == 2}">
@@ -204,7 +203,7 @@
 
 								<span class="medium-text">one stop</span>
 								<h1 class="big-text">Event Planner</h1>
-								<small class="small-text">every event sould be perfect</small>
+								<small class="small-text">every event should be perfect</small>
 
 								<div class="link-groups">
 									<a href="<c:url value='/about' />" class="about-btn custom-btn">about us</a>
@@ -222,7 +221,7 @@
 
 								<span class="medium-text">one stop</span>
 								<h1 class="big-text">Event Planner</h1>
-								<small class="small-text">every event sould be perfect</small>
+								<small class="small-text">every event should be perfect</small>
 
 								<div class="link-groups">
 									<a href="<c:url value='/about' />" class="about-btn custom-btn">about us</a>
@@ -240,7 +239,7 @@
 
 								<span class="medium-text">one stop</span>
 								<h1 class="big-text">Event Planner</h1>
-								<small class="small-text">every event sould be perfect</small>
+								<small class="small-text">every event should be perfect</small>
 
 								<div class="link-groups">
 									<a href="<c:url value='/about' />" class="about-btn custom-btn">about us</a>
@@ -268,8 +267,8 @@
 
 				<!-- section-title - start -->
 				<div class="section-title text-center mb-50">
-					<small class="sub-title">upcomming events</small>
-					<h2 class="big-title">Latest <strong>Awesome Events</strong></h2>
+					<small class="sub-title">upcoming events</small>
+					<h2 class="big-title">Latest <strong>Upcoming Events</strong></h2>
 				</div>
 				<!-- section-title - end -->
 
@@ -360,10 +359,10 @@
 							<small class="sub-title">we are harmoni</small>
 							<h2 class="big-title"><strong>No.1</strong> Events Management</h2>
 							<p class="black-color mb-50">
-								Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat insignia the consectuer adipiscing elit.
+								Harmoni is your all-in-one event workforce platform. We connect event companies with skilled workhands, making it effortless to plan, staff, and execute events of any scale — from intimate gatherings to large corporate conferences.
 							</p>
 							<a href="<c:url value='/about' />" class="custom-btn">
-								about harmonei
+								about harmoni
 							</a>
 						</div>
 					</div>
@@ -393,10 +392,10 @@
 											<i class="flaticon-two-balloons"></i>
 										</span>
 										<strong class="title">
-											perfact venues
+											Perfect Venues
 										</strong>
 										<small class="sub-title">
-											perfact venues
+											The right venue for every event
 										</small>
 									</a>
 								</li>
@@ -406,10 +405,10 @@
 											<i class="flaticon-cheers"></i>
 										</span>
 										<strong class="title">
-											Unique Scenario
+											Smart Matching
 										</strong>
 										<small class="sub-title">
-											We thinking out of the box
+											Right talent for every event
 										</small>
 									</a>
 								</li>
@@ -420,10 +419,10 @@
 											<i class="flaticon-clown-hat"></i>
 										</span>
 										<strong class="title">
-											Unforgettable Time
+											Unforgettable Times
 										</strong>
 										<small class="sub-title">
-											We make you perfect event
+											We make your event perfect
 										</small>
 									</a>
 								</li>
@@ -446,10 +445,10 @@
 											<i class="flaticon-light-bulb"></i>
 										</span>
 										<strong class="title">
-											Briliant Idea
+											Brilliant Ideas
 										</strong>
 										<small class="sub-title">
-											We have million idea
+											Creative solutions every time
 										</small>
 									</a>
 								</li>
@@ -469,326 +468,11 @@
 
 
 
-		<!-- conference-section - start
-		================================================== -->
-		<section id="conference-section" class="conference-section clearfix">
-			<div class="jarallax" style="background-image: url(assets/images/conference/pexels-photo-262669.jpg);">
-				<div class="overlay-black sec-ptb-100">
-
-					<div class="mb-50">
-						<div class="container">
-							<div class="row">
-
-								<!-- section-title - start -->
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="section-title text-left">
-										<span class="line-style"></span>
-										<small class="sub-title">harmoni venues</small>
-										<h2 class="big-title">Conference <strong>Rooms & Hotels</strong></h2>
-									</div>
-								</div>
-								<!-- section-title - end -->
-
-								<!-- conference-location - start -->
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="conference-location ul-li clearfix">
-										<ul>
-
-											<!-- country-select - start -->
-											<li class="country-select">
-												<form action="#!">
-													<label for="country">Country :</label>
-													<select class="custom-select" id="country">
-														<option selected>Netherland</option>
-														<option value="1">USA</option>
-														<option value="2">england</option>
-														<option value="3">germany</option>
-													</select>
-												</form>
-											</li>
-											<!-- country-select - end -->
-
-											<!-- city-select - start -->
-											<li class="city-select">
-												<form action="#!">
-													<label for="city">city :</label>
-													<select class="custom-select" id="city">
-														<option selected>Amsterdam</option>
-														<option value="1">washington</option>
-														<option value="2">london</option>
-														<option value="3">berlin</option>
-													</select>
-												</form>
-											</li>
-											<!-- city-select - end -->
-
-										</ul>
-									</div>
-								</div>
-								<!-- conference-location - end -->
-
-							</div>
-						</div>
-					</div>
-
-					<!-- conference-content-wrapper - start -->
-					<div class="tab-wrapper">
-
-						<!-- tab-menu - start -->
-						<div class="container">
-							<div class="row justify-content-lg-start">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="tab-menu">
-										<ul class="nav tab-nav mb-50">
-
-											<li class="nav-item">
-												<a class="nav-link active" id="nav-one-tab" data-toggle="tab" href="#nav-one" aria-expanded="true">
-													<span class="image">
-														<img src="assets/images/conference/RCJAKPP_00016_coddddnversion.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">5 <i class="fas fa-star"></i> Chocolato </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" id="nav-two-tab" data-toggle="tab" href="#nav-two" aria-expanded="false">
-													<span class="image">
-														<img src="assets/images/conference/fresh-conference-room-microphones-decoration-ideas-collection-gallery-to-conference-room-microphones-home-ideas.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">4 <i class="fas fa-star"></i> Vanila </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" id="nav-three-tab" data-toggle="tab" href="#nav-three" aria-expanded="false">
-													<span class="image">
-														<img src="assets/images/conference/RCTORON_00047ss.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">3 <i class="fas fa-star"></i> Pear </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-
-											<li class="nav-item">
-												<a class="nav-link" id="nav-four-tab" data-toggle="tab" href="#nav-four" aria-expanded="false">
-													<span class="image">
-														<img src="assets/images/conference/clayton-hotel-leopardstown-meeting-room-1.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">5 <i class="fas fa-star"></i> Chocolato </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" id="nav-five-tab" data-toggle="tab" href="#nav-five" aria-expanded="false">
-													<span class="image">
-														<img src="assets/images/conference/conference-room-with-projection-facilities-3d-model-max.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">4 <i class="fas fa-star"></i> Vanila </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" id="nav-six-tab" data-toggle="tab" href="#nav-six" aria-expanded="false">
-													<span class="image">
-														<img src="assets/images/conference/midlands-park-hotel-meeting-rooms.jpg" alt="Image_not_found">
-													</span>
-													<span class="title">
-														<strong class="yellow-color">3 <i class="fas fa-star"></i> pear </strong>
-														Hotel
-													</span>
-													<small class="sub-title">Party Room 2.500 seats</small>
-													<small class="price yellow-color">Price from $52/night</small>
-												</a>
-											</li>
-
-										</ul>
-										<div class="more-btn">
-											<a href="#!">
-												<strong class="yellow-color">VIEW ALL</strong> HOTEL & RESORT
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- tab-menu - end -->
-
-						<!-- tab-content - start -->
-						<div class="tab-content">
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade active show" id="nav-one" role="tabpanel" aria-labelledby="nav-one-tab" aria-expanded="true">
-								<div class="image">
-									<img src="assets/images/conference/RCJAKPP_00016_coddddnversion.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade" id="nav-two" role="tabpanel" aria-labelledby="nav-two-tab" aria-expanded="false">
-								<div class="image">
-									<img src="assets/images/conference/fresh-conference-room-microphones-decoration-ideas-collection-gallery-to-conference-room-microphones-home-ideas.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade" id="nav-three" role="tabpanel" aria-labelledby="nav-three-tab" aria-expanded="false">
-								<div class="image">
-									<img src="assets/images/conference/RCTORON_00047ss.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade" id="nav-four" role="tabpanel" aria-labelledby="nav-four-tab" aria-expanded="false">
-								<div class="image">
-									<img src="assets/images/conference/clayton-hotel-leopardstown-meeting-room-1.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade" id="nav-five" role="tabpanel" aria-labelledby="nav-five-tab" aria-expanded="false">
-								<div class="image">
-									<img src="assets/images/conference/conference-room-with-projection-facilities-3d-model-max.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-							<!-- tab-pane - start -->
-							<div class="tab-pane fade" id="nav-six" role="tabpanel" aria-labelledby="nav-six-tab" aria-expanded="false">
-								<div class="image">
-									<img src="assets/images/conference/midlands-park-hotel-meeting-rooms.jpg" alt="Image_not_found">
-									<a href="#!" class="custom-btn">
-										booking now
-									</a>
-									<div class="badge-item">
-										<div class="content">
-											<i class="fas fa-star"></i>
-											<strong>5.0</strong>
-											<small>featured hotel</small>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- tab-pane - end -->
-
-						</div>
-						<!-- tab-content - end -->
-
-					</div>
-					<!-- conference-content-wrapper - end -->
-
-				</div>
-			</div>
-		</section>
-		<!-- conference-section - end
-		================================================== -->
 
 
 
 
 
-		<!-- special-offer-section - start
-		================================================== -->
-		<section id="special-offer-section" class="special-offer-section clearfix" style="background-image: url(assets/images/special-offer-bg.png);">
-			<div class="container">
-				<div class="row">
-
-					<!-- special-offer-content - start -->
-					<div class="col-lg-9 col-md-12 col-sm-12">
-						<div class="special-offer-content">
-							<h2><strong>30%</strong> Off in June~July for <span>Birthday Events</span></h2>
-							<p class="m-0">
-								Contact us now and we will make your event unique & unforgettable
-							</p>
-						</div>
-					</div>
-					<!-- special-offer-content - end -->
-
-					<!-- event-makeing-btn - start -->
-					<div class="col-lg-3 col-md-12 col-sm-12">
-						<div class="event-makeing-btn">
-							<a href="#!">make an event now</a>
-						</div>
-					</div>
-					<!-- event-makeing-btn - end -->
-
-				</div>
-			</div>
-		</section>
-		<!-- special-offer-section - end
-		================================================== -->
 
 
 
@@ -813,7 +497,7 @@
 						<!-- section-title - end -->
 
 						<div class="col-lg-8 col-md-12 col-sm-12 d-flex align-items-center justify-content-end">
-							<a href="<c:url value='/events' />" class="custom-btn">View All Events</a>
+							<a href="<c:url value='/event' />" class="custom-btn">View All Events</a>
 						</div>
 
 					</div>
@@ -825,54 +509,36 @@
 						<div class="text-center" style="padding:60px 0;">
 							<i class="fas fa-calendar-times fa-3x mb-3 d-block text-muted"></i>
 							<p class="text-muted mb-3">No upcoming events yet. Stay tuned!</p>
-							<a href="<c:url value='/events' />" class="custom-btn">Browse Events</a>
+							<a href="<c:url value='/event' />" class="custom-btn">Browse Events</a>
 						</div>
 					</c:when>
 					<c:otherwise>
 						<div class="row">
 							<c:forEach var="ev" items="${upcomingEvents}">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="event-item clearfix">
-
-										<div class="event-image">
-											<div class="post-date">
-												<span class="date">${ev.startDay}</span>
-												<small class="month">${ev.startMonth}</small>
-											</div>
+								<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+									<div class="card h-100 shadow-sm" style="border-radius:12px; overflow:hidden; border:none;">
+										<div style="position:relative;">
 											<c:choose>
 												<c:when test="${not empty ev.imagePath}">
-													<img src="<c:url value='/${ev.imagePath}' />" alt="${ev.eventName}" style="height:200px;object-fit:cover;width:100%;">
+													<img src="<c:url value='/${ev.imagePath}' />" style="height:200px; object-fit:cover; width:100%;" alt="${ev.eventName}">
 												</c:when>
 												<c:otherwise>
-													<img src="assets/images/event/event-1.jpg" alt="${ev.eventName}">
+													<img src="assets/images/event/event-1.jpg" style="height:200px; object-fit:cover; width:100%;" alt="${ev.eventName}">
 												</c:otherwise>
 											</c:choose>
-										</div>
-
-										<div class="event-content">
-											<div class="event-title mb-15">
-												<h3 class="title">${ev.eventName}</h3>
-												<span class="ticket-price yellow-color">
-													<i class="fas fa-users"></i> ${ev.totalWorkhand} positions
-												</span>
+											<div style="position:absolute; top:12px; left:12px; background:#f0a500; color:#fff; padding:5px 12px; border-radius:6px; font-size:0.78rem; font-weight:700; letter-spacing:0.5px;">
+												${ev.startDay} ${ev.startMonth}
 											</div>
-											<div class="event-post-meta ul-li-block mb-30">
-												<ul>
-													<li>
-														<span class="icon"><i class="far fa-clock"></i></span>
-														${ev.formattedDatetime}
-													</li>
-													<li>
-														<span class="icon"><i class="fas fa-map-marker-alt"></i></span>
-														${ev.streetAddress}
-													</li>
-												</ul>
-											</div>
-											<a href="<c:url value='/event-details/${ev.eventId}' />" class="tickets-details-btn">
-												view details
-											</a>
 										</div>
-
+										<div class="card-body d-flex flex-column" style="padding:20px;">
+											<h6 class="font-weight-bold mb-2" style="font-size:1rem; color:#1c1c2e;">${ev.eventName}</h6>
+											<p class="text-muted small mb-1"><i class="fas fa-users mr-2" style="color:#f0a500;"></i>${ev.totalWorkhand} positions open</p>
+											<p class="text-muted small mb-1"><i class="far fa-clock mr-2" style="color:#f0a500;"></i>${ev.formattedDatetime}</p>
+											<p class="text-muted small mb-3"><i class="fas fa-map-marker-alt mr-2" style="color:#f0a500;"></i>${ev.streetAddress}</p>
+											<div class="mt-auto">
+												<a href="<c:url value='/event-details/${ev.eventId}' />" class="custom-btn" style="padding:8px 18px; font-size:0.85rem;">View Details</a>
+											</div>
+										</div>
 									</div>
 								</div>
 							</c:forEach>
@@ -922,8 +588,8 @@
 						<img src="assets/images/gallery/1.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>John Doe Wedding day</h3>
-						<span>Wedding Party, 24 June 2016</span>
+						<h3>Grand Wedding Celebration</h3>
+						<span>Wedding &amp; Occasions</span>
 					</div>
 				</div>
 				<div class="grid-item grid-item--width2 video-gallery " data-category="video-gallery">
@@ -931,8 +597,8 @@
 						<img src="assets/images/gallery/2.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>Business Conference in Dubai</h3>
-						<span>Food Festival, 24 June 2016</span>
+						<h3>Corporate Business Summit</h3>
+						<span>Corporate &amp; Social</span>
 					</div>
 				</div>
 				<div class="grid-item photo-gallery " data-category="photo-gallery">
@@ -940,8 +606,8 @@
 						<img src="assets/images/gallery/3.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>Envato Author Fun Hiking</h3>
-						<span>Food Festival, 24 June 2016</span>
+						<h3>Team Building Outdoor Event</h3>
+						<span>Corporate &amp; Social</span>
 					</div>
 				</div>
 
@@ -950,8 +616,8 @@
 						<img src="assets/images/gallery/4.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>John Doe Wedding day</h3>
-						<span>Wedding Party, 24 June 2016</span>
+						<h3>Grand Wedding Celebration</h3>
+						<span>Wedding &amp; Occasions</span>
 					</div>
 				</div>
 				<div class="grid-item grid-item--width2 video-gallery " data-category="video-gallery">
@@ -959,8 +625,8 @@
 						<img src="assets/images/gallery/5.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>New Year Celebration</h3>
-						<span>Food Festival, 24 June 2016</span>
+						<h3>Annual Gala Night</h3>
+						<span>Corporate &amp; Social</span>
 					</div>
 				</div>
 
@@ -969,8 +635,8 @@
 						<img src="assets/images/gallery/6.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>John Doe Wedding day</h3>
-						<span>Wedding Party, 24 June 2016</span>
+						<h3>Outdoor Music Festival</h3>
+						<span>Wedding &amp; Occasions</span>
 					</div>
 				</div>
 				<div class="grid-item video-gallery " data-category="video-gallery">
@@ -978,8 +644,8 @@
 						<img src="assets/images/gallery/7.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>New Year Celebration</h3>
-						<span>Food Festival, 24 June 2016</span>
+						<h3>Annual Gala Night</h3>
+						<span>Corporate &amp; Social</span>
 					</div>
 				</div>
 				<div class="grid-item photo-gallery " data-category="photo-gallery">
@@ -987,14 +653,14 @@
 						<img src="assets/images/gallery/8.image.jpg" alt="Image_not_found">
 					</a>
 					<div class="item-content">
-						<h3>Envato Author Fun Hiking</h3>
-						<span>Food Festival, 24 June 2016</span>
+						<h3>Team Building Outdoor Event</h3>
+						<span>Corporate &amp; Social</span>
 					</div>
 				</div>
 			</div>
 
 			<div class="text-center">
-				<a href="#!" class="custom-btn">view all gallery</a>
+				<a href="<c:url value='/event' />" class="custom-btn">browse all events</a>
 			</div>
 
 
@@ -1014,7 +680,7 @@
 				<!-- section-title - start -->
 				<div class="section-title text-center mb-50">
 					<small class="sub-title">our services</small>
-					<h2 class="big-title">harmony <strong>Expertise</strong></h2>
+					<h2 class="big-title">harmoni <strong>Expertise</strong></h2>
 				</div>
 				<!-- section-title - end -->
 
@@ -1031,8 +697,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">Wedding Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1047,8 +712,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">birthday Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1063,8 +727,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">business meeting</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1079,8 +742,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">Wedding Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1095,8 +757,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">birthday Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1111,8 +772,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">business meeting</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1127,8 +787,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">Wedding Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1143,8 +802,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">birthday Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1159,8 +817,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">business meeting</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1175,8 +832,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">Wedding Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1191,8 +847,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">birthday Party</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1207,8 +862,7 @@
 							</div>
 							<div class="content">
 								<h3 class="title">business meeting</h3>
-								<p>Start from <strong>$1.200-$2.000</strong></p>
-							</div>
+								</div>
 						</div>
 					</div>
 					<!-- expertise-item - end -->
@@ -1225,501 +879,16 @@
 
 
 
-		<!-- speaker-section - start
-		================================================== -->
-		<section id="speaker-section" class="speaker-section clearfix">
-			<div class="jarallax" style="background-image: url(assets/images/speaker/Black-White-Dubai-Wallpaper.jpg);">
-				<div class="overlay-white">
-					<div class="container">
 
-						<!-- speaker-carousel - start -->
-						<div class="speaker-carousel">
-							<div class="slider-for">
 
-								<div class="item">
-									<div class="row">
 
-										<!-- speaker-image - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-image image-wrapper text-center">
-												<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-												<span class="speaker-name"><strong>Jenni</strong> Berthas</span>
-											</div>
-										</div>
-										<!-- speaker-image - end -->
 
-										<!-- speaker-content - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-content">
 
-												<!-- section-title - start -->
-												<div class="section-title text-left mb-50">
-													<span class="line-style"></span>
-													<small class="sub-title">harmoni staffs</small>
-													<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-												</div>
-												<!-- section-title - end -->
 
-												<div class="speaker-info">
-													<div class="speaker-title mb-30">
-														<span class="speaker-name"><strong>Jenni</strong> Berthas</span>
-														<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-													</div>
-													<p class="black-color mb-30">
-														Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-													</p>
-													<div class="speaker-social-network ul-li">
-														<h3 class="title title-medium mb-15">
-															<strong>Social</strong> Network
-														</h3>
-														<ul>
-															<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-															<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-															<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-														</ul>
-													</div>
-												</div>
 
-											</div>
-										</div>
-										<!-- speaker-content - end -->
 
-									</div>
-								</div>
 
-								<div class="item">
-									<div class="row">
 
-										<!-- speaker-image - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-image image-wrapper text-center">
-												<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-												<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-											</div>
-										</div>
-										<!-- speaker-image - end -->
-
-										<!-- speaker-content - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-content">
-
-												<!-- section-title - start -->
-												<div class="section-title text-left mb-50">
-													<span class="line-style"></span>
-													<small class="sub-title">harmoni staffs</small>
-													<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-												</div>
-												<!-- section-title - end -->
-
-												<div class="speaker-info">
-													<div class="speaker-title mb-30">
-														<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-														<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-													</div>
-													<p class="black-color mb-30">
-														Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-													</p>
-													<div class="speaker-social-network ul-li">
-														<h3 class="title title-medium mb-15">
-															<strong>Social</strong> Network
-														</h3>
-														<ul>
-															<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-															<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-															<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-														</ul>
-													</div>
-												</div>
-
-											</div>
-										</div>
-										<!-- speaker-content - end -->
-
-									</div>
-								</div>
-
-								<div class="item">
-									<div class="row">
-
-										<!-- speaker-image - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-image image-wrapper text-center">
-												<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-												<span class="speaker-name"><strong>Denies</strong> Suarez</span>
-											</div>
-										</div>
-										<!-- speaker-image - end -->
-
-										<!-- speaker-content - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-content">
-
-												<!-- section-title - start -->
-												<div class="section-title text-left mb-50">
-													<span class="line-style"></span>
-													<small class="sub-title">harmoni staffs</small>
-													<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-												</div>
-												<!-- section-title - end -->
-
-												<div class="speaker-info">
-													<div class="speaker-title mb-30">
-														<span class="speaker-name"><strong>Denies</strong> Suarez</span>
-														<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-													</div>
-													<p class="black-color mb-30">
-														Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-													</p>
-													<div class="speaker-social-network ul-li">
-														<h3 class="title title-medium mb-15">
-															<strong>Social</strong> Network
-														</h3>
-														<ul>
-															<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-															<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-															<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-														</ul>
-													</div>
-												</div>
-
-											</div>
-										</div>
-										<!-- speaker-content - end -->
-
-									</div>
-								</div>
-
-								<div class="item">
-									<div class="row">
-
-										<!-- speaker-image - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-image image-wrapper text-center">
-												<img src="assets/images/speaker/speakes1.png" alt="Image_not_found">
-												<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-											</div>
-										</div>
-										<!-- speaker-image - end -->
-
-										<!-- speaker-content - start -->
-										<div class="col-lg-6 col-md-12 col-sm-12">
-											<div class="speaker-content">
-
-												<!-- section-title - start -->
-												<div class="section-title text-left mb-50">
-													<span class="line-style"></span>
-													<small class="sub-title">harmoni staffs</small>
-													<h2 class="big-title">Professional <strong>Speakers</strong></h2>
-												</div>
-												<!-- section-title - end -->
-
-												<div class="speaker-info">
-													<div class="speaker-title mb-30">
-														<span class="speaker-name"><strong>Jonathan</strong> Doe</span>
-														<span class="work-experienc yellow-color"><strong>15 Years</strong> experienced</span>
-													</div>
-													<p class="black-color mb-30">
-														Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam...
-													</p>
-													<div class="speaker-social-network ul-li">
-														<h3 class="title title-medium mb-15">
-															<strong>Social</strong> Network
-														</h3>
-														<ul>
-															<li><a href="#!"><i class="fab fa-facebook-f"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitter"></i></a></li>
-															<li><a href="#!"><i class="fab fa-twitch"></i></a></li>
-															<li><a href="#!"><i class="fab fa-google-plus-g"></i></a></li>
-															<li><a href="#!"><i class="fab fa-instagram"></i></a></li>
-														</ul>
-													</div>
-												</div>
-
-											</div>
-										</div>
-										<!-- speaker-content - end -->
-
-									</div>
-								</div>
-
-							</div>
-
-							<div class="slider-nav">
-								<div class="item">
-									<div class="item-content">
-										<span class="speaker-thumbnail">
-											<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-										</span>
-										<h3 class="speaker-name">Jenni Berthas</h3>
-										<span class="sub-title">Harmoni Speaker</span>
-									</div>
-								</div>
-
-								<div class="item">
-									<div class="item-content">
-										<span class="speaker-thumbnail">
-											<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-										</span>
-										<h3 class="speaker-name">Jonathan Doe</h3>
-										<span class="sub-title">Harmoni Speaker</span>
-									</div>
-								</div>
-
-								<div class="item">
-									<div class="item-content">
-										<span class="speaker-thumbnail">
-											<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-										</span>
-										<h3 class="speaker-name">Denies Suarez</h3>
-										<span class="sub-title">Harmoni Speaker</span>
-									</div>
-								</div>
-
-								<div class="item">
-									<div class="item-content">
-										<span class="speaker-thumbnail">
-											<img src="assets/images/speaker/speakes-thumbnail.png" alt="Image_not_found">
-										</span>
-										<h3 class="speaker-name">Jonathan Doe</h3>
-										<span class="sub-title">Harmoni Speaker</span>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						<!-- speaker-carousel - end -->
-
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- speaker-section - end
-		================================================== -->
-
-
-
-
-
-		<!-- advertisement-section - start
-		================================================== -->
-		<section id="advertisement-section" class="advertisement-section clearfix" style="background-image: url(assets/images/special-offer-bg.png);">
-			<div class="container">
-				<div class="advertisement-content text-center">
-
-					<h2 class="title-large white-color">Are you ready to make <strong>your Own Special Events?</strong></h2>
-					<p class="mb-31">“Get started now, Harmoni event management PSD template.”</p>
-					<a href="#!" class="purchase-btn">purchase now!</a>
-
-				</div>
-			</div>
-		</section>
-		<!-- advertisement-section - end
-		================================================== -->
-
-
-
-
-
-		<!-- partners-clients-section - start
-		================================================== -->
-		<section id="partners-clients-section" class="partners-clients-section bg-gray-light sec-ptb-100 clearfix">
-			<div class="container">
-
-				<!-- section-title - start -->
-				<div class="section-title text-center mb-50">
-					<small class="sub-title">we are harmoni</small>
-					<h2 class="big-title">We have <strong>Best Partners & Clients</strong></h2>
-					<p class="m-0 black-color">
-						Lorem ipsum dollor site amet the best  consectuer adipiscing elites sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat insignia the consectuer adipiscing elit.
-					</p>
-				</div>
-				<!-- section-title - end -->
-
-				<div class="row">
-
-					<!-- partners-wrapper - start -->
-					<div class="col-lg-6 col-md-12 col-sm-12">
-						<div class="partners-wrapper">
-							<span class="carousel-title">
-								harmoni <strong>sponsors</strong>
-							</span>
-							<div id="partners-carousel" class="partners-carousel owl-carousel owl-theme">
-
-								<div class="item">
-									<ul>
-
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-
-									</ul>
-								</div>
-
-								<div class="item">
-									<ul>
-
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-
-									</ul>
-								</div>
-
-								<div class="item">
-									<ul>
-
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-										<li>
-											<a href="#!">
-												<img src="assets/images/partners/image1.png" alt="Image_not_found">
-											</a>
-										</li>
-
-									</ul>
-								</div>
-
-							</div>
-						</div>
-					</div>
-					<!-- partners-wrapper - end -->
-
-					<!-- clients-testimonial - start -->
-					<div class="col-lg-6 col-md-12 col-sm-12">
-						<div class="clients-testimonial" style="background-image: url(assets/images/1.testimonial-bg.jpg);">
-							<div class="overlay-black">
-
-								<div class="section-title text-center mb-50">
-									<small class="sub-title">testimonial</small>
-									<h2 class="big-title">client <strong>says</strong></h2>
-								</div>
-
-								<div id="clients-testimonial-carousel" class="clients-testimonial-carousel owl-carousel owl-theme">
-									<div class="item text-center">
-										<p class="mb-30">
-											“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet adispiscing dispend.”
-										</p>
-										<div class="client-info">
-											<h3 class="client-name">Jenni Hernandes</h3>
-											<span class="client-sub-title">Graphic Designer</span>
-										</div>
-									</div>
-
-									<div class="item text-center">
-										<p class="mb-30">
-											“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet adispiscing dispend.”
-										</p>
-										<div class="client-info">
-											<h3 class="client-name">Jenni Hernandes</h3>
-											<span class="client-sub-title">Graphic Designer</span>
-										</div>
-									</div>
-
-									<div class="item text-center">
-										<p class="mb-30">
-											“Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet adispiscing dispend.”
-										</p>
-										<div class="client-info">
-											<h3 class="client-name">Jenni Hernandes</h3>
-											<span class="client-sub-title">Graphic Designer</span>
-										</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-					</div>
-					<!-- clients-testimonial - end -->
-
-				</div>
-
-			</div>
-		</section>
-		<!-- partners-clients-section - end
-		================================================== -->
 
 
 
@@ -1736,37 +905,34 @@
 						<!-- section-title - start -->
 						<div class="section-title mb-30">
 							<span class="line-style"></span>
-							<small class="sub-title">find your answer</small>
-							<h2 class="big-title">ask & <strong>questions</strong></h2>
+							<small class="sub-title">frequently asked questions</small>
+							<h2 class="big-title">common <strong>questions</strong></h2>
 						</div>
 						<!-- section-title - end -->
 						<div id="faq-accordion" class="faq-accordion">
 
 							<div class="card">
 								<div class="card-header" id="headingone">
-									<button class="btn collapsed" data-toggle="collapse" data-target="#collapseone" aria-expanded="true" aria-controls="collapseone">
-										<span>01.</span> How to join Harmoni Event Management?
+									<button class="btn collapsed" data-toggle="collapse" data-target="#collapseone" aria-expanded="false" aria-controls="collapseone">
+										<span>01.</span> What is Harmoni and who is it for?
 									</button>
 								</div>
-
 								<div id="collapseone" class="collapse" aria-labelledby="headingone" data-parent="#faq-accordion">
 									<div class="card-body">
-										<h3>answer</h3>
-										Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
+										Harmoni is an event workforce platform that connects event companies with skilled professionals called Workhands. It is built for two types of users — Companies that organise events and need reliable staff, and Workhands who want to find paid event opportunities that match their skills.
 									</div>
 								</div>
 							</div>
 
 							<div class="card">
 								<div class="card-header" id="headingtwo">
-									<button class="btn" data-toggle="collapse" data-target="#collapsetwo" aria-expanded="false" aria-controls="collapsetwo">
-										<span>02.</span> How to make my own event?
+									<button class="btn" data-toggle="collapse" data-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
+										<span>02.</span> How does a Workhand apply for an event?
 									</button>
 								</div>
 								<div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo" data-parent="#faq-accordion">
 									<div class="card-body">
-										<h3>answer</h3>
-										Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
+										After registering as a Workhand, browse the Events page to find openings that suit your skills. Click on any event to view the roles, pay rate, and schedule, then submit your application with one click. The company will review your profile and notify you of their decision.
 									</div>
 								</div>
 							</div>
@@ -1774,13 +940,12 @@
 							<div class="card">
 								<div class="card-header" id="headingthree">
 									<button class="btn collapsed" data-toggle="collapse" data-target="#collapsethree" aria-expanded="false" aria-controls="collapsethree">
-										<span>03.</span> About the price to make new event?
+										<span>03.</span> How do companies review and approve applicants?
 									</button>
 								</div>
 								<div id="collapsethree" class="collapse" aria-labelledby="headingthree" data-parent="#faq-accordion">
 									<div class="card-body">
-										<h3>answer</h3>
-										Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
+										Once a company publishes an event, applications from Workhands appear in the Applications tab of that event. Companies can review each applicant's profile, accept or reject them, and once an applicant is approved the platform handles the next steps including payment coordination.
 									</div>
 								</div>
 							</div>
@@ -1788,13 +953,12 @@
 							<div class="card">
 								<div class="card-header" id="headingfour">
 									<button class="btn collapsed" data-toggle="collapse" data-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
-										<span>04.</span> About the price to make new event?
+										<span>04.</span> Can I track my earnings and event history?
 									</button>
 								</div>
 								<div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#faq-accordion">
 									<div class="card-body">
-										<h3>answer</h3>
-										Bring people together, or turn your passion into a business. Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
+										Yes. Every Workhand has a dedicated History section in their profile that shows all past registrations, application statuses, payment records, and ratings received from companies. Everything you need to track your work is in one place.
 									</div>
 								</div>
 							</div>
@@ -1803,57 +967,113 @@
 					</div>
 					<!-- faq-accordion - end -->
 
-					<!-- latest-blog-wrapper - start -->
+					<!-- get-started-wrapper - start -->
 					<div class="col-lg-6 col-md-12 col-sm-12">
-						<div class="latest-blog-wrapper">
-
-							<!-- section-title - start -->
-							<div class="section-title mb-30">
-								<span class="line-style"></span>
-								<small class="sub-title">our blog</small>
-								<h2 class="big-title">latest <strong>news</strong></h2>
-							</div>
-							<!-- section-title - end -->
-
-							<!-- latest-blog - start -->
-							<div class="latest-blog clearfix">
-								<div class="blog-image">
-									<img src="assets/images/blog/1.latest-blog.jpg" alt="Image_not_found">
-									<a href="#!" class="plus-effect"></a>
-								</div>
-								<div class="blog-content">
-									<div class="blog-title mb-30">
-										<h3>Barcelona Friday Food Truck Festival 26 Mei 2019</h3>
-										<span>26 June 2018</span>
-									</div>
-									<p class="m-0">
-										Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
-									</p>
-								</div>
-							</div>
-							<!-- latest-blog - end -->
-
-							<!-- latest-blog - start -->
-							<div class="latest-blog clearfix">
-								<div class="blog-image">
-									<img src="assets/images/blog/1.latest-blog.jpg" alt="Image_not_found">
-									<a href="#!" class="plus-effect"></a>
-								</div>
-								<div class="blog-content">
-									<div class="blog-title mb-30">
-										<h3>Barcelona Friday Food Truck Festival 26 Mei 2019</h3>
-										<span>26 June 2018</span>
-									</div>
-									<p class="m-0">
-										Harmoni gives you everything you need to host your best event yet. lorem ipsum diamet.
-									</p>
-								</div>
-							</div>
-							<!-- latest-blog - end -->
-
+						<div class="section-title mb-30">
+							<span class="line-style"></span>
+							<small class="sub-title">join harmoni</small>
+							<h2 class="big-title">get <strong>started</strong></h2>
 						</div>
+
+						<c:choose>
+							<%-- Logged-in users: show role-relevant quick links --%>
+							<c:when test="${not empty user}">
+
+								<c:choose>
+									<c:when test="${user.roleId == 2}">
+										<!-- Company logged in -->
+										<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; margin-bottom:20px; display:flex; align-items:flex-start; gap:20px;">
+											<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#1c1c2e,#2d2d44); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+												<i class="fas fa-calendar-plus" style="color:#f0a500; font-size:1.3rem;"></i>
+											</div>
+											<div>
+												<h5 style="font-weight:700; margin-bottom:6px;">Post a New Event</h5>
+												<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Create an event, define workhand roles and requirements, and start receiving applications from skilled professionals.</p>
+												<a href="<c:url value='/vendor/event/add' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">Add Event</a>
+											</div>
+										</div>
+										<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; display:flex; align-items:flex-start; gap:20px;">
+											<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#f0a500,#d4920a); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+												<i class="fas fa-list-alt" style="color:#fff; font-size:1.3rem;"></i>
+											</div>
+											<div>
+												<h5 style="font-weight:700; margin-bottom:6px;">Manage My Events</h5>
+												<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">View all your posted events, review workhand applications, approve candidates, and track payments in one place.</p>
+												<a href="<c:url value='/vendor/my-events' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">My Events</a>
+											</div>
+										</div>
+									</c:when>
+									<c:when test="${user.roleId == 1}">
+										<!-- Workhand logged in -->
+										<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; margin-bottom:20px; display:flex; align-items:flex-start; gap:20px;">
+											<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#1c1c2e,#2d2d44); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+												<i class="fas fa-search" style="color:#f0a500; font-size:1.3rem;"></i>
+											</div>
+											<div>
+												<h5 style="font-weight:700; margin-bottom:6px;">Browse Open Events</h5>
+												<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Explore upcoming events looking for workhands. Filter by location and category, and apply to roles that match your skills.</p>
+												<a href="<c:url value='/event' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">Browse Events</a>
+											</div>
+										</div>
+										<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; display:flex; align-items:flex-start; gap:20px;">
+											<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#f0a500,#d4920a); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+												<i class="fas fa-history" style="color:#fff; font-size:1.3rem;"></i>
+											</div>
+											<div>
+												<h5 style="font-weight:700; margin-bottom:6px;">My Event History</h5>
+												<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Track all your applications, check approval statuses, view payment records, and see ratings from past events.</p>
+												<a href="<c:url value='/history' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">View History</a>
+											</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<!-- Admin logged in -->
+										<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; display:flex; align-items:flex-start; gap:20px;">
+											<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#1c1c2e,#2d2d44); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+												<i class="fas fa-tachometer-alt" style="color:#f0a500; font-size:1.3rem;"></i>
+											</div>
+											<div>
+												<h5 style="font-weight:700; margin-bottom:6px;">Admin Dashboard</h5>
+												<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Manage users, events, and platform activity from the admin control panel.</p>
+												<a href="<c:url value='/admin/dashboard' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">Go to Dashboard</a>
+											</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
+
+							</c:when>
+							<%-- Guest: show registration cards --%>
+							<c:otherwise>
+
+								<!-- Company card -->
+								<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; margin-bottom:20px; display:flex; align-items:flex-start; gap:20px;">
+									<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#1c1c2e,#2d2d44); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+										<i class="fas fa-building" style="color:#f0a500; font-size:1.3rem;"></i>
+									</div>
+									<div>
+										<h5 style="font-weight:700; margin-bottom:6px;">I'm a Company</h5>
+										<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Post events, set workhand requirements, review applications, and manage your entire event workforce — all in one place.</p>
+										<a href="<c:url value='/register' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">Register as Company</a>
+									</div>
+								</div>
+
+								<!-- Workhand card -->
+								<div style="border:1px solid #e8e8e8; border-radius:10px; padding:28px 26px; display:flex; align-items:flex-start; gap:20px;">
+									<div style="flex-shrink:0; width:52px; height:52px; background:linear-gradient(135deg,#f0a500,#d4920a); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+										<i class="fas fa-user-tie" style="color:#fff; font-size:1.3rem;"></i>
+									</div>
+									<div>
+										<h5 style="font-weight:700; margin-bottom:6px;">I'm a Workhand</h5>
+										<p style="color:#666; font-size:0.9rem; margin-bottom:14px;">Browse open events near you, apply for roles that match your skills, and get paid — no middleman, no hassle.</p>
+										<a href="<c:url value='/register' />" class="custom-btn" style="padding:8px 20px; font-size:0.85rem;">Register as Workhand</a>
+									</div>
+								</div>
+
+							</c:otherwise>
+						</c:choose>
+
 					</div>
-					<!-- latest-blog-wrapper - end -->
+					<!-- get-started-wrapper - end -->
 
 				</div>
 			</div>
@@ -1883,7 +1103,7 @@
 								<!-- site-logo-wrapper - end -->
 
 								<p class="mb-30">
-									Harmoni events management system.
+									Harmoni is your all-in-one event workforce platform — connecting companies with skilled workhands across India.
 								</p>
 
 								<!-- basic-info - start -->
@@ -1891,15 +1111,15 @@
 									<ul>
 										<li>
 											<i class="fas fa-map-marker-alt"></i>
-											100 highland ave, california, united state
+											Ahmedabad, Gujarat, India
 										</li>
 										<li>
 											<i class="fas fa-envelope"></i>
-											hamoni@gmail.com
+											info@harmoni.com
 										</li>
 										<li>
 											<i class="fas fa-phone"></i>
-											<a href="#!">100 800 1234 5555</a>
+											<a href="#!">+91 98765 43210</a>
 										</li>
 									</ul>
 								</div>
@@ -2020,7 +1240,7 @@
 						<!-- copyright-text - start -->
 						<div class="col-lg-7 col-md-12 col-sm-12">
 							<div class="copyright-text">
-								<p class="m-0">©2018 <a href="#!" class="site-link">Harmoni.com</a> all right reserved, made with <i class="fas fa-heart"></i> by <a href="#!" class="author-link"><strong>jThemes Studio</strong></a></p>
+								<p class="m-0">&copy;2025 Harmoni. All rights reserved.</p>
 							</div>
 						</div>
 						<!-- copyright-text - end -->
@@ -2072,3 +1292,8 @@
         <script> const contextPath = "${pageContext.request.contextPath}"; </script>
 	</body>
 </html>
+
+
+
+
+

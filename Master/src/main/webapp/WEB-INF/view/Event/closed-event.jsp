@@ -1,29 +1,39 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- page banner -->
-<section style="background: linear-gradient(135deg, #1c1c2e 0%, #2d2d44 100%); padding: 60px 0;">
-    <div class="container">
-        <div class="section-title text-center mb-0">
-            <small class="sub-title">past events</small>
-            <h2 class="big-title white-color mt-2">Recently <strong>Closed Events</strong></h2>
-            <p class="white-color mb-0 mt-2">${totalEvents} recently closed events</p>
+<!-- breadcrumb-section - start -->
+<section id="breadcrumb-section" class="breadcrumb-section clearfix" style="background-image: url('<c:url value='/assets/images/breadcrumb/0.breadcrumb-bg.jpg' />'); background-size:cover; background-position:center center;">
+        <div class="overlay-black">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="breadcrumb-title text-center mb-50">
+                            <span class="sub-title">harmoni events</span>
+                            <h2 class="big-title">recently <strong>closed events</strong></h2>
+                        </div>
+                        <div class="breadcrumb-list">
+                            <ul>
+                                <li class="breadcrumb-item"><a href="<c:url value='/home' />" class="breadcrumb-link">Home</a></li>
+                                <li class="breadcrumb-item"><a href="<c:url value='/event' />" class="breadcrumb-link">Events</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Closed Events</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 </section>
-
-<!-- Back button bar -->
-<div style="background:#fff; border-bottom:1px solid #eee; padding:10px 0;">
-    <div class="container">
-        <a href="<c:url value='/event' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
-            <i class="fas fa-arrow-left mr-2"></i>Back to Events
-        </a>
-    </div>
-</div>
+<!-- breadcrumb-section - end -->
 
 <!-- Event list -->
 <section style="padding: 60px 0; background: #f8f9fa;">
     <div class="container">
+
+        <div class="mb-4">
+            <a href="<c:url value='/event' />" class="custom-btn" style="padding:9px 22px; font-size:0.88rem;">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Events
+            </a>
+        </div>
 
         <c:choose>
             <c:when test="${empty events.content}">
@@ -116,3 +126,5 @@
         </c:choose>
     </div>
 </section>
+
+

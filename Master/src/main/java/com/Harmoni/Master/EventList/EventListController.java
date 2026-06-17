@@ -33,6 +33,7 @@ public class EventListController {
         model.addAttribute("currentPage",   events.getNumber() + 1);
         model.addAttribute("totalEvents",   events.getTotalElements());
         model.addAttribute("active", "event");
+        model.addAttribute("title", "Events");
         model.addAttribute("viewName", "Event/event-list");
         return "base/base";
     }
@@ -57,6 +58,7 @@ public class EventListController {
         model.addAttribute("currentPage",   results.getNumber() + 1);
         model.addAttribute("totalEvents",   results.getTotalElements());
         model.addAttribute("active", "event");
+        model.addAttribute("title", "Events");
         model.addAttribute("viewName", "Event/event-list");
         return "base/base";
     }
@@ -68,6 +70,7 @@ public class EventListController {
         model.addAttribute("totalPageList", pageNumbers(events));
         model.addAttribute("currentPage",   events.getNumber() + 1);
         model.addAttribute("totalEvents",   events.getTotalElements());
+        model.addAttribute("title", "Closed Events");
         model.addAttribute("viewName", "Event/closed-event");
         return "base/base";
     }

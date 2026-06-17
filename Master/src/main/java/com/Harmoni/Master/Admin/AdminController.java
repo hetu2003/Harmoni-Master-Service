@@ -67,6 +67,7 @@ public class AdminController {
         model.addAttribute("recentRegs",     recentRegs.getContent());
         model.addAttribute("recentEvents",   recentEvents.getContent());
         model.addAttribute("active", "dashboard");
+        model.addAttribute("title", "Admin Dashboard");
         model.addAttribute("viewName", "admin/dashboard");
         return "base/base";
     }
@@ -106,6 +107,7 @@ public class AdminController {
         model.addAttribute("selectedRole",  role);
         model.addAttribute("search",        search);
         model.addAttribute("active", "users");
+        model.addAttribute("title", "User Management");
         model.addAttribute("viewName", "admin/users");
         return "base/base";
     }
@@ -162,6 +164,7 @@ public class AdminController {
         model.addAttribute("search",           search);
         model.addAttribute("selectedFeatured", featured);
         model.addAttribute("active", "events");
+        model.addAttribute("title", "Event Management");
         model.addAttribute("viewName", "admin/events");
         return "base/base";
     }

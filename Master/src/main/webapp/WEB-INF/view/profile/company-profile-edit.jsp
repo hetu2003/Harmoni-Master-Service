@@ -48,8 +48,8 @@
                             <div id="logoPlaceholder"
                                  style="width:140px;height:140px;border-radius:10px;border:3px dashed #ccc;
                                         display:flex;align-items:center;justify-content:center;
-                                        background:#f9f9f9;color:#bbb;font-size:13px;margin:0 auto;">
-                                No Logo
+                                        background:#f9f9f9;font-size:3.5rem;margin:0 auto;">
+                                &#127970;
                             </div>
                             <img id="logoPreview" src="" alt=""
                                  style="display:none;width:140px;height:140px;
